@@ -44,8 +44,9 @@ from API rather than independently duplicate the 0.5 mission rule.
 7. A visually justified boulder-rich result challenges the low-obstruction
    assumption; human confirmation still controls persistence and routing.
 
-No validated checkpoint is currently bundled and torch is optional in
-ai/requirements.txt. Concurrent work added ai/train.py with split evaluation,
+No validated checkpoint is currently bundled. PyTorch dependencies are provided
+in ai/requirements.txt; the local model execution path is selected by
+MARSENSE_MODEL_PATH. Concurrent work added ai/train.py with split evaluation,
 confusion/IoU reporting and TorchScript export. Its synthetic smoke test checks
 plumbing only; genuine AI4Mars held-out performance is still absent.
 Gate 7 and the real-inference part of Gate 15 remain open.

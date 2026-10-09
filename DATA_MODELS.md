@@ -51,7 +51,10 @@ Existing fields: identity; region/mission/observation references; source and sou
 type; timestamp; local location; spatial footprint; observation type; expected and
 observed terrain; model output and score; verification state; persistence type;
 valid_until; raw asset reference; discrepancy; consequence; reviewer/time/note;
-derived stale flag. Observation additionally stores asset_sha256 and metadata_note.
+derived stale flag. Observation additionally stores asset_sha256, metadata_note,
+original_asset_reference and model_input_sha256. New uploads hash/store original
+bytes separately from the sanitized display/model input. Older records may lack
+the optional original reference; provenance absence must remain explicit.
 
 Required additions before final audit: typed source mission/instrument/product,
 archive URL/identifier, acquisition timestamp, source resolution/CRS, processing
@@ -83,3 +86,34 @@ Current EntityRow uses id/kind/validated JSON payload; SQLAlchemy typed accessor
 reconstruct Pydantic entities. BEGIN IMMEDIATE serializes writes; rollback prevents
 half-verified updates. Add payload/schema versioning and migration tests before
 changing persisted fields. No migration may delete NASA priors or previous EVAs.
+
+## Scenario checks and transition ownership
+
+| Scenario | Stored state / allowed projection | Owner |
+| --- | --- | --- |
+| Orbital-only Area 14 before EVA | Immutable NASA source plus explicitly illustrative low-obstacle interpretation; no ground verification | Prior knowledge |
+| Actual image/model result matches expectation | Provisional observation/inference retained, MATCH, no interrupt or terrain mutation | Perception then discrepancy |
+| Minor difference away from mission dependencies | Retained provisional evidence, no mission alert | Consequence |
+| Weak rough/unknown result intersects Alpha | INSUFFICIENT_EVIDENCE with possible provisional safety warning; no learned terrain | Consequence; human review required |
+| Human confirms known persistent terrain | Append decision/interpretation, footprint-only GROUND_OBSERVED, assumption/event/route reevaluation atomically | Verification application service |
+| Human supplies unknown even for strong model output | Reject persistent confirmation; preserve original provisional observation and inference | Verification |
+| Human rejects or requests more evidence | Rejection retained without knowledge change; more-evidence remains pending | Verification |
+| Dynamic dust is confirmed then expires | Temporary operational record; stale history remains, no permanent terrain or inherited condition | Freshness projection |
+| Independent evidence agrees / disagrees | Agreement can support MULTI_SOURCE_CONFIRMED only for supported property/overlap; disagreement remains explicit CONFLICTING | Knowledge projection |
+| Valid replacement interpretation supersedes old one | Retain source/old decision and explicit replacement reference; never edit final decision in place | Knowledge/version history |
+| Routing or commit fails during confirmation | Roll back the combined mutation; prior saved state and route remain; report failure rather than confirmation success | Transaction boundary |
+| Future EVA after restart | Queries committed persistent verified footprint knowledge; pending/rejected/stale dynamic evidence is not inherited as terrain | Mission memory |
+
+Required event vocabulary covers mission plan, astronaut position/area entry,
+image capture, inference completion/failure, discrepancy evaluation, assumption
+challenge, review decision, knowledge update and route reevaluation/failure.
+Events retain mission/evidence/decision/assumption/route references, timestamp and
+saved outcome. Current coarser event strings are implementation observations,
+not permission to omit the traceable final timeline.
+
+The target Interpretation and Decision records are logically distinct even if
+initial storage uses typed JSON aggregates. Observation.model_output is immutable;
+human_terrain changes the reviewed interpretation, not the stored inference.
+Region.knowledge_state is a coverage summary, not authority to reclassify every
+point within the region. These distinctions resolve ambiguous uses of "truth",
+"confirmed", "safe", "raw" and "known" in implementation descriptions.

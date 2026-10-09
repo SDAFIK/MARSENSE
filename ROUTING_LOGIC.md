@@ -60,9 +60,9 @@ the region summary's newest terrain to every cell.
 The low-obstruction Area 14 assumption must name supporting prior evidence and
 exact dependent Alpha segment 3, target access and illustrative retraced return
 corridor. Geometry intersection resolves affected segments before consequence.
-Current consequence uses all segment IDs of an intersecting route and the seed
-shares one segment ID across EVAs; neither satisfies the final exact dependency
-contract. Revisions must carry stable mission-scoped segment identities.
+Current consequence intersects actual segment geometries and fresh seeds use
+EVA-specific IDs. Target-only/access dependencies and old-store migration remain
+incomplete. Revisions must carry stable mission-scoped segment identities.
 
 Before verification Alpha is challenged, coordinates/cost unchanged. After
 confirmation reevaluate all relevant missions against verified evidence. Preserve
@@ -77,5 +77,6 @@ No generative model is required to phrase these stored facts.
 If no path exists: retain the previous path for context, clearly mark it affected,
 record NO_ROUTE / failed reevaluation and require planning review. Do not replace
 the visible route with a fake path or show zero meters as a successful traverse.
-An algorithm/model error must roll back terrain/route transaction or explicitly
-record failure without pretending all updates were committed.
+An algorithm error during verification must roll back the combined transaction
+and report failure with prior saved state retained. A valid no-path result is
+distinct from an execution failure and must be stored with explicit planning status.

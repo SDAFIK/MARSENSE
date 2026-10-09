@@ -1,0 +1,12 @@
+{
+  "source_path": "C:\\Users\\ACER\\Downloads\\MARSENSE_Final_Project_Notes.docx",
+  "source_sha256": "8ceaad7d579bfc79c16aa419d7db086fb21f2a15a6493463d6e07eec65c084a4",
+  "source_bytes": 53499,
+  "extraction_path": "docs\\MAIN_PROJECT_NOTES.md",
+  "extraction_sha256": "32812a73a9d5f9b286d14620a56ecc5f2f750d9bfebff41ca15cf914558eba53",
+  "paragraphs": 458,
+  "paragraph_text_fidelity_verified": true,
+  "embedded_media": [],
+  "method": "OOXML main-document paragraphs in document order, including table-cell paragraphs; formatting is not reproduced.",
+  "authority": "User confirmed this is the main project document, to use for reference and implementation."
+}

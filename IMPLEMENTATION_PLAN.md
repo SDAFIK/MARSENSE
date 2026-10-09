@@ -4,6 +4,10 @@ Source authority: frozen request + preserved PROJECT_SPEC.md and the user-confir
 MARSENSE_Final_Project_Notes.docx, extracted at docs/MAIN_PROJECT_NOTES.md.
 Current implementation: docs/IMPLEMENTATION_STATUS.md. Owner: MARSENSE engineering.
 
+Current execution scope: Gate 0 only, per the user's stop instruction. Gates
+1-20 are a plan and historical observations, not authorization to resume
+implementation in this chat.
+
 Every gate follows: acceptance/spec → meaningful behavior test first → smallest
 coherent implementation → checks → spec/code review → docs/status → coherent
 commit. Existing implementation is assessed at each gate; do not rewrite passing
@@ -57,3 +61,67 @@ research/documentation/tests of existing components continue. It does not permit
 inventing source products or bypassing sequential acceptance. Notion is currently
 not exposed. Figma/MagicPath capabilities are available but not yet used for
 Gate 12. No DigitalOcean infrastructure is provisioned at this checkpoint.
+
+## Small tickets from the to-tickets workflow
+
+Execution is stopped by the user's Gate 0-only instruction. All tickets are
+TODO/on hold, including partially implemented behaviors awaiting final acceptance.
+Owner of each: MARSENSE engineering, with QA review. Each row inherits these
+non-goals: no frozen-product redesign, optional instruments, fabricated science,
+automatic confirmation, unrelated platforms, destructive reset or early hosting.
+Scope is limited to the named outcome. Dependencies include prior-gate acceptance
+plus the listed edges. Completion requires a reviewed coherent commit, relevant
+passing checks, STATUS/docs update and specified evidence. Assess existing code
+first; do not rewrite accepted compatible behavior. Missing genuine inputs block
+their dependent ticket rather than permitting synthetic substitutes.
+
+| Ticket / gate | Outcome and limited scope | Extra dependency | Acceptance tests and required evidence |
+| --- | --- | --- | --- |
+| T01 / G01 | Reproducible compatible foundation | G00 | Clean install/start on isolated state, lint/types/build, locks/ignore and no secrets |
+| T02 / G02 | Typed raw/inference/interpretation/decision provenance | T01 | Separate references/hashes, immutable prior/model/decisions and schema examples |
+| T03 / G02 | Footprint/state/human review invariants | T02 | Strong/weak/failed/unknown overrides, trimmed identity, reject/more-evidence regressions |
+| T04 / G02 | Versioned non-destructive migration | T03 | Restart plus old mission/segment migration preserving evidence/priors |
+| T05 / G03 | Mars transforms and product alignment | G02 | CRS/geotransform/known-distance/NoData and retained frame metadata |
+| T06 / G03 | Supported polygon/segment geometry | T05 | Empty/nonfinite/invalid/cross-region and exact intersection cases |
+| T07 / G04 | Bounded CTX prior/cache provenance | G03 | Product/hash/corners/resolution and interrupted/corrupt cache checks |
+| T08 / G04 | Aligned bounded HiRISE imagery | T07 | Source/analysis CRS, actual crop bounds/hash and corner fixture |
+| T09 / G04 | Covering HiRISE DTM and real slope | T08; covering product | Label/units/datum/coverage/NoData/gradient; zero-coverage cannot pass |
+| T10 / G04 | Coarse MOLA regional fallback | T07; selected product | Topography/areoid meaning, native resolution/hash and regional-only caveats |
+| T11 / G04 | Calibrated Navcam asset/metadata | T08; selected product | Source ID/time/calibration/camera metadata, original/derivative hashes |
+| T12 / G04 | Calibrated Mastcam-Z context | T11; selected product | Calibration/provenance contract, no RGB mineral claims |
+| T13 / G04 | PLACES image/pose/frame registration | T11,T12; matching pose | SCLK/site/drive/mechanism joins, validated footprint; simulated path separate |
+| T14 / G04 | CRISM science/target context | T08; selected product | Mapped product/band/label provenance, registration and target linkage |
+| T15 / G04 | Genuine bounded AI4Mars split manifest | T11; genuine dataset | IDs/labels/license/hashes and disjoint rover/site/sequence splits |
+| T16 / G04 | Complete normalized offline package | T09–T15 | Atomic/checksum schema, missing/corrupt/network cases; all required sources |
+| T17 / G05 | Prior map with mission/position/target | G04 | Area 14/Habitat/Delta/astronaut, aligned detail and partial-state rendering |
+| T18 / G05 | Cached/WebGL fallback consistency | T17 | Equal corners/routes/expiry across renderers, external requests blocked |
+| T19 / G06 | Deterministic edge-aware A* costs | G05 | Non-grid endpoints, sub-grid roughness, diagonal blocks, slope/NoData and cost breakdown |
+| T20 / G06 | Exact segments and no-path context | T19 | Mission-specific geometries, prior route retained, no false zero-distance success |
+| T21 / G07 | Original/derivative upload contract | G06 | MIME/size/pixel/geometry bounds, both hashes, protected original access/cleanup |
+| T22 / G07 | Genuine validated local inference | T21,T15 | Reproducible checkpoint/classes/preprocessing, held-out metrics, domain limits, known image |
+| T23 / G07 | Failed inference/manual-review boundary | T22 | Unknown/unavailable/nonfinite retains observation; no mutation; offline model hash |
+| T24 / G08 | Configured five-state discrepancy | G07 | MATCH/minor/significant/conflict/insufficient, boundaries, backend eligibility |
+| T25 / G09 | Exact mission dependency consequence | G08,T20 | Route/off-route/target-only/return cases and actual dependency IDs |
+| T26 / G09 | Relevant/provisional safety alerts | T25 | Strong/uncertain possible-safety, irrelevant silence, no terrain update |
+| T27 / G10 | Atomic human verification lifecycle | G09 | Confirm/reject/more-evidence, immutable decisions, idempotency/concurrency/rollback |
+| T28 / G10 | Local knowledge and independent evidence | T27 | Outside-footprint unchanged, multi-source independence, conflict/supersession |
+| T29 / G10 | Dynamic expiry and stale history | T28 | Restart/expiry, no permanent terrain/inherited condition, consistent filtering |
+| T30 / G11 | Verified reroute with stored WHY | G10 | Preferable Beta, source/decision/dependency references and actual distance tradeoff |
+| T31 / G11 | Durable future-EVA reevaluation | T30 | Reload/restart/inheritance, route/commit failure preserving saved context |
+| T32 / G12 | Product Design/MagicPath selection | G11; tools | Brief/flow review, alternatives and selection preserving business rules |
+| T33 / G12 | Figma system and six final screens | T32 | Artifact links, tokens/components/states, responsive/accessibility/code references |
+| T34 / G13 | Mission Control and sparse astronaut UX | G12 | Target/distance/return/knowledge, alert, WHY/COMPARE/review and map hierarchy |
+| T35 / G13 | Evidence/memory/before-after UX | T34 | Prior inspection, raw/model/decision provenance, timeline, pending versus learned |
+| T36 / G13 | Accessible canonical state/failure UX | T35 | Keyboard/zoom/reduced motion, offline/stale/partial/unsaved/conflict/no-route |
+| T37 / G14 | Real complete integrated learning loop | G13 | Genuine image/model through consequence, human review, map/route/future memory |
+| T38 / G15 | Known-image cold offline Playwright | G14 | Area 14/A17/Alpha segment 3, real inference, Beta/WHY, restart/future EVA |
+| T39 / G16 | Scientific claims/provenance audit | G15 | Source/model/frame/coverage assertions, limitations and resolved findings |
+| T40 / G17 | Captured UX/accessibility audit/fixes | G16 | Six screens, responsive/zoom/state captures, contrast/readers/focus/touch |
+| T41 / G18 | Protected browser/identity reviews | G17 | Server proxy/private backend, no client secret, protected full-loop checks |
+| T42 / G18 | Bounded inference/readiness/recovery | T41 | Worker/model lifecycle, valid JSON, DB/cache/model readiness, failures/performance |
+| T43 / G18 | Fixed-commit blocker/high closure | T42 | FINAL_AUDIT.md, meaningful regressions and complete required validation |
+| T44 / G19 | Locked production/local deployment | G18 | Container/start/smoke, HTTPS/auth/volumes/restart/backup/restore/fallback; DO only now |
+| T45 / G20 | Competition freeze and rehearsal | G19 | Versions/SHA/data/model hashes, offline demo, final README/video/submission |
+
+Gate 0 defines these tickets. It does not execute them, produce later design
+artifacts, deploy an application or freeze a competition build.

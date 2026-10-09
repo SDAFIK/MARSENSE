@@ -918,9 +918,9 @@ depends on that assumption. After ground observation: high rock abundance / roug
 candidate, significant discrepancy when sufficiently supported, assumption
 challenged, provisional consequence. After human verification: GROUND_OBSERVED
 inside footprint, revised costs, Route Beta if preferable, WHY and actual distance
-tradeoff. Future EVA inherits discovery. Existing names "Traverse corridor" and
-"assumption-corridor" are implementation gaps against Area 14 / A17 terminology,
-not a new approved scenario.
+tradeoff. Future EVA inherits discovery. Fresh seeds now display Area 14/A17 and
+use EVA-specific Alpha segment 3 identities. Existing stored missions still need
+non-destructive migration; stable internal IDs need not equal their display labels.
 
 ## Current implementation versus required scope
 
@@ -951,3 +951,51 @@ docs/BASELINE_AUDIT.md. Production plan: DEPLOYMENT.md.
 Gate 0 passes only when these documents are internally consistent **and** checked
 against the authoritative project notes. New feature work follows gates 1–20 in
 order; a baseline test pass does not waive missing source/data/model requirements.
+
+## Gate 0 clarification and user stories
+
+The master prompt is retained verbatim in docs/MASTER_PROMPT.md. It supplies the
+engineering constraints and exact Gate 0 deliverables; the Word notes remain
+the frozen product reference. Root documents are the required target contracts.
+Companion docs describe implementation snapshots and cannot reduce acceptance.
+On 2026-10-10 the user stopped implementation and requested Gate 0 only. No
+application implementation, deployment or later gate follows this checkpoint
+automatically. Workflow evidence and reconciliation: docs/GATE_0_REVIEW.md.
+
+Problem: prior maps may omit human-scale terrain or current conditions. Mission
+decisions must respond to supported evidence without losing NASA provenance,
+overstating model confidence or interrupting the astronaut for irrelevant changes.
+Goals: traceable mission-relevant discrepancy, human-controlled local learning,
+deterministic reevaluation, durable inheritance and a genuine offline demo.
+
+| User | Story | Observable outcome |
+| --- | --- | --- |
+| Mission-control operator | Inspect what Alpha assumes and why it crosses Area 14 | Prior source, A17 and exact segment/target dependencies are inspectable |
+| Astronaut | Report terrain and decide whether to confirm its interpretation | Actual inference is provisional; confirm/reject/more-evidence preserves original output and decision history |
+| Astronaut | Learn whether evidence changes the traverse | Relevant warning names the dependency; WHY/COMPARE gives stored facts and actual tradeoff |
+| Scientist/reviewer | Trace current knowledge to supporting and conflicting sources | Original prior, raw observation, model metadata, footprint and human decision remain distinct and inspectable |
+| Future explorer | Start the next EVA with verified discoveries already known | Restart/reload retains footprint knowledge and reevaluates the later route |
+
+Unknown or failed perception requires explicit known human terrain identification
+before persistent confirmation. A human override to unknown is also ineligible.
+Low-confidence possible safety effects may warn provisionally without changing
+terrain. MATCH and irrelevant minor differences are stored silently. Expired
+dynamic evidence stays auditable but is excluded from current operational use.
+Independent-source agreement is required for MULTI_SOURCE_CONFIRMED; repeating
+one image does not qualify. Conflicts and supersession require explicit records.
+
+Consequence examines route, return corridor, assumptions, science objective,
+target accessibility and any supported time/resource/safety dependencies. Missing
+resource models are explicitly unavailable; never invent oxygen, time or risk
+values. Current outbound-as-return geometry is an illustrative declared assumption.
+Route Beta is created when preferable; no-path/error retains prior route context
+and requests review. Unsaved writes cannot be shown as completed knowledge.
+
+Compatible existing Next.js/FastAPI/SQLite code is retained. PostGIS is a practical
+later option requiring migration, not a current integration. Small normalized
+NASA products, typed contracts and backend-owned policy prevent scientific
+parsing or duplicate mission rules leaking into frontend/perception code.
+
+No frozen product decision remains unanswered. Covering scientific products,
+camera registration and genuine model validation are open later-gate inputs;
+final design-tool artifacts and hosting are later-gate work, not Gate 0 outputs.

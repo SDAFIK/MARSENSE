@@ -38,6 +38,10 @@ they do not replace the missing final project notes.
 | D14 | New notes extraction | Read and reconcile docs/MAIN_PROJECT_NOTES.md when it appeared during concurrent work | Its product content agrees with the frozen request; original path/hash/text fidelity independently verified |
 | D15 | Concurrent workspace | User confirmed another chat is implementing; this chat finishes contracts and evidence audit without feature edits | Do not commit or overwrite the other chat's application changes; no final fixed-release claim |
 
+| D16 | Gate 0-only stop | Run the five Toolkit workflows in order; documentation/configuration only | No automatic Gates 1-20 resumption, application edits, training, ingestion, service launches or deployment |
+| D17 | Contract versus implementation | Root files are required contracts; companion docs are implementation snapshots | Existing replay/tests never weaken required real-inference/data acceptance |
+| D18 | Original versus derivative | New uploads retain original bytes/hash separately from display/model input | Correct stale documentation; older records may lack originals and must disclose absence |
+
 The grilling workflow was resolved against the supplied material: users are
 mission-control operators, astronauts, and future explorers; verification is
 manual; the first scenario and stack are already specified. The source question initially received "okay", without a path. Later the

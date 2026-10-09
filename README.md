@@ -3,6 +3,13 @@
 NASA tells us what we expect. Astronauts show us what is actually there.
 MARSENSE learns the difference. Every step makes Mars more known.
 
+**Current task scope: Gate 0 only; implementation stopped by the user.**
+[Ordered workflow review](docs/GATE_0_REVIEW.md) records to-spec, grilling,
+domain-modeling, codebase-design and to-tickets, followed by consistency checks.
+[Master prompt](docs/MASTER_PROMPT.md) is retained verbatim. Root contract files
+define required acceptance; companion implementation summaries describe snapshots.
+The existing runnable app below is preserved, not certification of later gates.
+
 This NASA Space Apps prototype preserves orbital evidence, compares ground
 observations with mission assumptions, requests human verification, updates only
 the supported map footprint, reevaluates routes and passes verified discoveries
@@ -100,4 +107,5 @@ requires all mandatory gates and blocker/high audit findings resolved.
 
 ## Current local delivery
 
-[Launcher and locked setup](docs/LOCAL_RUN.md), [current NASA source status](docs/NASA_DATA.md), and [current implementation and remaining gates](docs/IMPLEMENTATION_STATUS.md) describe the latest executable code. The root planning documents retain earlier scope and gate criteria. The launcher publishes no external deployment.
+[Launcher and locked setup](docs/LOCAL_RUN.md), [current NASA source status](docs/NASA_DATA.md), and [current implementation and remaining gates](docs/IMPLEMENTATION_STATUS.md) describe the latest executable code. The root contracts define the required final behavior; no later gate resumes
+automatically after this Gate 0-only review. The launcher publishes no external deployment.

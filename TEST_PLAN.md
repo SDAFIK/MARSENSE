@@ -1,6 +1,8 @@
 # Validation plan and baseline results
 
-Date: 2026-10-10. Current run validates the **existing implementation**. A passing
+Date: 2026-10-10. Historical results below validate the existing implementation
+and precede the user's Gate 0-only stop. No application test, feature repair,
+training, ingestion or server launch is part of this Gate 0 review. A passing
 suite does not waive missing trained AI, required datasets or audit
 findings. No tests are disabled or changed to conceal these gaps.
 

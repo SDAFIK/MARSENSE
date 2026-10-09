@@ -13,9 +13,10 @@ Orbital expected interpretation: low-obstacle soil. Alpha direct route length:
 960 m on a 40 m grid. Assumption A17: low obstacle density supports Alpha segment
 3, target access and the declared retraced return corridor.
 
-Existing seed labels corridor as "Traverse corridor", uses assumption-corridor
-and one alpha-corridor segment. Align these with Area 14/A17 and exact mission
-segment geometries at Gates 2/6/9. This is a required terminology/dependency fix.
+Fresh seeds display Area 14/A17 and create EVA-specific segment identities.
+The internal assumption ID remains assumption-corridor. Older stored missions
+need non-destructive migration, and target-only/return dependencies still need
+full acceptance at Gates 2/6/9. Display names do not authorize deleting history.
 
 ## Required final demonstration
 
@@ -60,5 +61,6 @@ Must include exact bounded real imagery/ground assets, normalized terrain/DEM
 and selected science/pose products, provenance/checksum manifest, validated local
 model/inference, mission fixture, pinned software, startup scripts and demo steps.
 Record data/model hashes and final commit; verify a cold offline start. Current
-cache covers imagery/public-release photo only; required scientific/model work
+cache includes imagery/public-release photo and partial MOLA/PLACES/DTM context;
+required scientific/model work
 keeps the complete competition demo gate open.

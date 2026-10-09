@@ -3,6 +3,13 @@
 Updated: 2026-10-10, Asia/Dhaka. This is an engineering specification/audit
 checkpoint, **not** a completed product or competition freeze.
 
+**Current scope: implementation stopped; Gate 0 only.** The user explicitly
+requested the five Software Engineering Toolkit workflows again in order.
+Evidence: docs/GATE_0_REVIEW.md. All later gates remain on hold in this chat;
+their table entries below are historical observations, not permission to resume.
+No application code, tests, NASA cache, model weights or runtime data were changed
+for this Gate 0 review, and no application/server/training/deployment was launched.
+
 The user confirmed another chat is actively implementing in this shared workspace.
 This chat owns the root specification/contract/audit checkpoint and avoids
 application feature edits. Companion implementation notes are in
@@ -36,7 +43,7 @@ of existing code. Follow the dependency order in IMPLEMENTATION_PLAN.md.
 
 | Gate | Status | Completed/observed work | Tests/evidence | Known issues / next step |
 | --- | --- | --- | --- | --- |
-| 0 Specification | PASS at document checkpoint | All root docs/decisions/tickets; frozen extraction reconciled | Manual requirements/contracts/source cross-check; doc completeness/link check | Original DOCX text/hash verified; next: G01 acceptance with the implementation owner |
+| 0 Specification | DONE; Gate 0-only review | Ordered five workflows, all 13 deliverables including .env.example, 45 small tickets, source reconciliation and contradiction fixes | docs/GATE_0_REVIEW.md and docs/GATE_0_CHECKS.json | Later scientific/model gaps are specified; next: stop here until user explicitly resumes |
 | 1 Foundation | REVIEW; acceptance pending | Existing compatible monorepo; Git initialized; strict TS; ignore/env setup; Docker files appear concurrently | Native lint/types/build passing snapshots | Windows dependency pins added; clean install/container validation; next G02 |
 | 2 Domain/persistence | PARTIAL; acceptance pending | Typed entities; SQLite transactions; persisted evidence/history | Core restart/idempotency/concurrency tests | UNKNOWN human override, typed provenance, old-store segment migration; next G03 |
 | 3 Mars geometry | PARTIAL; acceptance pending | Explicit Mars local transforms, validated footprint geometry | Roundtrip/known-distance/footprint tests | HiRISE manifest CRS mismatch, source geotransform/crop validation; next G04 |
@@ -60,6 +67,8 @@ of existing code. Follow the dependency order in IMPLEMENTATION_PLAN.md.
 
 ## Continuation
 
+Implementation remains stopped in this chat after Gate 0. The master's automatic
+continuation instruction is superseded by the user's latest Gate 0-only request.
 Do not race the other chat's application edits. Use docs/BASELINE_AUDIT.md for
 concrete failing guard/dependency/provenance cases and TEST_PLAN.md for the final
 missing behaviors. Source-authority provenance is resolved; product choices are already specified. No ordinary permission gate is

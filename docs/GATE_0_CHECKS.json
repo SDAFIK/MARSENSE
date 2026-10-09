@@ -1,0 +1,111 @@
+{
+  "date_local": "2026-10-10 Asia/Dhaka",
+  "checked_at_utc": "2026-10-09T23:34:34.856742+00:00",
+  "scope": "Gate 0 documents/configuration only; no application test or implementation launched",
+  "result": "PASS",
+  "checks": {
+    "all_13_required_deliverables": true,
+    "master_archive_byte_identical": true,
+    "original_notes_full_paragraph_fidelity": true,
+    "all_root_and_companion_markdown_links": true,
+    "all_documents_utf8_no_replacement_characters": true,
+    "requirements_R01_R20": true,
+    "gates_G00_G20": true,
+    "small_tickets_T01_T45": true,
+    "status_all_21_gates": true,
+    "five_workflows_recorded_in_order": true,
+    "env_example_syntax_defaults_and_no_credentials": true,
+    "application_and_data_snapshot_unchanged": true,
+    "manual_cross_document_reconciliation_recorded": true
+  },
+  "required_deliverables": [
+    {
+      "path": "PROJECT_SPEC.md",
+      "sha256": "cb488437e99f334b27b05171ba061e2905af7235b085a69a07ad0bccbf42b234"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "sha256": "093bd2dd61163093984cb1dc2cff7c228bf43b8a6f8426c8419d2ec6422b1978"
+    },
+    {
+      "path": "DATA_MODELS.md",
+      "sha256": "b3998d194c7833489dec136e26f7ff663eca360c68c631f430a0f961cf6de086"
+    },
+    {
+      "path": "API_CONTRACT.md",
+      "sha256": "41f14321400daa88a423f182f6bc39fe49c531a7ee0cb77fa51e8b4909c31e8d"
+    },
+    {
+      "path": "NASA_DATA.md",
+      "sha256": "785c7df45587415e5b96eb64bdbd86ff18a3b909e1c5d55e298416bbb4b27ae5"
+    },
+    {
+      "path": "AI_PIPELINE.md",
+      "sha256": "0b75ca5bb01b577afe8f11602a07db3885a0ab572768a14878850a8102538945"
+    },
+    {
+      "path": "ROUTING_LOGIC.md",
+      "sha256": "d9c7663b8a44583e1c89f2f2dac22b75037d2e814d2194213a92e2d6b261f55a"
+    },
+    {
+      "path": "UI_SYSTEM.md",
+      "sha256": "e681b67a972ce4a8ad6024694d12aab8826e2a959159e6d7bfe5f37e2363bf1b"
+    },
+    {
+      "path": "DEMO_SCENARIO.md",
+      "sha256": "94007da1c875678f352e488a28372c845bd97dfcc25581ed7f22e1ebd2cc596c"
+    },
+    {
+      "path": "TEST_PLAN.md",
+      "sha256": "f0f6b8e95cf1590cc8ad74211fc311304aee6b9c019cb6269d44d1e578cc3486"
+    },
+    {
+      "path": "IMPLEMENTATION_PLAN.md",
+      "sha256": "182e002228914d9576ddeea65538ffc69de0087b69a5a80bbd03943a5ef57a0d"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b3ee4cd0798ba30481acfff71f818d5fab40ccee5b63473e7995f6d1eb99a660"
+    },
+    {
+      "path": ".env.example",
+      "sha256": "0b53ef7e03f6073049a110e3f9028d55878912f5c9035151e49000a2f3ee71f8"
+    }
+  ],
+  "master_prompt_sha256": "a63eaef69746862e19ee9eb59cde22410029105c4368cf2851f3f74f19eefe74",
+  "original_notes_sha256": "8ceaad7d579bfc79c16aa419d7db086fb21f2a15a6493463d6e07eec65c084a4",
+  "paragraphs": 458,
+  "application_and_data_files_compared": 67,
+  "unchanged_baseline": "docs/BASELINE_SOURCE_MANIFEST.json",
+  "limitations": "Static/local consistency and source fidelity only; historical passing app suites do not certify later gates, remote source availability, scientific/model validity, UI conformance or deployment.",
+  "supplemental_documents": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "88effeb96bb9e587d977fc1a5472f758119230bdbdc8c75dd3ef55d5e9777868"
+    },
+    {
+      "path": "STATUS.md",
+      "sha256": "48383d2e62b777a9be471c00ec6d0c7cdc9e66b646f34a060edfb4e3218ce0af"
+    },
+    {
+      "path": "docs/GATE_0_REVIEW.md",
+      "sha256": "5ccc315cf0f91178e207a891a693bcbd4057e386e53de5d97533c1d82b702905"
+    },
+    {
+      "path": "docs/DECISIONS.md",
+      "sha256": "36eee98a8b23036fca28c766a41986a6b8c3abbebd7750cf6d0a0b6b66cea324"
+    },
+    {
+      "path": "docs/MASTER_PROMPT.md",
+      "sha256": "a63eaef69746862e19ee9eb59cde22410029105c4368cf2851f3f74f19eefe74"
+    },
+    {
+      "path": "docs/MAIN_PROJECT_NOTES.md",
+      "sha256": "32812a73a9d5f9b286d14620a56ecc5f2f750d9bfebff41ca15cf914558eba53"
+    },
+    {
+      "path": "docs/MAIN_PROJECT_SOURCE.json",
+      "sha256": "e810db6e67061452d7a2842f4deeb88b567c8101707773200b8d42700a2239d1"
+    }
+  ]
+}

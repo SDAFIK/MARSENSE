@@ -79,3 +79,31 @@ Introduce typed provenance/calibration/configuration, exact segment dependency
 resolution and schema versioning before adding any optional NASA instruments.
 No queue, agent framework, generic chatbot or microservice split is needed for
 the bounded demo.
+
+## Stable seams and design tradeoffs
+
+These are responsibility contracts for later implementation, not newly introduced
+modules. Keep cohesive behavior behind small interfaces; split the existing
+service only when tests and responsibility growth justify it.
+
+| Seam | Input | Output / hidden detail | Meaningful test boundary |
+| --- | --- | --- | --- |
+| Prior knowledge | Supported Mars footprint, property, as-of time | Expected interpretation, evidence IDs and uncertainty; hides normalized NASA storage/coverage | NoData, outside-footprint and source immutability |
+| Observation | Validated original/derivative asset references, hashes, mission/footprint/time | Immutable observation plus inference status; hides upload storage and decoding | Invalid bytes, provenance and inference failure retention |
+| Perception | Sanitized model-input bytes and trusted local model configuration | Typed output, class fractions, version/hash/limitations; no write capability | Real held-out inference and known failure contract |
+| Discrepancy | Expected/observed interpretations, quality/conflict status, configured policy | One of five discrepancy states and supporting references | Threshold boundaries, unknown and conflict |
+| Consequence/decision support | Discrepancy, footprint, normalized mission dependency graph | Exact affected assumptions/segments/targets, provisional warning and factual options | Target-only, off-route, return and uncertain-safety cases |
+| Verification/knowledge | Evidence identity, human action/interpretation, reviewer/rationale | Atomic authorized projection, immutable decision/history and events | Idempotency, conflict, expiry, rollback and original-inference invariants |
+| Routing | Mission endpoints, normalized cost grid and verified evidence, prototype policy | Deterministic path/cost breakdown or explicit no-path; no NASA parsing | Geometry/cost, small footprints, slope/NoData and reproducibility |
+| Memory | Mission/as-of query and committed records | Current snapshot plus auditable history/inherited knowledge | Fresh-process restart and future-EVA projection |
+
+Use typed Pydantic boundaries and generated frontend types; backend owns eligibility,
+thresholds, dependencies and costs. Inject perception, repository/transaction and
+routing seams for failure tests. The UI selects/uploads/reviews and renders canonical
+responses. No scientific parser, credential or business-rule copy belongs in React.
+
+SQLite/WAL supports the bounded single-writer deployment with deterministic local
+fallback. PostGIS is an allowed later migration if practical, with migration/backup
+tests first. CPU inference needs bounded worker execution and initialized model
+lifecycle before production; this is a later reliability ticket, not a queue/service
+expansion. Local cache preparation remains independent of runtime mission requests.
