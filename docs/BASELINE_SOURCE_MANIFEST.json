@@ -1,0 +1,530 @@
+{
+  "created_at_utc": "2026-10-09T23:19:26.593966+00:00",
+  "purpose": "Concurrent-work baseline audit snapshot; not a release freeze. Different test suites were run at different prior points.",
+  "scope": "Source/config/contract documents and small product metadata; excludes secrets, runtime mission data, caches, binaries and generated dependencies/builds.",
+  "original_notes": {
+    "path": "C:\\Users\\ACER\\Downloads\\MARSENSE_Final_Project_Notes.docx",
+    "sha256": "8ceaad7d579bfc79c16aa419d7db086fb21f2a15a6493463d6e07eec65c084a4",
+    "paragraph_count": 458,
+    "section_count": 28,
+    "tracked_insertions_deletions": 0,
+    "extraction": "docs/MAIN_PROJECT_NOTES.md",
+    "full_paragraph_text_match_ignoring_whitespace": true
+  },
+  "files": [
+    {
+      "path": ".dockerignore",
+      "bytes": 187,
+      "sha256": "e536c96c4ec8f2d9a0446a1bcddac934db2d41cbbcaa5c13648e71ff4cbf2c96"
+    },
+    {
+      "path": ".env.example",
+      "bytes": 251,
+      "sha256": "e55947af7c1700b42446422e4af46cba0b536f882ffadcbb94a5c9f7ed263c99"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 264,
+      "sha256": "392e4228ae92a5c00f6aa475c1a57972140b214b64020000bc0d2788ffdb8517"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 1515,
+      "sha256": "1bd469353769238bd0dd6e57fca2a9759ff40b806f7395cf4a1409efa99deab6"
+    },
+    {
+      "path": "ai/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ai/perception.py",
+      "bytes": 3831,
+      "sha256": "7f17d895362ecd7c82b4f700ace8bb17c00eb1dbf3392b999456c2316e4d8273"
+    },
+    {
+      "path": "ai/requirements-lock.txt",
+      "bytes": 73,
+      "sha256": "b4eee8596c71f1fd3c1d48cfaed00cda92ffcee41fe965b58b08b3bb3c5052a0"
+    },
+    {
+      "path": "ai/requirements.txt",
+      "bytes": 14,
+      "sha256": "96c21a66cb3bd78f2bc397cac115a6dab70530932fd8c94ff3705abe4e62c02d"
+    },
+    {
+      "path": "ai/train.py",
+      "bytes": 5734,
+      "sha256": "38aa21e4b45cfe6b505ab644b69c93523d16c17ea873e49bd3bf2a8397af8172"
+    },
+    {
+      "path": "AI_PIPELINE.md",
+      "bytes": 4442,
+      "sha256": "071e089aed09ee9e911405c97c5d4ef25adc755eeb169bf412b1de69aa2c5eb5"
+    },
+    {
+      "path": "API_CONTRACT.md",
+      "bytes": 3381,
+      "sha256": "e01c5c13991fb9d1297464d8e991ff96e64015cda7b06020d5dcca4ef539f30f"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "bytes": 4673,
+      "sha256": "5c446536d78f64fd8a02044e354002d597f905f7b3077f6e2fc532b8209cada8"
+    },
+    {
+      "path": "backend/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend/comparison.py",
+      "bytes": 3486,
+      "sha256": "b4c0234cc6fd6298dcfa8807a31a439110bc566ecb5e5d6ec99041c05540f0c8"
+    },
+    {
+      "path": "backend/config.py",
+      "bytes": 1039,
+      "sha256": "cb92b059ccdfb6820758f8fab1c1f0087aa789e5952d5cd180a96246b3c3286c"
+    },
+    {
+      "path": "backend/Dockerfile",
+      "bytes": 625,
+      "sha256": "8947ad2fb0c69201775ff52058f51bf19731b183466d84b3568fbe85bbd68426"
+    },
+    {
+      "path": "backend/domain.py",
+      "bytes": 7267,
+      "sha256": "7e89d9a42b51ead60ad783f80bd500c6f49fe2ebf38bce727f33c4d3c3701b09"
+    },
+    {
+      "path": "backend/main.py",
+      "bytes": 10123,
+      "sha256": "dbc5ca8d1841fa2da387abadf602d7b442d7080d5781efd2214e713c05907cb1"
+    },
+    {
+      "path": "backend/requirements-dev.txt",
+      "bytes": 76,
+      "sha256": "57ef834d1ebc7f4300b4824f12f1ae8a1122fb96ff3b08359ddf5d6c815e61df"
+    },
+    {
+      "path": "backend/requirements-lock.txt",
+      "bytes": 1127,
+      "sha256": "439226ba8cef02bb377f87f1ef0910115a0f9f371438af2b5ec8bbeafe6d44b6"
+    },
+    {
+      "path": "backend/requirements.txt",
+      "bytes": 220,
+      "sha256": "dcd0f631661268e52004dc510b0dd500972b4b9743d36f982724378c058a29cc"
+    },
+    {
+      "path": "backend/routing.py",
+      "bytes": 4753,
+      "sha256": "4ca703988f22f5e3778fc2f75dd1c42364530900c7df39b7d3f511e02f732ed6"
+    },
+    {
+      "path": "backend/seed.py",
+      "bytes": 5756,
+      "sha256": "d18c8741bc5fed562e157adbbffe1100d8aafecf4544ce19615ac01bba760f44"
+    },
+    {
+      "path": "backend/service.py",
+      "bytes": 19592,
+      "sha256": "e66bcdda94e72badeb3d35ef3834c9f325064f16a129d2f901770b167ab4e93f"
+    },
+    {
+      "path": "backend/spatial.py",
+      "bytes": 1025,
+      "sha256": "bbfbf30076ec0a3e5f76fce8e3176e336cba6bd0b7bace1f21f576406038a664"
+    },
+    {
+      "path": "backend/store.py",
+      "bytes": 2353,
+      "sha256": "79ef0e77bbced1bba5eabdbe199836425d49b475cc84160e3b593333bfaf2eb9"
+    },
+    {
+      "path": "compose.yaml",
+      "bytes": 603,
+      "sha256": "698d27e652410b82f22aa5d234077fef9e3318631e0f8a6dc67ebb529103abff"
+    },
+    {
+      "path": "data/demo/scenarios.json",
+      "bytes": 7604,
+      "sha256": "1e534d06e9207dfa7ff17e2a70c9bfefdc24370849dbf598b0f4cc07daae9f0a"
+    },
+    {
+      "path": "data/nasa/ctx-capabilities.xml",
+      "bytes": 8343,
+      "sha256": "aeb623627236fc77bbe62c45a8db6e8c148cba7f70c02006eeb30c4fa377598c"
+    },
+    {
+      "path": "data/nasa/ctx-controlled-capabilities.xml",
+      "bytes": 8810,
+      "sha256": "bb58f640da78bcc404a9109f613f2b3f0e3e683ff6625e8f48dcb23e602813b8"
+    },
+    {
+      "path": "data/nasa/hirise-capabilities.xml",
+      "bytes": 10037,
+      "sha256": "6a67af4f3e79ed8bf5e625b60d4b9250533f38a8f61e98758410ff8ad9213693"
+    },
+    {
+      "path": "data/nasa/mola.lbl",
+      "bytes": 4820,
+      "sha256": "bc624a238ba6d71a770a09f959ead96f1c144970fae435b8ca5e26208b42eec5"
+    },
+    {
+      "path": "data/nasa/places-best-tactical.csv.xml",
+      "bytes": 15898,
+      "sha256": "777074bc03a3f06be8241b85cd4448cbdac5bff4dfecc443de6757152d22ac79"
+    },
+    {
+      "path": "data/processed/manifest.json",
+      "bytes": 17954,
+      "sha256": "c7e6ccf61b65f23cfa185fe32710604eeeefeebc9a024ea92c5f368f898e5842"
+    },
+    {
+      "path": "DATA_MODELS.md",
+      "bytes": 5046,
+      "sha256": "d3231cd24a0aa07d04c3a058c004a47f8b8e80e9ab063072012fd82a4802b46a"
+    },
+    {
+      "path": "DEMO_SCENARIO.md",
+      "bytes": 3696,
+      "sha256": "17d169370ef19959b752fc9e2c85aa94890b0c3e1a3d0cd9d3fc38e6bb730db4"
+    },
+    {
+      "path": "DEPLOYMENT.md",
+      "bytes": 5407,
+      "sha256": "8834745bd595ec55851054f427baf8666a0e08b96bab5a6abdc2487f89fe7556"
+    },
+    {
+      "path": "docs/AI_PIPELINE.md",
+      "bytes": 2523,
+      "sha256": "57dbfabb5fb5bacdcf4e318b0a6cc5ba374335310e04d2641ae44defd1c83ac3"
+    },
+    {
+      "path": "docs/API_CONTRACT.md",
+      "bytes": 2140,
+      "sha256": "b332cac0bcbd3092bf580cb83dba408cf38410194dd656a88e8a00d838104273"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 2410,
+      "sha256": "ee954785726eecdb0be241c30858adbb33ba497a95ae276ab870a5b5cf6221f7"
+    },
+    {
+      "path": "docs/BASELINE_AUDIT.md",
+      "bytes": 8987,
+      "sha256": "f33419bbd28865c98c3391291f0561df3c23f9882e9e8299fd36527b702fbbab"
+    },
+    {
+      "path": "docs/DATA_MODELS.md",
+      "bytes": 2214,
+      "sha256": "175f13d84bb0db6fb6b077a693e473deb061d0451e92fb5e884b1db474d3a125"
+    },
+    {
+      "path": "docs/DECISIONS.md",
+      "bytes": 5057,
+      "sha256": "4a0862d88f0dace1bed8aef55d5da38e0cf21e442bebc2a41a308f01649c6114"
+    },
+    {
+      "path": "docs/DEMO_SCENARIO.md",
+      "bytes": 2192,
+      "sha256": "5ee6fe911d21f66902136399c9804c5d0bf2778d792627a057c2b21ddc19a825"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS.md",
+      "bytes": 2831,
+      "sha256": "4783638a2a3f72f78a263cbcef19298005d18aee5e9c977c1ed936fb4bda0981"
+    },
+    {
+      "path": "docs/LOCAL_RUN.md",
+      "bytes": 1376,
+      "sha256": "2d731a9cc0a493d489d1216ceb4af2e0045cace8b54ea1184fff57cc30e41ce9"
+    },
+    {
+      "path": "docs/MAIN_PROJECT_NOTES.md",
+      "bytes": 27223,
+      "sha256": "32812a73a9d5f9b286d14620a56ecc5f2f750d9bfebff41ca15cf914558eba53"
+    },
+    {
+      "path": "docs/NASA_DATA.md",
+      "bytes": 4577,
+      "sha256": "df4e4fd8b8bd521815169b6ef3883addfd052ec0ffce7c1d806c29aebbb66ae8"
+    },
+    {
+      "path": "docs/ROUTING_LOGIC.md",
+      "bytes": 2462,
+      "sha256": "bec657a2dc3105676aa210300d92978ff890d2bd12ea22b5f8591c2f2b2ebb52"
+    },
+    {
+      "path": "docs/TEST_PLAN.md",
+      "bytes": 2383,
+      "sha256": "77b66596af4cb68b49aa75a77b8ee87e0c5472ec43ec0ce0297da6e23ecc65fc"
+    },
+    {
+      "path": "docs/UI_SYSTEM.md",
+      "bytes": 2060,
+      "sha256": "2dd79e90837e8672333b34b8bbec44ac60c48b3d162007f7876ff3184354879a"
+    },
+    {
+      "path": "frontend/AGENTS.md",
+      "bytes": 679,
+      "sha256": "063098f6cb31bb44c6f8fbea25b3876de7ee1e5f7d00a50dbab506f6415eb7f0"
+    },
+    {
+      "path": "frontend/Dockerfile",
+      "bytes": 407,
+      "sha256": "8e634c890cf54127a0d6258879cb47220b406eab42ad348ccb4f8d9b3288cb99"
+    },
+    {
+      "path": "frontend/e2e/acceptance.spec.ts",
+      "bytes": 5406,
+      "sha256": "68cde727007f4bf0b5d1e03e30263460fba5804dea95a70923a7ac23b38dba8f"
+    },
+    {
+      "path": "frontend/eslint.config.mjs",
+      "bytes": 351,
+      "sha256": "6dafff58a9fb5f3ff5ca22427b3448afa480598a0c22384c5da38ea2df910dac"
+    },
+    {
+      "path": "frontend/next-env.d.ts",
+      "bytes": 308,
+      "sha256": "6b0f94268cb5eb65386cbec82887c96b4eba63fb5be3c2c950168f7b3e7e67dc"
+    },
+    {
+      "path": "frontend/next.config.ts",
+      "bytes": 375,
+      "sha256": "50b0e36b6c52326f2371dcc0591780107c28f6a5e12f026e1f2bb2454fc9eb2f"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "bytes": 323353,
+      "sha256": "22753167f68a34c7e068f8e0e4e50ba3b6007aaa589ea1374b3c9cd0475cb5d0"
+    },
+    {
+      "path": "frontend/package.json",
+      "bytes": 971,
+      "sha256": "5017f0e4751fd6df61f3ce5554807d6041ecb66879b91e891f5df8363dcdd31a"
+    },
+    {
+      "path": "frontend/playwright.config.ts",
+      "bytes": 963,
+      "sha256": "b406ab36fab3eefa5028c359e026155a6b6b05b46b6de5e8e440c2039327778a"
+    },
+    {
+      "path": "frontend/postcss.config.mjs",
+      "bytes": 83,
+      "sha256": "b783348d5618047d0f37e12acd15c5a2c5f02809d8711e0764c9cea52750346c"
+    },
+    {
+      "path": "frontend/src/app/[view]/page.tsx",
+      "bytes": 585,
+      "sha256": "a10deb0a098075ba4f85d60e7ea0bc1f201114777abc4e632c701a3ae0f7e2fb"
+    },
+    {
+      "path": "frontend/src/app/globals.css",
+      "bytes": 31736,
+      "sha256": "6df4fde89bd917a2a302c4589416db5131914f63c0d09c264d35e8676e464f1b"
+    },
+    {
+      "path": "frontend/src/app/layout.tsx",
+      "bytes": 485,
+      "sha256": "f2e59851753cf66b485dcc1f2d83cf753c0c1aff90eb7de762ef2c99a12232ff"
+    },
+    {
+      "path": "frontend/src/app/page.tsx",
+      "bytes": 3144,
+      "sha256": "9cb9d96c147ad1ad0481fe1e02821943b713ee1a69cf4c4468ed2c94b9c323b4"
+    },
+    {
+      "path": "frontend/src/components/astronaut-workspace.tsx",
+      "bytes": 2694,
+      "sha256": "d2f8fea3d10880054497d4646180cc4277fa58e700c7d9329bf9c71b315b76b8"
+    },
+    {
+      "path": "frontend/src/components/before-after.tsx",
+      "bytes": 3183,
+      "sha256": "58b41b1e4909ef04d888d4f5f2aa1662db7e0654d22d6cb27f36de20aefc2205"
+    },
+    {
+      "path": "frontend/src/components/evidence-review.tsx",
+      "bytes": 8171,
+      "sha256": "60b7be96c8daf30b024682398bc21dbe66184872bebd11a16d15c303bc4c2f86"
+    },
+    {
+      "path": "frontend/src/components/living-map.tsx",
+      "bytes": 11533,
+      "sha256": "9c46329edefeb7eff0a0806fe35ef207a9a2ea58e55f19ccac41c45fdbe6c212"
+    },
+    {
+      "path": "frontend/src/components/mission-memory.tsx",
+      "bytes": 2810,
+      "sha256": "8c680ae64c854cb85406a227273e73afbef4602c927a25af5efe3e2dfef23e80"
+    },
+    {
+      "path": "frontend/src/components/mission-shell.tsx",
+      "bytes": 4392,
+      "sha256": "c45eb1846f8c06edb577f4d2f813f5d5c642b96c1a2eeff2ccbc2535a454a8be"
+    },
+    {
+      "path": "frontend/src/components/mission-workspace.tsx",
+      "bytes": 13085,
+      "sha256": "a21820e785f3291eb0fa8168c11fcf664869d6d6b1e1a0a385b8cf33bd20dab1"
+    },
+    {
+      "path": "frontend/src/components/observation-panel.tsx",
+      "bytes": 5881,
+      "sha256": "3e91011558f9afd678562d9796e706f82cd0fdda4d96b63316366e8c0c0c8355"
+    },
+    {
+      "path": "frontend/src/components/route-summary.tsx",
+      "bytes": 2261,
+      "sha256": "f1057be775bd8b2b171b7cb1af36a0f07436bd120fe4042a2d8eeee1968ed9fd"
+    },
+    {
+      "path": "frontend/src/lib/api.ts",
+      "bytes": 872,
+      "sha256": "75779af40d84cbfbd36359a0472fd1aadf45a4cb26eb8d2c6a61ff639559e62d"
+    },
+    {
+      "path": "frontend/src/lib/types.ts",
+      "bytes": 3416,
+      "sha256": "f8ec79e84cc8b7cdbd63492cbd94007f5277e331116274a37eef17f6c03054ee"
+    },
+    {
+      "path": "frontend/src/lib/use-mission.ts",
+      "bytes": 1354,
+      "sha256": "33bf1485f446ea755e777b935b0c0fe51325ec5a68171ae2ecd8a1dfe458ac17"
+    },
+    {
+      "path": "frontend/src/test/evidence-review.test.tsx",
+      "bytes": 3088,
+      "sha256": "05ef0623df1c659911baae0babe26b534c2a2773cf169ff5fd9c3ca533c39b48"
+    },
+    {
+      "path": "frontend/src/test/setup.ts",
+      "bytes": 149,
+      "sha256": "475c7500129ce15530c7b8070b2838a840f96ac75ce83a0a413ef66ae24b5d64"
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "bytes": 860,
+      "sha256": "8b374f44ce0f06247697514d2ba278217c105f98117a49fdab999127a956eb4c"
+    },
+    {
+      "path": "frontend/vitest.config.ts",
+      "bytes": 311,
+      "sha256": "2380b2579b7746b493b3421300538ec397d4754d5221fb0be7e28793adc3d0fa"
+    },
+    {
+      "path": "IMPLEMENTATION_PLAN.md",
+      "bytes": 7944,
+      "sha256": "76fd051d28f5f20fff56c78683892e4e33540f63d032faadb428d47ed601a773"
+    },
+    {
+      "path": "NASA_DATA.md",
+      "bytes": 7371,
+      "sha256": "785c7df45587415e5b96eb64bdbd86ff18a3b909e1c5d55e298416bbb4b27ae5"
+    },
+    {
+      "path": "PROJECT_SPEC.md",
+      "bytes": 25948,
+      "sha256": "f71a61e689a65d99f85911ecb7eb823076b15a4f540541c226ef36d8395b5fa4"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 326,
+      "sha256": "e9a2df785bf241cb7af453eef58289b6e0b423a89ce2d2521fe5e4f4de0df149"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5070,
+      "sha256": "847c5f10769b8f5faf9626a636fa29a9d62855357f5bca6230b5e5e51d3e56d9"
+    },
+    {
+      "path": "ROUTING_LOGIC.md",
+      "bytes": 4534,
+      "sha256": "07228313eb08c09abf5dc4833ca91897d6dbb127c18db5f9c5132c0a628bd386"
+    },
+    {
+      "path": "scripts/cache_context.py",
+      "bytes": 8672,
+      "sha256": "0079cad39f8b8198e70e0e9bb35fcc833bcba942697464fc319f89006ec5ed2f"
+    },
+    {
+      "path": "scripts/cache_nasa.py",
+      "bytes": 6085,
+      "sha256": "bf017be00b99b97f347ac418748816640a84579d0d391c70672cdd7e62d815ed"
+    },
+    {
+      "path": "scripts/e2e_backend.py",
+      "bytes": 517,
+      "sha256": "bf2ea5bb3a7de6370b9b16c580c9664932da4040c7e5e62a73c228c31ca0f713"
+    },
+    {
+      "path": "scripts/make_scenarios.py",
+      "bytes": 1992,
+      "sha256": "3763de58bef78a252dd39fe5225543384fac1b3eba236bd9665e5b94b42e0587"
+    },
+    {
+      "path": "scripts/process_dem.py",
+      "bytes": 3317,
+      "sha256": "dd6999e1929dc83435751adb606ded42bb44aef3689dcf3727212d8bdcb8f741"
+    },
+    {
+      "path": "scripts/start-local.ps1",
+      "bytes": 1772,
+      "sha256": "cb438fe2f154ae63b53fd3317e874e97d2ec1e031f7323efaeb0fed68130f41d"
+    },
+    {
+      "path": "scripts/stop-local.ps1",
+      "bytes": 761,
+      "sha256": "b12197bed6b307fc90644d28a7b1f6328091e92ba121789ca36491cf2abb04ca"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 7433,
+      "sha256": "fa4cf76062b2cdb4d6438aa28b1f1f05ef4e855e8973964f5f42b2d6ff5f2527"
+    },
+    {
+      "path": "TEST_PLAN.md",
+      "bytes": 5084,
+      "sha256": "192216638a5eeed578f4e4a54917dd7fafc8e022267773a6912c267949874855"
+    },
+    {
+      "path": "tests/conftest.py",
+      "bytes": 470,
+      "sha256": "3cb3ef117cfbcbf8426b6d127382ed4f1dcacf1f08ced00cc7190d5561dc3e40"
+    },
+    {
+      "path": "tests/test_core.py",
+      "bytes": 14395,
+      "sha256": "5d6498c722d1334ea11176a578893888d05a715bc1e1541eecd919bffba933b0"
+    },
+    {
+      "path": "tests/test_pipelines.py",
+      "bytes": 3638,
+      "sha256": "b90ad63896cdab6fa25881966c319e4f77610e50902fa72860548b71a6e8aef6"
+    },
+    {
+      "path": "tests/test_spatial_routing.py",
+      "bytes": 2198,
+      "sha256": "bbe128e77bb0685f55b834aeecd2fa9488dc462e42396ca68be2e09f0a0a8b4f"
+    },
+    {
+      "path": "UI_SYSTEM.md",
+      "bytes": 5989,
+      "sha256": "e681b67a972ce4a8ad6024694d12aab8826e2a959159e6d7bfe5f37e2363bf1b"
+    }
+  ],
+  "verification_recheck": {
+    "backend_tests_passed": 29,
+    "blank_review_rejected": true,
+    "unknown_model_without_human_identification_rejected": true,
+    "known_model_with_explicit_unknown_human_override_rejected": false,
+    "exact_segment_regression_passed": true,
+    "hirise_analysis_crs_equal": false,
+    "other_suites": "Earlier snapshots: component 3, browser 21, Next build, lint and types. No fixed final release claim."
+  }
+}
