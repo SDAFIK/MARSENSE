@@ -6,7 +6,10 @@ website URL has been verified yet.
 
 ## Frontend import
 
-1. Sign in to Vercel and import `SDAFIK/MARSENSE`.
+1. Sign in to Vercel and import `SDAFIK/MARSENSE`. Use **Redscape** as the
+   requested project/team display name, with project slug `redscape` if
+   available. The final hostname must be taken from the successful deployment;
+   do not assume ownership of `redscape.vercel.app`.
 2. Set Root Directory to `frontend` and Framework Preset to Next.js.
 3. Use the project's `npm run build` and default Next.js output settings.
 4. Set the server-only `BACKEND_URL` to the public HTTPS FastAPI origin.
