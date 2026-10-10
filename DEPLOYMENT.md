@@ -2,8 +2,21 @@
 
 MARSENSE is a research and mission-concept prototype for evidence-aware Mars
 exploration decision support built from NASA-derived data and validated prototype
-workflows. Public publication has not been authorized or performed. Source/model
+workflows. Public deployment was requested on 2026-10-10; it has not been performed. Source/model
 limits in NASA_SOURCE_MATRIX.md remain; this is not operational EVA software.
+
+## Latest deployment request: GitHub
+
+The complete project is pushed to the private `SDAFIK/MARSENSE` repository.
+GitHub Pages is not enabled. Pages serves static files and cannot run this
+application's FastAPI backend, identity sessions, uploads or persistent SQLite
+mission store. Source delivery alone is not a running full-system deployment.
+
+The existing Docker Compose configuration is the full-system deployment path.
+Execution still requires an accessible host, HTTPS hostname/certificates and a
+private identity file. No host or production configuration was supplied for the
+latest request. A separate static showcase would be a different deliverable;
+it must not replace the working app or be described as the full system.
 
 ## Local operation
 
