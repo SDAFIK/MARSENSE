@@ -1,88 +1,88 @@
-# Local operation and production deployment plan
+# Deployment readiness — S10
 
-Status: documentation only. No deployment/provisioning has occurred. Gate 19
-cannot pass until Gates 0–18, real inference/data acceptance, all required checks
-and BLOCKER/HIGH audit fixes pass. README.md contains current runnable dev commands.
+MARSENSE is a research and mission-concept prototype for evidence-aware Mars
+exploration decision support built from NASA-derived data and validated prototype
+workflows. Public publication has not been authorized or performed. Source/model
+limits in NASA_SOURCE_MATRIX.md remain; this is not operational EVA software.
 
-## Existing local production frontend check
+## Local operation
 
-From frontend, npm run build produces the Next.js application successfully;
-npm run start serves it on port 3000. Backend remains a local FastAPI process
-with persisted SQLite/runtime uploads. NEXT_DIST_DIR separates development/E2E
-builds. BACKEND_URL is server configuration; never put secrets in public env.
-Use MARSENSE_ENVIRONMENT=demo on loopback for the existing demonstration.
+Run scripts/start-local.ps1 after README dependency setup. It refuses occupied
+ports, runs hidden loopback services on 3000/8000 and preserves SQLite mission
+history. Frontend development edits reload automatically; backend code requires
+a controlled process restart. Do not delete the database to repeat a demo.
+Use a separate MARSENSE_DATABASE_URL for a fresh demonstration instead.
 
-## Configuration contract
+## Production preparation (operator steps, not executed)
 
-| Variable | Meaning |
-| --- | --- |
-| MARSENSE_ENVIRONMENT | demo or production; production disables curated replay |
-| MARSENSE_DATABASE_URL | SQLite absolute/working-directory-consistent persistent file; current application does not support PostgreSQL |
-| MARSENSE_CORS_ORIGINS | Explicit JSON list of allowed origins; no wildcard |
-| MARSENSE_API_TOKEN | Production backend bearer secret, >=32 characters; never exposed to browser |
-| MARSENSE_MODEL_PATH | Absolute path to verified locally cached TorchScript checkpoint |
-| MARSENSE_SLOPE_PATH | Optional validated Mars DEM-derived slope-grid path; no covering grid is active in the current demo |
-| MARSENSE_MAX_UPLOAD_BYTES | Upload byte cap, default 8 MiB |
-| BACKEND_URL | Next server backend origin; private service address in production |
-| NEXT_DIST_DIR | Optional distinct Next build directory |
-| PLAYWRIGHT_CHANNEL | Browser installed for local E2E; default msedge |
+1. Provision a Linux host with Docker Compose, a hostname and a valid TLS
+   certificate. No infrastructure or billing action is automated here.
+2. Provision identities using `python -m scripts.create_auth_user --file
+   /private/marsense/users.json --username controller --name "Mission Controller"
+   --role MISSION_CONTROL`. Use an installed project environment. Password is
+   prompted, salted and hashed. Restrict file access to the API container account;
+   never commit it. ADMIN also reviews; ASTRONAUT submits observations.
+3. Set MARSENSE_USERS_FILE to that absolute private file, MARSENSE_DOMAIN to the
+   certificate hostname, and MARSENSE_TLS_DIR to a directory containing
+   fullchain.pem and privkey.pem. These are operator environment values, not
+   secrets checked into the repository. The runtime account must be able to read
+   its mounted users file; set ownership for the container UID or use a managed
+   secrets mount with the same path. TLS key is readable only by the gateway.
+4. Validate: `docker compose -f compose.production.yaml config --quiet`.
+5. Build: `docker compose -f compose.production.yaml build`.
+6. After separately authorizing publication, start with
+   `docker compose -p marsense-production -f compose.production.yaml up -d`.
+7. Check `docker compose -p marsense-production -f compose.production.yaml ps`,
+   `/api/health`, browser sign-in, image decoding and an authorized test review
+   against a disposable mission environment before accepting traffic.
 
-Current .env.example demonstrates local settings. Production auth exists on the
-backend, but the current Next rewrite/browser client does not authenticate.
-Production would therefore return 401 for mission data/assets and 404 for replay.
-Fix the full-stack authenticated session/server proxy and validated model path
-before using production mode. Do not weaken backend authorization to make the UI
-appear deployed.
+The production file exposes only TLS port 443, routes through nginx to standalone
+Next.js and private FastAPI, uses one API worker and persistent SQLite, and
+restarts services unless stopped. API CORS is the exact HTTPS origin. Cookies
+are Secure/HttpOnly/SameSite Strict; mutation Origin and roles are enforced.
+Login rate limits exist at nginx and inside the single API process. The inner
+limiter sees the direct proxy address and can throttle the small deployment
+collectively; do not claim distributed abuse protection. Plan operational limits
+and monitoring before scaling. API uploads are capped at 8 MiB with decoded
+pixel limits; gateway body limit is 10 MiB for multipart overhead.
 
-## Production topology to implement at Gate 19
+## Database and recovery
 
-HTTPS reverse proxy → Next standalone server → private FastAPI. Bind backend
-privately; authenticate operators at the frontend server boundary and use its
-server-side backend credential. Single backend writer with SQLite persistent
-volume is sufficient for this bounded prototype. PostGIS migration may be chosen
-later, but is not current configuration support and needs migrations/tests.
+SQLite WAL and atomic schema-version migrations are the supported local/small
+single-instance production database. Future schema versions are refused. Do not
+configure PostgreSQL: the current store does not implement it. A named Docker
+volume survives restarts/rebuilds. Never use `down -v` against mission data.
 
-Build pinned frontend lockfile and pinned Python/AI environment into versioned
-containers with non-root processes. Include only bounded cached NASA assets,
-manifest and verified local model. Keep user evidence/database/uploads on a
-separate persistent volume; preserve ownership/permissions and disk capacity.
-Read secrets through runtime environment/secret manager. Serve assets with
-appropriate private caching for user evidence. Apply request body/time/rate bounds.
+Back up the database with Python sqlite3's online backup API (not a live file
+copy that omits WAL), and separately back up runtime/uploads and runtime/originals,
+private identity configuration, and exact source manifests/cache. For a consistent
+mission+upload snapshot, quiesce writes or stop only the API during backup.
+Store backups encrypted with restrictive permissions outside the public web root.
+Restore into a new volume/directory, run `PRAGMA integrity_check`, start the same
+application version and inspect mission/evidence/history before changing traffic.
+Keep the original volume intact for rollback. Sessions are in the database;
+revoke them or rotate identities after a suspected compromise.
 
-Configure process restart, health and **readiness** checks, structured valid JSON
-logs/request IDs without credentials, backup and restore. Current /api/health
-checks process and CTX existence only; it is insufficient as readiness. Readiness
-must verify DB connectivity, asset/checksum completeness and configured model.
-Measure inference/mission interaction latency and bound CPU work before sizing a
-host. Cache the model per service and avoid inline blocking async inference.
+## Scientific/runtime configuration
 
-## Reproducible release / rollback procedure
+The default local run keeps existing route cost facts and deterministic replay.
+MARSENSE_SLOPE_PATH may explicitly select data/processed/hirise-covering-slope.npz
+for a new isolated run. Configured invalid grids fail; unconfigured slope is
+visibly excluded. MARSENSE_MODEL_PATH may select the experimental checkpoint,
+whose classification remains disabled because measured quality is low. Mount
+that checkpoint and adjacent metadata explicitly; checkpoints are excluded from
+Docker builds by default. Genuine camera/CRISM context is bundled locally.
+Production disables replay; local demo is a separate explicit mode. Optional
+MARSENSE_READ_ONLY=true blocks mission mutation; never expose writable demo mode.
 
-1. Pin exact dependency versions and record build, data/model hashes and Git SHA.
-2. Run every mandatory command in TEST_PLAN.md from a clean environment.
-3. Complete FINAL_AUDIT.md with no open BLOCKER/HIGH findings.
-4. Validate image builds, health/readiness and production browser authentication
-   locally on isolated data, including upload → verification → reroute → restart.
-5. Back up the live SQLite file using a consistent database backup and preserve
-   uploads/provenance together; verify restore in an isolated instance.
-6. Deploy that exact release behind HTTPS, observe health/logs, run protected
-   smoke tests without deleting existing evidence. Keep previous release/data
-   migration rollback strategy available.
-7. Cold-start the full local deterministic demo with external internet blocked.
+Health endpoint reports process/cache availability; it is not scientific source
+certification. API errors use structured logging without passwords/session
+secrets; container access logs require normal retention/privacy controls.
 
-If DigitalOcean access is available at this point, use the installed provisioning
-workflow then; do not create a remote box during early gates. If credentials or
-provisioning are unavailable, complete the tested container/reverse-proxy/runbook
-configuration and clearly report the external deployment blocker. This file is
-not a claim that HTTPS, validated container deployment or backup automation exist.
-Concurrent implementation added Dockerfiles, a loopback demo compose.yaml and
-native PowerShell startup/shutdown scripts. Docker is not installed/exposed on
-this host, so no container build/start validation is recorded. The compose
-configuration is local demo mode, not protected public production.
+## Verification boundary
 
-## Competition fallback
-
-Keep the offline demo laptop/environment, pinned dependencies, verified cache,
-local model, fresh separate rehearsal DB and printed/demo steps. Record a demo
-video and submission references after freeze. Remote-host failure must not force
-switching to fabricated images, replay presented as AI, or deleting history.
+Native backend, Next production build, authenticated browser flow and offline
+local acceptance are tested. Docker image builds, nginx TLS termination, DNS,
+certificate renewal and external backup/restore operations have not been executed
+in this workstation session. S10 delivers configuration and exact operator steps;
+there is no externally deployed service or production security certification.

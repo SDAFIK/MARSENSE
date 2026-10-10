@@ -1,0 +1,592 @@
+{
+  "ctx": {
+    "layer": "JEZ_ctx_B_soc_008_orthoMosaic_6m_Eqc_latTs0_lon0",
+    "requested_bounds_lon_lat": [
+      77.45,
+      18.44,
+      77.47134044194759,
+      18.453496483886493
+    ],
+    "bounds_lon_lat": [
+      77.45000839233398,
+      18.44003677368164,
+      77.47129440307617,
+      18.453426361083984
+    ],
+    "render_corners": [
+      [
+        77.45000839233398,
+        18.453426361083984
+      ],
+      [
+        77.47129440307617,
+        18.453426361083984
+      ],
+      [
+        77.47129440307617,
+        18.44003677368164
+      ],
+      [
+        77.45000839233398,
+        18.44003677368164
+      ]
+    ],
+    "effective_pixel_m": [
+      9.652736004705229,
+      10.175176195330733
+    ],
+    "processing": "WMTS mosaic cropped to nearest pixel edges; native resolution retained in source layer ID",
+    "analysis_crs": "+proj=eqc +lat_ts=18.44 +lat_0=0 +lon_0=77.45 +R=3396190.0 +y_0=-1093025.4223297667 +units=m +no_defs",
+    "local_origin_offset_m": [
+      0,
+      1093025.4223297667
+    ],
+    "source_crs": "IAU2000 Mars equirectangular / sphere 3396190 m",
+    "capabilities": "data/nasa/ctx-controlled-capabilities.xml",
+    "tiles": [
+      {
+        "url": "https://trek.nasa.gov/tiles/Mars/EQ/JEZ_ctx_B_soc_008_orthoMosaic_6m_Eqc_latTs0_lon0/1.0.0/default/default028mm/12/1628/5858.png",
+        "file": "data/nasa/tiles/ctx-controlled-12-1628-5858.png",
+        "sha256": "98e751a5112b498b99628ac96cb1c6ad314ab1ee4fbe8c7aad070d9d72e3161b"
+      }
+    ],
+    "sha256": "cfd69afc9f1a0ff52d01e2cb1afb9ba9c3eea77a8eddc826031d46b137b15b52",
+    "pixel_size": [
+      124,
+      78
+    ]
+  },
+  "ground": {
+    "source_url": "https://d2pn8kiwq2w21t.cloudfront.net/original_images/PIA26072.jpg",
+    "source_page": "https://www.jpl.nasa.gov/images/pia26072-perseverance-makes-tracks-in-boulder-field/",
+    "product": "PIA26072",
+    "instrument": "Perseverance Navcam",
+    "sol": 866,
+    "acquired": "2023-07-28",
+    "credit": "NASA/JPL-Caltech",
+    "sha256": "dda01157f86e136656ce23cf9e71e243577e119547c4e6da796901e14f444ceb",
+    "processing": "Public-release mosaic JPEG, resized only; not a calibrated PDS product",
+    "registration": "Simulated local footprint; NOT the image's actual PLACES location"
+  },
+  "cached_at": "2026-10-09T23:50:32.564105+00:00",
+  "mission_geometry": "Illustrative habitat, target, soil assumptions and footprint; not NASA mission planning data",
+  "hirise": {
+    "layer": "JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd",
+    "requested_bounds_lon_lat": [
+      77.45,
+      18.44,
+      77.47134044194759,
+      18.453496483886493
+    ],
+    "bounds_lon_lat": [
+      77.45000839233398,
+      18.439993858337402,
+      77.47133731842041,
+      18.45351219177246
+    ],
+    "render_corners": [
+      [
+        77.45000839233398,
+        18.45351219177246
+      ],
+      [
+        77.47133731842041,
+        18.45351219177246
+      ],
+      [
+        77.47133731842041,
+        18.439993858337402
+      ],
+      [
+        77.45000839233398,
+        18.439993858337402
+      ]
+    ],
+    "effective_pixel_m": [
+      2.4131840011763073,
+      2.5437940488326833
+    ],
+    "processing": "WMTS mosaic cropped to nearest pixel edges; native resolution retained in source layer ID",
+    "analysis_crs": "+proj=eqc +lat_ts=18.44 +lat_0=0 +lon_0=77.45 +R=3396190.0 +y_0=-1093025.4223297667 +units=m +no_defs",
+    "local_origin_offset_m": [
+      0,
+      1093025.4223297667
+    ],
+    "source_crs": "IAU2000 Mars equirectangular / sphere 3396190 m",
+    "capabilities": "data/nasa/hirise-capabilities.xml",
+    "tiles": [
+      {
+        "url": "https://trek.nasa.gov/tiles/Mars/EQ/JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd/1.0.0/default/default028mm/14/6512/23433.png",
+        "file": "data/nasa/tiles/hirise-14-6512-23433.png",
+        "sha256": "1c88e83c2ba1ef440a7040ffa2e25b2beea8171a52720bb3fbc114c3af5060c3"
+      },
+      {
+        "url": "https://trek.nasa.gov/tiles/Mars/EQ/JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd/1.0.0/default/default028mm/14/6512/23434.png",
+        "file": "data/nasa/tiles/hirise-14-6512-23434.png",
+        "sha256": "ddde4093d78055d4d4ecf737c546cc50a3c9e1c03a98e9f7d615a6d618f0ad49"
+      },
+      {
+        "url": "https://trek.nasa.gov/tiles/Mars/EQ/JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd/1.0.0/default/default028mm/14/6512/23435.png",
+        "file": "data/nasa/tiles/hirise-14-6512-23435.png",
+        "sha256": "0bd6188d99443ec7f352ced3a91e09fc647462dd566e9019f30f700c09a361ce"
+      },
+      {
+        "url": "https://trek.nasa.gov/tiles/Mars/EQ/JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd/1.0.0/default/default028mm/14/6513/23433.png",
+        "file": "data/nasa/tiles/hirise-14-6513-23433.png",
+        "sha256": "56900051e486a35bb9f9c36f5986a64f6768df2b6151e1d9830ff004537c45b0"
+      },
+      {
+        "url": "https://trek.nasa.gov/tiles/Mars/EQ/JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd/1.0.0/default/default028mm/14/6513/23434.png",
+        "file": "data/nasa/tiles/hirise-14-6513-23434.png",
+        "sha256": "32d376286d83b66c7766cd72e67b1eb94ba2b55785ea6cf27825dac81168bb78"
+      },
+      {
+        "url": "https://trek.nasa.gov/tiles/Mars/EQ/JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd/1.0.0/default/default028mm/14/6513/23435.png",
+        "file": "data/nasa/tiles/hirise-14-6513-23435.png",
+        "sha256": "4f1d03beb8953bd28be0cf8249a3559fc31a616a9c385c7121f410599c9c6789"
+      }
+    ],
+    "sha256": "10fd21826515a12b63a197807ce87ce0872e216455c427a040e90f9bed049b77",
+    "pixel_size": [
+      497,
+      315
+    ]
+  },
+  "dtm": {
+    "product_id": "DTEEC_048842_1985_048908_1985_U01",
+    "source_url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+    "coverage_fraction": 0.0,
+    "ranges": [
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 0,
+        "length": 27820,
+        "file": "data/nasa/ranges/hirise-dtm-0-27820.bin",
+        "sha256": "7a04c53b41949db3712e87550328e4ac142d02d4a52e8777198fd57e55568026"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 220612744,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-220612744-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 221725544,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-221725544-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 222810524,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-222810524-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 223923324,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-223923324-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 225036124,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-225036124-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 226121104,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-226121104-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 227233904,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-227233904-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 228318884,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-228318884-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 229431684,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-229431684-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 230544484,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-230544484-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 231629464,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-231629464-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 232742264,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-232742264-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 233827244,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-233827244-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 234940044,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-234940044-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 236052844,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-236052844-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 237137824,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-237137824-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 238250624,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-238250624-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 239335604,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-239335604-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 240448404,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-240448404-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 241561204,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-241561204-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_048800_048899/ESP_048842_1985_ESP_048908_1985/DTEEC_048842_1985_048908_1985_U01.IMG",
+        "offset": 242646184,
+        "length": 2100,
+        "file": "data/nasa/ranges/hirise-dtm-242646184-2100.bin",
+        "sha256": "ff285765ec5ebb27c24afec7299df144e98feb2b665ac5403d78bb9dda1213be"
+      }
+    ],
+    "native_scale_m": 1.0096633268711,
+    "processing": "Nearest native elevation samples every 40 m, slope at 40 m",
+    "file": "data/processed/hirise-elevation-sampled40m.tif",
+    "sha256": "b44abdb4a9b9f032486309c8a34fc2da7855b44f232c5fd21552710e5563ed7a",
+    "limitations": "No valid sampled coverage; no slope enabled."
+  },
+  "mola": {
+    "product_id": "MEGT44N000HB.IMG",
+    "source_url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+    "source_crs": "+proj=eqc +lat_ts=0 +lon_0=180 +R=3396000 +units=m +no_defs",
+    "native_pixel_m": 463.05766716974557,
+    "ranges": [
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75268460,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75268460-18.bin",
+        "sha256": "44884430aeba5d967700bfbcfaa771c07813d13c3026c48049465ee5c90ee010"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75291500,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75291500-18.bin",
+        "sha256": "5dd987f105a607d82b22aebb1c58e2535ce3970d4734e81731e019c5144cc8b7"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75314540,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75314540-18.bin",
+        "sha256": "155297628663046639b0efee69b9867fc47477a7a5f3c9a76a937eccda96819d"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75337580,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75337580-18.bin",
+        "sha256": "ebf30c94cd8baa29a0278df6fc3f69da9b0349ea5f6efebc64aff1c342ecb6a0"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75360620,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75360620-18.bin",
+        "sha256": "e6332b2e19deb7a83fb59181f0585684c07a7fc52e5d21d00995e82e8731ebaa"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75383660,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75383660-18.bin",
+        "sha256": "728ade9c9d38b94f7c01f7dc0d46c71479b6f70b42401697c2d8f4d533e3d2bb"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75406700,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75406700-18.bin",
+        "sha256": "4a67d6599e58ea878710f9d8ab74b4bd7c80306e812fdf3e0448a0829494f153"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75429740,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75429740-18.bin",
+        "sha256": "68c2dc235dd642972dd2bbb00329f91096991eb5d5ba06c77a956b1b0084db86"
+      },
+      {
+        "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img",
+        "offset": 75452780,
+        "length": 18,
+        "file": "data/nasa/ranges/mola-75452780-18.bin",
+        "sha256": "33bc45a70ab550e457c923fa381f888ba341f1d715dd76c73d36e2a473727876"
+      }
+    ],
+    "sha256": "b187bf42b461ce607a0d21b2ef212c0460f960a105bb747628283f3936ee66b5",
+    "file": "data/processed/mola-context.tif",
+    "limitations": "Regional median topography; interpolated bins; no local hazard claim."
+  },
+  "places": {
+    "source_url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_localizations/best_tactical.csv",
+    "sha256": "9da19e4f70287fe0d33ba716ff2169c10447c30c7a048583f730e4155226cde9",
+    "selected_poses": 42,
+    "file": "data/processed/places-rover-local.geojson",
+    "coordinate_note": "Planetocentric lat / east lon converted to local Mars meters",
+    "limitations": "Rover poses alone do not establish image footprint or instrument pointing."
+  },
+  "dtm_covering": {
+    "product_id": "DTEEC_045994_1985_046060_1985_U01",
+    "source_url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+    "source_crs": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",3396190,0]],PRIMEM[\"Reference meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Equirectangular\"],PARAMETER[\"standard_parallel_1\",18.44],PARAMETER[\"central_meridian\",77.45],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",-1093025.42232977],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+    "analysis_crs": "+proj=eqc +lat_ts=18.44 +lat_0=0 +lon_0=77.45 +R=3396190.0 +y_0=-1093025.4223297667 +units=m +no_defs",
+    "source_resolution": [
+      40.0,
+      40.0
+    ],
+    "analysis_cell_m": 40,
+    "elevation_units": "meters, verified in PDS label",
+    "coverage_fraction": 1.0,
+    "sha256": "813fc9f9cd27eb9ba45e8d3ad5d79856225babd3e3232f286859f7459e8a1b62",
+    "limitations": "Coarse planning slope; not foot-scale obstacle or EVA safety certification",
+    "processed_sha256": "88cadd887ae7045b5c9bdb6f3f9ff52613fd5ed56d822c131b174e55a953fa98",
+    "native_source_crs": "+proj=eqc +lat_ts=15.0 +lon_0=77.44 +R=3394839.8133163 +units=m",
+    "native_resolution_m": 1.0096633268711,
+    "native_bounds_lonlat": [
+      77.3833804,
+      18.305293550569,
+      77.50109494,
+      18.548391096554
+    ],
+    "native_missing_constant": "16#FF7FFFFB# (IEEE float32 PDS special pixel)",
+    "vertical_datum": "Mars 2000 equipotential surface; PDS IMAGE NOTE",
+    "classification": "DERIVED: official stereo DTM, sampled mission grid and slope",
+    "ranges": [
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 0,
+        "length": 30000,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-label-0-30000.bin",
+        "sha256": "78b049ec3220e490bccbc9a2aaadd31e6919b6d64aa221a233af025e930d35f3"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 148716240,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-148716240-4844.bin",
+        "sha256": "948d0711c763a6c90dbd12f1a4f5bb52767dbfcaf3ea5aa07b0812ad8e284af3"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 149757228,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-149757228-4844.bin",
+        "sha256": "2c6aef5ad7887fb5bc640b15895a8a19d95c16d968aaffa58e3e47a42d27f9ad"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 150824908,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-150824908-4844.bin",
+        "sha256": "b0aab812a9cf66a3096b64bd52081b9faca1001d5fbe66a84dc2fe9816726e81"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 151865896,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-151865896-4844.bin",
+        "sha256": "e1c084e27ff362a7c9681dae8eb62a5e6bd2659e701f3798ae410056dc4cbde4"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 152933576,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-152933576-4844.bin",
+        "sha256": "2e0e1813873398fa241e194d54fe0af35c276e586366d097a96e92c073a3e0aa"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 154001256,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-154001256-4844.bin",
+        "sha256": "4b5a8a75382ed94daf6fa9b21f3f03a5845ed0282c85cba5b3bc0920397f89db"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 155042244,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-155042244-4844.bin",
+        "sha256": "92e90d317cfdd28beaec1e94a94aff578d2f2ad1cfe7265bf21684ff066afbfb"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 156109924,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-156109924-4844.bin",
+        "sha256": "a0a8a21537eb7e46ee1ca458fc4d70cf48790b4fa821f631ba058ebac3335318"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 157150912,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-157150912-4844.bin",
+        "sha256": "f225fb1e7b4513d7b88b01c6dd2620eb46d9e5f9c4dd4ffff0c1afd40f688835"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 158218592,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-158218592-4844.bin",
+        "sha256": "adabccc9a6ad473a2f43eb1f7be258d39b750ad003487be3180324c1bc67f467"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 159286272,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-159286272-4844.bin",
+        "sha256": "3482af5bd51a20a865a6f990158a9a10ba1af35c0836332563fbbe4b54afe1d3"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 160327260,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-160327260-4844.bin",
+        "sha256": "a97348a996f80b562e6e7129dc5d2ccc7e81870d56b03f7ca181da41185ad6e5"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 161394940,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-161394940-4844.bin",
+        "sha256": "7c5f359b59f03e7f2e36257244fa484c05452cb681fcdb98673be7a1d7b2ee14"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 162435928,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-162435928-4844.bin",
+        "sha256": "6a827d71953498b52c4583c3a57f63409ae66c97e9e2076e49ad793aeee2d91c"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 163503608,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-163503608-4844.bin",
+        "sha256": "7fb2e8e6461a81dd234f25d6ecd4324fbab6ee6b46f40e79e8792b1f054ed321"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 164571288,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-164571288-4844.bin",
+        "sha256": "e9d63e99b491e66fa734fa2f8402cd98fc341101c979bb199c5ffd64d6ab0301"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 165612276,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-165612276-4844.bin",
+        "sha256": "7037a776e5776dea83e804179c5cfd70a4d9086a75fbe191badc49477c2dd766"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 166679956,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-166679956-4844.bin",
+        "sha256": "3798bdaec402e4101d003f7980096e9f8ba338a99d30cc394e443cde540d5b33"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 167720944,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-167720944-4844.bin",
+        "sha256": "e73a8c4d5d3aad2de958b727ef38e6ea6f47da0094fe5e76aec493f349752dd0"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 168788624,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-168788624-4844.bin",
+        "sha256": "2b7c39a84c2988f09e61eae98052a15e25b85b545dd80033f3efae7440b73e1f"
+      },
+      {
+        "url": "https://hirise.lpl.arizona.edu/PDS/DTM/ESP/ORB_045900_045999/ESP_045994_1985_ESP_046060_1985/DTEEC_045994_1985_046060_1985_U01.IMG",
+        "offset": 169856304,
+        "length": 4844,
+        "file": "data/nasa/ranges/DTEEC_045994_1985_046060_1985_U01-169856304-4844.bin",
+        "sha256": "df73e846851160b24ccc3427844c7aa6dd3aaa2d10a4f05857cbeed04899187f"
+      }
+    ],
+    "source_dimensions": [
+      6673,
+      14266
+    ],
+    "processing": "Nearest native samples at 40 m mission nodes; metric gradient at 40 m",
+    "pixel_convention": "PDS pixel centers, independently checked with GDAL PDS driver"
+  }
+}

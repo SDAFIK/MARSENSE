@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - mission-data:/app/data/runtime
+      - ${MARSENSE_USERS_FILE:?Set private absolute users file}:/run/secrets/marsense-users.json:ro
+    environment:
+      MARSENSE_ENVIRONMENT: production
+      MARSENSE_AUTH_USERS_FILE: /run/secrets/marsense-users.json
+      MARSENSE_CORS_ORIGINS: '["https://${MARSENSE_DOMAIN:?Set public HTTPS hostname}"]'
+      MARSENSE_DATABASE_URL: sqlite:////app/data/runtime/marsense.db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+  gateway:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports: ["443:443"]
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${MARSENSE_TLS_DIR:?Set TLS certificate directory}:/etc/marsense/tls:ro
+    depends_on: [web]
+volumes:
+  mission-data:

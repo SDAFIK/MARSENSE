@@ -1,0 +1,278 @@
+{
+  "obstacles": {
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            520.0,
+            320.0
+          ],
+          [
+            680.0,
+            320.0
+          ],
+          [
+            680.0,
+            480.0
+          ],
+          [
+            520.0,
+            480.0
+          ],
+          [
+            520.0,
+            320.0
+          ]
+        ]
+      ]
+    },
+    "model_output": {
+      "terrain": "obstacle-rich terrain",
+      "confidence": 0.9,
+      "confidence_label": "reviewed demo annotation",
+      "engine": "curated-demo-replay",
+      "version": "jezero-scenario-v1",
+      "class_fractions": {},
+      "features": {},
+      "limitations": [
+        "Replay annotation for a fictional EVA; not a trained model prediction.",
+        "PIA26072 is a public-release Navcam mosaic; location and footprint are simulated.",
+        "No mechanical strength, mineral composition, or safety probability is measured."
+      ],
+      "mask_reference": null
+    },
+    "metadata_note": "Simulated 160 \u00d7 160 m local footprint (minor scenario 160 \u00d7 120 m). No camera-to-ground reconstruction or PLACES registration is claimed.",
+    "observation_type": "terrain"
+  },
+  "match": {
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            520.0,
+            320.0
+          ],
+          [
+            680.0,
+            320.0
+          ],
+          [
+            680.0,
+            480.0
+          ],
+          [
+            520.0,
+            480.0
+          ],
+          [
+            520.0,
+            320.0
+          ]
+        ]
+      ]
+    },
+    "model_output": {
+      "terrain": "soil",
+      "confidence": 0.9,
+      "confidence_label": "reviewed demo annotation",
+      "engine": "curated-demo-replay",
+      "version": "jezero-scenario-v1",
+      "class_fractions": {},
+      "features": {},
+      "limitations": [
+        "Replay annotation for a fictional EVA; not a trained model prediction.",
+        "PIA26072 is a public-release Navcam mosaic; location and footprint are simulated.",
+        "No mechanical strength, mineral composition, or safety probability is measured."
+      ],
+      "mask_reference": null
+    },
+    "metadata_note": "Simulated 160 \u00d7 160 m local footprint (minor scenario 160 \u00d7 120 m). No camera-to-ground reconstruction or PLACES registration is claimed.",
+    "observation_type": "terrain"
+  },
+  "minor": {
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            520.0,
+            640.0
+          ],
+          [
+            680.0,
+            640.0
+          ],
+          [
+            680.0,
+            760.0
+          ],
+          [
+            520.0,
+            760.0
+          ],
+          [
+            520.0,
+            640.0
+          ]
+        ]
+      ]
+    },
+    "model_output": {
+      "terrain": "sand",
+      "confidence": 0.9,
+      "confidence_label": "reviewed demo annotation",
+      "engine": "curated-demo-replay",
+      "version": "jezero-scenario-v1",
+      "class_fractions": {},
+      "features": {},
+      "limitations": [
+        "Replay annotation for a fictional EVA; not a trained model prediction.",
+        "PIA26072 is a public-release Navcam mosaic; location and footprint are simulated.",
+        "No mechanical strength, mineral composition, or safety probability is measured."
+      ],
+      "mask_reference": null
+    },
+    "metadata_note": "Simulated 160 \u00d7 160 m local footprint (minor scenario 160 \u00d7 120 m). No camera-to-ground reconstruction or PLACES registration is claimed.",
+    "observation_type": "terrain"
+  },
+  "weak": {
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            520.0,
+            320.0
+          ],
+          [
+            680.0,
+            320.0
+          ],
+          [
+            680.0,
+            480.0
+          ],
+          [
+            520.0,
+            480.0
+          ],
+          [
+            520.0,
+            320.0
+          ]
+        ]
+      ]
+    },
+    "model_output": {
+      "terrain": "rough terrain",
+      "confidence": 0.3,
+      "confidence_label": "low",
+      "engine": "curated-demo-replay",
+      "version": "jezero-scenario-v1",
+      "class_fractions": {},
+      "features": {},
+      "limitations": [
+        "Replay annotation for a fictional EVA; not a trained model prediction.",
+        "PIA26072 is a public-release Navcam mosaic; location and footprint are simulated.",
+        "No mechanical strength, mineral composition, or safety probability is measured."
+      ],
+      "mask_reference": null
+    },
+    "metadata_note": "Simulated 160 \u00d7 160 m local footprint (minor scenario 160 \u00d7 120 m). No camera-to-ground reconstruction or PLACES registration is claimed.",
+    "observation_type": "terrain"
+  },
+  "failure": {
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            520.0,
+            320.0
+          ],
+          [
+            680.0,
+            320.0
+          ],
+          [
+            680.0,
+            480.0
+          ],
+          [
+            520.0,
+            480.0
+          ],
+          [
+            520.0,
+            320.0
+          ]
+        ]
+      ]
+    },
+    "model_output": {
+      "terrain": "unknown",
+      "confidence": 0.0,
+      "confidence_label": "unavailable",
+      "engine": "curated-demo-replay",
+      "version": "jezero-scenario-v1",
+      "class_fractions": {},
+      "features": {},
+      "limitations": [
+        "Replay annotation for a fictional EVA; not a trained model prediction.",
+        "PIA26072 is a public-release Navcam mosaic; location and footprint are simulated.",
+        "No mechanical strength, mineral composition, or safety probability is measured."
+      ],
+      "mask_reference": null
+    },
+    "metadata_note": "Simulated 160 \u00d7 160 m local footprint (minor scenario 160 \u00d7 120 m). No camera-to-ground reconstruction or PLACES registration is claimed.",
+    "observation_type": "terrain"
+  },
+  "dynamic": {
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            520.0,
+            320.0
+          ],
+          [
+            680.0,
+            320.0
+          ],
+          [
+            680.0,
+            480.0
+          ],
+          [
+            520.0,
+            480.0
+          ],
+          [
+            520.0,
+            320.0
+          ]
+        ]
+      ]
+    },
+    "model_output": {
+      "terrain": "unknown",
+      "confidence": 0.3,
+      "confidence_label": "low",
+      "engine": "curated-demo-replay",
+      "version": "jezero-scenario-v1",
+      "class_fractions": {},
+      "features": {},
+      "limitations": [
+        "Replay annotation for a fictional EVA; not a trained model prediction.",
+        "PIA26072 is a public-release Navcam mosaic; location and footprint are simulated.",
+        "No mechanical strength, mineral composition, or safety probability is measured."
+      ],
+      "mask_reference": null
+    },
+    "metadata_note": "Simulated 160 \u00d7 160 m local footprint (minor scenario 160 \u00d7 120 m). No camera-to-ground reconstruction or PLACES registration is claimed.",
+    "observation_type": "visibility"
+  }
+}

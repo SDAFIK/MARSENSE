@@ -84,8 +84,19 @@ display derivative, and record both hashes.
 
 Current EntityRow uses id/kind/validated JSON payload; SQLAlchemy typed accessors
 reconstruct Pydantic entities. BEGIN IMMEDIATE serializes writes; rollback prevents
-half-verified updates. Add payload/schema versioning and migration tests before
-changing persisted fields. No migration may delete NASA priors or previous EVAs.
+half-verified updates. Schema version 2 migrates legacy shared Alpha segment IDs
+to mission-specific dependencies atomically, retaining historical references,
+NASA priors and final decisions. Newer schema versions are refused. Migration
+failure rolls back payload and version together; restart is idempotent.
+
+New reviews append immutable HumanDecision records. Confirmations additionally
+append Interpretation records linked to the decision, original observation and
+supported footprint. The history API labels older decisions without these
+separate records explicitly; no reviewer authority is invented by backfill.
+Typed Provenance distinguishes observed/derived/simulated/unavailable inputs,
+source identity, processing and manual/simulated registration. Missing metadata
+in older records remains unavailable. Local reviewer identity is self-asserted;
+authenticated binding remains a production requirement.
 
 ## Scenario checks and transition ownership
 
@@ -117,3 +128,26 @@ human_terrain changes the reviewed interpretation, not the stored inference.
 Region.knowledge_state is a coverage summary, not authority to reclassify every
 point within the region. These distinctions resolve ambiguous uses of "truth",
 "confirmed", "safe", "raw" and "known" in implementation descriptions.
+# CalibratedCameraContext (S3)
+
+Offline source context records PDS product/version, instrument, UTC/SCLK/partition,
+distinct mini-header clock, sol, full RMC, dimensions/array ordering/type/scaling,
+camera-model XML, original URL/file/hash, calibrated array/hash, preview processing,
+exact PLACES interval, observation-clock matches, mechanism candidates and drive
+anchor. Anchor orientation has wildcard pose=-1 and cannot establish image
+orientation. Image footprint and spatial uncertainty remain null when unsupported.
+Context is exposed as data-status provenance; ingestion creates no mission
+Evidence, HumanDecision or terrain memory. Saved replay history remains unchanged.
+
+## S3–S6 data contracts
+SourceDeclaration records a permanent reviewer assertion of instrument/source,
+acquisition episode and independence rationale. Supersession records previous and
+replacement evidence IDs, reviewer and timestamp; original final decisions remain.
+Current synthesis returns supporting IDs, pairwise intersection footprints,
+conflicting IDs and ancestry, with no numerical confidence adjustment. Duplicate
+original hashes and same-episode frames cannot independently confirm.
+HumanDecision now retains optional immutable user_id, mission_id, observation_id
+and identity_basis. Older local decisions remain self-asserted. AuthSession stores
+only the opaque token hash, user ID, last-seen/expiry and revocation. AuthAudit
+login/logout events are immutable. No new SQL schema shape is required for these
+JSON entity types; existing schema-v2 migrations and original stores are preserved.

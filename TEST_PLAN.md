@@ -79,3 +79,61 @@ implement the smallest fix, review and run the relevant suite. Expand testing
 only for changed behavior or unresolved risks. Final freeze requires all mandatory
 checks passing and BLOCKER/HIGH findings resolved; never treat a baseline replay
 pass as Gate 15 completion.
+
+## Scientific completion S1 — current checkpoint
+
+Official covering product: DTEEC_045994_1985_046060_1985_U01, selected from
+https://hirise.lpl.arizona.edu/dtm/ESP_045994_1985 . Attached PDS metadata
+and source byte hashes are retained in data/processed/hirise-covering-slope.json.
+Native coverage bounds, equirectangular planetocentric source CRS, 1.0096633268711 m
+pixel size, IEEE missing constant and Mars 2000 equipotential vertical datum
+are recorded. Native source radius differs from the mission analysis radius;
+sampling explicitly converts through planetocentric longitude/latitude.
+
+Reproduce with `.venv\Scripts\python.exe -m scripts.cache_hirise_dtm`; cached
+exact PDS ranges enable offline reuse. Raw range bytes, sampled elevation TIFF
+and derived slope NPZ remain separate. All 651 operational cells have valid
+elevation. Ingestion and configured slope loading now reject incomplete
+operational coverage; loader requires matching Mars analysis CRS metadata.
+Missing configured files are errors. Empty slope configuration remains visibly
+unavailable rather than measured zero slope.
+
+Enable explicitly for a new/local validation run using
+`MARSENSE_SLOPE_PATH=data/processed/hirise-covering-slope.npz`. Existing services
+and saved routes were not silently restarted or rewritten. MARSENSE prototype
+route weights: slope cost = edge length * slope degrees / 10; slopes above
+20 degrees excluded. These are configuration choices, not NASA EVA-safe limits.
+
+Diagnostic: docs/science/s1-dtm-alignment.png and s1-route.geojson, generated
+by `python -m scripts.debug_dtm`. White route overlays the identical 40 m
+node grid on elevation and slope. GeoJSON rendering longitude/latitude is
+presentation only; metric coordinates remain in feature properties. HiRISE
+rendering now uses its own actual crop bounds; CTX/HiRISE switching updates
+the image coordinates together with the URL. No product redesign.
+
+Checks cover real cached coverage and known samples, grid/route intersection,
+partial no-data refusal, CRS mismatch, independent PROJ round trip, synthetic
+plane gradient sanity and cost changes. The coarse 40 m slope cannot validate
+foot-scale obstacles or operational EVA safety. Complete regression results
+are recorded in STATUS.md after execution. S2 remains pending until S1 review passes.
+
+## S2 behavior checks
+
+Tests reproduce duplicate image bytes under different paths and shared group leakage; training now refuses both. Image/mask byte hashes are verified against acquisition manifests. Training and inference share RGB bilinear 256 preprocessing; masks use nearest resampling and 255 ignored. Fixed synthetic uniform model yields UNKNOWN at .25 confidence; invalid images raise; tampered checkpoint yields unavailable UNKNOWN. Genuine held-out and Perseverance transfer confusion/precision/recall/F1/IoU remain separate. These code tests do not establish genuine classification performance.
+# S3 camera checks
+
+`tests/test_s3_camera.py`: genuine Navcam/Mastcam metadata, preserved distinct
+clock fields, exact RMC/time interval matching, approximate/ambiguous/missing pose
+rejection, Mars local position/region overlap, numeric array scaling, null-footprint
+uncertainty and API preview/provenance without automatic mission evidence.
+Frozen NASA cache files reproduce via `scripts.cache_cameras` and offline
+`scripts.process_cameras`; upstream changed bytes fail SHA validation.
+
+## Final verification checkpoint — 2026-10-10
+70 backend tests, 3 component tests, 24 browser tests plus the separate authenticated
+browser test pass. Ruff backend/ai/scripts/tests, mypy backend/ai (18 files),
+ESLint, TypeScript and production frontend build pass. Camera/CRISM manifests
+verify 23 frozen files. Detailed bounds: FINAL_AUDIT.md and NASA_SOURCE_MATRIX.md.
+New coverage includes footprint independence/correlation, immutable supersession,
+source ancestry, authenticated roles, CSRF-origin rejection, identity binding,
+logout/expiry, read-only mode, Secure cookies, throttling and expanded map controls.

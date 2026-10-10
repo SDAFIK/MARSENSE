@@ -1,0 +1,53 @@
+{
+  "retrieved": "2026-10-10",
+  "files": [
+    {
+      "file": "data/nasa/crism/frt000047a3_07_brtanj_mtr3.hdr",
+      "bytes": 1294,
+      "sha256": "ab86e01869b5e03dfdb62ecdea7a629a5379e5f5ae1c7764b4d98391833c5dbc",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/browse/2007/2007_057/frt000047a3/frt000047a3_07_brtanj_mtr3.hdr"
+    },
+    {
+      "file": "data/nasa/crism/frt000047a3_07_brtanj_mtr3.img",
+      "bytes": 2053128,
+      "sha256": "73084aaaa20a0c40705cad22526400f5b552e04cf0f0205b16b7700f494723d6",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/browse/2007/2007_057/frt000047a3/frt000047a3_07_brtanj_mtr3.img"
+    },
+    {
+      "file": "data/nasa/crism/frt000047a3_07_brtanj_mtr3.lbl",
+      "bytes": 7206,
+      "sha256": "b4218a2ba972fc2b229857ba89e94853d36e7427f4bbee31d490158008f44b32",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/browse/2007/2007_057/frt000047a3/frt000047a3_07_brtanj_mtr3.lbl"
+    },
+    {
+      "file": "data/nasa/crism/frt000047a3_07_brtanj_mtr3.png",
+      "bytes": 831481,
+      "sha256": "94df7eaf5fd58293fe038a4d9e137c201e29eca44c03bd346fe14f11799f361f",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/browse/2007/2007_057/frt000047a3/frt000047a3_07_brtanj_mtr3.png"
+    },
+    {
+      "file": "data/nasa/crism/frt000047a3_07_brtanj_mtr3.xml",
+      "bytes": 15672,
+      "sha256": "eba460bb0bde5de7c92154a0c9cde352c62507adbbb1490814111bd8dbdcb4e4",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/browse/2007/2007_057/frt000047a3/frt000047a3_07_brtanj_mtr3.xml"
+    },
+    {
+      "file": "data/nasa/crism/frt000047a3_07_if166j_mtr3.lbl",
+      "bytes": 6178,
+      "sha256": "8a998e994839fbbbf7d8bf572c1b582c24210b432fab45c86ddbef5ed7705e99",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/mtrdr/2007/2007_057/frt000047a3/frt000047a3_07_if166j_mtr3.lbl"
+    },
+    {
+      "file": "data/nasa/crism/frt000047a3_07_if166j_mtr3.xml",
+      "bytes": 14989,
+      "sha256": "39c995a64b34b9d231413e176edb1267a97844d9a5124a3a78a637d56768bb85",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/mtrdr/2007/2007_057/frt000047a3/frt000047a3_07_if166j_mtr3.xml"
+    },
+    {
+      "file": "data/nasa/crism/frt000047a3_07_sr166j_mtr3.hdr",
+      "bytes": 1802,
+      "sha256": "dfb912294226519e500701bd5e215e15dc5b747212c25d4bef2287f4d39a61e4",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/mtrdr/2007/2007_057/frt000047a3/frt000047a3_07_sr166j_mtr3.hdr"
+    }
+  ]
+}

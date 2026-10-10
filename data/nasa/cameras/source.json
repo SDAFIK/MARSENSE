@@ -1,0 +1,98 @@
+{
+  "retrieved": "2026-10-10",
+  "files": [
+    {
+      "file": "data/nasa/cameras/NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.xml",
+      "url": "https://planetarydata.jpl.nasa.gov/img/data/mars2020/mars2020_navcam_ops_calibrated/data/sol/00013/ids/fdr/ncam/NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.xml",
+      "bytes": 82481,
+      "sha256": "e86015deb2cdaef5c7a1348af29c28bdec7a22dac0b5a2a3456a493f65d4f9a8"
+    },
+    {
+      "file": "data/nasa/cameras/NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.IMG",
+      "url": "https://planetarydata.jpl.nasa.gov/img/data/mars2020/mars2020_navcam_ops_calibrated/data/sol/00013/ids/fdr/ncam/NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.IMG",
+      "bytes": 7426560,
+      "sha256": "031d39bcfa2bb9e8f26add9ef80676b2442c369728f9871d59b31ca39b5132a2"
+    },
+    {
+      "file": "data/nasa/cameras/ZL0_0015_0668273255_213RAD_N0030110ZCAM08000_1000LUA01.xml",
+      "url": "https://planetarydata.jpl.nasa.gov/img/data/mars2020/mars2020_mastcamz_sci_calibrated/data/0015/rad/ZL0_0015_0668273255_213RAD_N0030110ZCAM08000_1000LUA01.xml",
+      "bytes": 82165,
+      "sha256": "704b3d8ff8fe9b62bc5b3a37e02afd854f6d6a9298e5193a9ed4e424a413191e"
+    },
+    {
+      "file": "data/nasa/cameras/ZL0_0015_0668273255_213RAD_N0030110ZCAM08000_1000LUA01.IMG",
+      "url": "https://planetarydata.jpl.nasa.gov/img/data/mars2020/mars2020_mastcamz_sci_calibrated/data/0015/rad/ZL0_0015_0668273255_213RAD_N0030110ZCAM08000_1000LUA01.IMG",
+      "bytes": 4004640,
+      "sha256": "5f62b0e19b479b981b6d0d2d3bca5b6a3254c7bb7fc4f94f49e9cda8c431a6de"
+    },
+    {
+      "file": "data/nasa/cameras/sclk_table.csv",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_ancillary/sclk_table.csv",
+      "bytes": 18163971,
+      "sha256": "b771796bd0ecb1c75e451065aa094838fae6966bb628aceae32cc15360473654"
+    },
+    {
+      "file": "data/nasa/cameras/sclk_table.csv.xml",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_ancillary/sclk_table.csv.xml",
+      "bytes": 9922,
+      "sha256": "19bb89f940cc8ce65c44e33da545a6262ebd360d5aa4743752ce6f918c24fd55"
+    },
+    {
+      "file": "data/nasa/cameras/observations.csv",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_ancillary/observations.csv",
+      "bytes": 11587320,
+      "sha256": "df6afa4c4375cd47a0efbdc324326f28428724fc3c1f602540d51522ad256951"
+    },
+    {
+      "file": "data/nasa/cameras/observations.csv.xml",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_ancillary/observations.csv.xml",
+      "bytes": 5913,
+      "sha256": "ead4268e435df4ec215302dac772727cd7f9babc9b04ce3c836441a77b48b116"
+    },
+    {
+      "file": "data/nasa/cameras/mech_rsm.csv",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_mechanisms/mech_rsm.csv",
+      "bytes": 8870261,
+      "sha256": "43596c839263019d988019617c25b7cd3cf8b448dad42293e0517fd870a45e92"
+    },
+    {
+      "file": "data/nasa/cameras/mech_rsm.csv.xml",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_mechanisms/mech_rsm.csv.xml",
+      "bytes": 8910,
+      "sha256": "7a8188bf69cc8342d0d471cf388e000010bf2e9e8758960740f96c5a356536cc"
+    },
+    {
+      "file": "data/nasa/cameras/places-sis.pdf",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/document/Mars2020_Rover_PLACES_PDS_SIS.pdf",
+      "bytes": 1700553,
+      "sha256": "ca3eb9d2a0d992cedf96860f30537ac508e15fb0e2417fb74c5b80cb31418d1a"
+    },
+    {
+      "file": "data/nasa/places-best-tactical.csv",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_localizations/best_tactical.csv",
+      "bytes": 171404,
+      "sha256": "9da19e4f70287fe0d33ba716ff2169c10447c30c7a048583f730e4155226cde9"
+    },
+    {
+      "file": "data/nasa/places-best-tactical.csv.xml",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_localizations/best_tactical.csv.xml",
+      "bytes": 15898,
+      "sha256": "777074bc03a3f06be8241b85cd4448cbdac5bff4dfecc443de6757152d22ac79"
+    },
+    {
+      "file": "data/nasa/cameras/m20_best_tactical_roverframe_site_3.xmlx",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_rover_places/data_localizations/best_tactical_raw/m20_best_tactical_roverframe_site_3.xmlx",
+      "bytes": 11340,
+      "sha256": "b6dd375680b6a9b56cb27fc8b01dbdc932af45b3a8c5309168f68d8b7d6ea785"
+    },
+    {
+      "file": "data/nasa/cameras/camera-label-definitions.html",
+      "url": "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_mission/document_camera/Mars2020_Camera_SIS_Labels_sort_pds.html",
+      "bytes": 3056343,
+      "sha256": "8153e858fe0e44d97d33b81d408dfaf4dce40220c9dbf37a9d8189fb9e28b279"
+    }
+  ],
+  "limitations": [
+    "Mastcam observation-clock mismatch remains unresolved; no exact image footprint."
+  ]
+}

@@ -1,0 +1,756 @@
+PDS_VERSION_ID             = PDS3
+RECORD_TYPE                = FIXED_LENGTH
+RECORD_BYTES               = 817
+FILE_RECORDS               = 504
+^INDEX_TABLE               = "MTRDR0703_INDEX.TAB"
+DATA_SET_ID                = "MRO-M-CRISM-5-RDR-MPTARGETED-V1.0"
+MISSION_NAME               = "MARS RECONNAISSANCE ORBITER"
+INSTRUMENT_HOST_NAME       = "MARS RECONNAISSANCE ORBITER"
+INSTRUMENT_NAME            = "COMPACT RECONNAISSANCE IMAGING SPECTROMETER FOR
+                              MARS"
+PRODUCT_TYPE               = "MPTARGETED_RDR"
+PRODUCER_INSTITUTION_NAME  = "APPLIED PHYSICS LABORATORY"
+DESCRIPTION                = "This index table lists information
+   about each of the data products contained on this archive volume.
+   All CRISM index tables use the same set of columns. Some columns
+   may contain the value N/A, indicating that the column does not 
+   apply to this CRISM data set."
+
+
+OBJECT                     = INDEX_TABLE
+  INTERCHANGE_FORMAT       = ASCII
+  ROW_BYTES                = 817  
+  ROWS                     = 504
+  COLUMNS                  = 57
+  INDEX_TYPE               = SINGLE
+
+  OBJECT                   = COLUMN
+      COLUMN_NUMBER        = 1
+      NAME                 = VOLUME_ID
+      DATA_TYPE            = CHARACTER
+      START_BYTE           = 2
+      BYTES                = 12
+      DESCRIPTION          = "The identifier of the volume on which the
+                              product is stored."
+    END_OBJECT             = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 2
+    NAME                   = PRODUCT_ID
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 17
+    BYTES                  = 30
+    DESCRIPTION            = "A permanent, unique identifier assigned to a
+                              data product by its producer."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 3
+    NAME                   = PRODUCT_TYPE
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 50
+    BYTES                  = 35
+    DESCRIPTION            = "The type or category of a product within a data
+                              set."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 4
+    NAME                   = FILE_SPECIFICATION_NAME
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 88
+    BYTES                  = 69
+    DESCRIPTION            = "The full name of a file, including a path name,
+                              relative to a PDS volume.  It excludes node or
+                              volume location. " 
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 5
+    NAME                   = PARTICIPATING_INSTRUMENTS
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 160
+    BYTES                  = 10
+    DESCRIPTION            = "A character string indicating the instruments
+                              that were planned to participate in the
+                              observation that generated this product.
+                              C = CRISM, H = HiRISE, and X = CTX." 
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 6
+    NAME                   = PRODUCT_CREATION_TIME
+    DATA_TYPE              = TIME
+    START_BYTE             = 172
+    BYTES                  = 27
+    DESCRIPTION            = "UTC date and time when this product was
+                              created, in the format 
+                              yyyy-mm-ddThh:mm:ss.sss."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 7
+    NAME                   = START_TIME
+    DATA_TYPE              = TIME
+    START_BYTE             = 200
+    BYTES                  = 27
+    NULL_CONSTANT          = 9999-01-01T01:01:01
+    DESCRIPTION            = "UTC date and time at the beginning
+                              of data acquisition for this product, 
+                              in the format yyyy-mm-ddThh:mm:ss.sss."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 8
+    NAME                   = STOP_TIME
+    DATA_TYPE              = TIME
+    START_BYTE             = 228
+    BYTES                  = 27
+    NULL_CONSTANT          = 9999-01-01T01:01:01
+    DESCRIPTION            = "UTC date and time at the end of
+                              data acquisition for this product, 
+                              in the format yyyy-mm-ddThh:mm:ss.sss."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 9
+    NAME                   = SPACECRAFT_CLOCK_START_COUNT
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 257
+    BYTES                  = 19
+    DESCRIPTION            = "The value of the spacecraft clock at the
+                              beginning of a time period of interest."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 10
+    NAME                   = SPACECRAFT_CLOCK_STOP_COUNT
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 279
+    BYTES                  = 19
+    DESCRIPTION            = "The value of the spacecraft clock at the end of
+                              a time period of interest."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 11
+    NAME                   = ORBIT_NUMBER
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 301
+    BYTES                  = 6
+    DESCRIPTION            = "The number of the orbital revolution of the
+                              spacecraft around a target body."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 12
+    NAME                   = OBSERVATION_TYPE
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 310
+    BYTES                  = 4
+    DESCRIPTION            = "The general type of an observation."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 13
+    NAME                   = OBSERVATION_ID
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 317
+    BYTES                  = 12
+    DESCRIPTION            = "Uniquely identifies a scientific observation
+                              within a data set."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 14
+    NAME                   = "MRO:OBSERVATION_NUMBER"
+    DATA_TYPE              = ASCII_INTEGER
+    START_BYTE             = 331
+    BYTES                  = 6  /*was 3*/
+    NOT_APPLICABLE_CONSTANT = -99999
+    UNKNOWN_CONSTANT       = -99998
+    NULL_CONSTANT          = -99997
+    DESCRIPTION            = "The monotonically increasing ordinal counter of
+                              the EDRs generated for a particular CRISM
+                              OBSERVATION_ID."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 15
+    NAME                   = "MRO:ACTIVITY_ID"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 339
+    BYTES                  = 5
+    DESCRIPTION            = "Identifies the type of measurement contained in
+                              a CRISM EDR or other CRISM data product, and
+                              provides indication of how the observation is
+                              commanded."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 16
+    NAME                   = "MRO:SENSOR_ID"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 347
+    BYTES                  = 3
+    DESCRIPTION            = "Identifies the CRISM focal plane from which
+                              data in an EDR or RDR were returned."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 17
+    NAME                   = PRODUCT_VERSION_ID
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 353
+    BYTES                  = 3
+    DESCRIPTION            = "Identifies the version of an individual product
+                              within a data set."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 18
+    NAME                   = TARGET_CENTER_DISTANCE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = "KM" 
+    START_BYTE             = 358
+    BYTES                  = 14
+    FORMAT                 = "F14.3"
+    NOT_APPLICABLE_CONSTANT = -999999999.999
+    UNKNOWN_CONSTANT       = -999999998.888
+    NULL_CONSTANT          = -999999997.777    
+    DESCRIPTION            = "The distance between an instrument and the
+                              center of mass of the named target."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 19
+    NAME                   = SOLAR_DISTANCE
+    UNIT                   = KM
+    DATA_TYPE              = ASCII_REAL
+    START_BYTE             = 373
+    BYTES                  = 14
+    FORMAT                 = "F14.3"
+    NOT_APPLICABLE_CONSTANT = -999999999.999
+    UNKNOWN_CONSTANT       = -999999998.888
+    NULL_CONSTANT          = -999999997.777
+    DESCRIPTION            = "The distance from the center of the sun to the
+                              center of a target body."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 20
+    NAME                   = SHUTTER_MODE_ID
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 389
+    BYTES                  = 6
+    DESCRIPTION            = "Identifies the state of an imaging instrument's
+                              shutter during image acquisition."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 21
+    NAME                   = LIGHT_SOURCE_NAME
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 398
+    BYTES                  = 20
+    DESCRIPTION            = "The name of the light source used in
+                              observations when it is not the Sun."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 22
+    NAME                   = "MRO:CALIBRATION_LAMP_STATUS"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 421
+    BYTES                  = 11
+    DESCRIPTION            = "The status of the CRISM calibration lamp
+                              identified by LIGHT_SOURCE_NAME."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 23
+    NAME                   = "MRO:CALIBRATION_LAMP_LEVEL"
+    DATA_TYPE              = ASCII_INTEGER
+    START_BYTE             = 434
+    BYTES                  = 4
+    NOT_APPLICABLE_CONSTANT = -999
+    UNKNOWN_CONSTANT       = -998
+    NULL_CONSTANT          = -997
+    DESCRIPTION            = "The level of the CRISM calibration lamp
+                              identified by LIGHT_SOURCE_NAME."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 24
+    NAME                   = PIXEL_AVERAGING_WIDTH
+    DATA_TYPE              = ASCII_INTEGER
+    START_BYTE             = 439
+    BYTES                  = 3
+    NOT_APPLICABLE_CONSTANT = -99
+    UNKNOWN_CONSTANT       = -98
+    NULL_CONSTANT          = -97
+    DESCRIPTION            = "The horizontal dimension, in pixels, of the
+                              area over which pixels were averaged prior to
+                              image compression."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 25
+    NAME                   = "MRO:INSTRUMENT_POINTING_MODE"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 444
+    BYTES                  = 16
+    DESCRIPTION            = "The pointing mode of the CRISM gimbal."
+  END_OBJECT               = COLUMN
+
+  OBJECT                   = COLUMN
+    COLUMN_NUMBER          = 26
+    NAME                   = SCAN_MODE_ID
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 463
+    BYTES                  = 5
+    DESCRIPTION            = "One of several internal rates for data
+                              acquisition by an instrument."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 27
+    NAME                   = "MRO:FRAME_RATE"
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = HZ
+    START_BYTE             = 470
+    BYTES                  = 6
+    FORMAT                 = "F6.2"
+    NOT_APPLICABLE_CONSTANT = -99.99
+    UNKNOWN_CONSTANT       = -88.88
+    NULL_CONSTANT          = -77.77
+    DESCRIPTION            = "The rate at which frames of data in a CRISM EDR
+                              were returned."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 28
+    NAME                   = "MRO:EXPOSURE_PARAMETER"
+    DATA_TYPE              = ASCII_INTEGER
+    START_BYTE             = 477
+    BYTES                  = 3
+    NOT_APPLICABLE_CONSTANT = -99
+    UNKNOWN_CONSTANT       = -98
+    NULL_CONSTANT          = -97
+    DESCRIPTION            = "The value supplied to the CRISM instrument to
+                              command the exposure time."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 29
+    NAME                   = SAMPLING_MODE_ID
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 482
+    BYTES                  = 11
+    DESCRIPTION            = "The resolution mode of a wavelength or
+                              frequency channel."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 30
+    NAME                   = COMPRESSION_TYPE
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 496
+    BYTES                  = 5
+    DESCRIPTION            = "The type of compression/encoding used for data
+                              that was subsequently decompressed/unencoded
+                              before storage."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 31
+    NAME                   = "MRO:WAVELENGTH_FILTER"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 504
+    BYTES                  = 4
+    DESCRIPTION            = "Identifies which of four CRISM onboard menus of
+                              rows was selected for downlink."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 32
+    NAME                   = "MRO:WAVELENGTH_FILE_NAME"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 511
+    BYTES                  = 35
+    DESCRIPTION            = "The name of the file that describes wavelength
+                              sampling in a CRISM EDR or RDR."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 33
+    NAME                   = "MRO:PIXEL_PROC_FILE_NAME"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 549
+    BYTES                  = 35
+    DESCRIPTION            = "The name of the file that documents the CRISM
+                              onboard compression options selected."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 34
+    NAME                   = "MRO:LOOKUP_TABLE_FILE_NAME"
+    DATA_TYPE              = CHARACTER
+    START_BYTE             = 587
+    BYTES                  = 35
+    DESCRIPTION            = "The name of the CRISM lookup table file that
+                              gives the 8-bit DN value replacing each 12-bit
+                              DN value if lossy compression is performed
+                              (if COMPRESSION_TYPE=8_BIT)."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 35
+    NAME                   = "MRO:DETECTOR_TEMPERATURE"
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = CELSIUS
+    START_BYTE             = 624
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "The temperature of the sensors."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 36
+    NAME                   = "MRO:OPTICAL_BENCH_TEMPERATURE"
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = CELSIUS
+    START_BYTE             = 633
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "The temperature of the CRISM optical bench."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 37
+    NAME                   = "MRO:SPECTROMETER_HOUSING_TEMP"
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = CELSIUS
+    START_BYTE             = 642
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "The temperature of the CRISM spectrometer
+                              housing."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 38
+    NAME                   = "MRO:SPHERE_TEMPERATURE"
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = CELSIUS
+    START_BYTE             = 651
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "The temperature of the CRISM onboard
+                              integrating sphere."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 39
+    NAME                   = "MRO:FPE_TEMPERATURE"
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = CELSIUS
+    START_BYTE             = 660
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "The temperature of the IR focal plane
+                              electronics (if MRO:SENSOR_ID = L), or the VNIR
+                              focal plane electronics
+                              (if MRO:SENSOR_ID = S)."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 40
+    NAME                   = LINES
+    DATA_TYPE              = ASCII_INTEGER
+    START_BYTE             = 669
+    BYTES                  = 4
+    NOT_APPLICABLE_CONSTANT = -999
+    UNKNOWN_CONSTANT       = -998
+    NULL_CONSTANT          = -997
+    DESCRIPTION            = "The total number of data instances along the
+                              vertical axis of an image."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 41
+    NAME                   = LINE_SAMPLES
+    DATA_TYPE              = ASCII_INTEGER
+    START_BYTE             = 674
+    BYTES                  = 4
+    NOT_APPLICABLE_CONSTANT = -999
+    UNKNOWN_CONSTANT       = -998
+    NULL_CONSTANT          = -997
+    DESCRIPTION            = "The total number of data instances along the
+                              horizontal axis of an image."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 42
+    NAME                   = BANDS
+    DATA_TYPE              = ASCII_INTEGER
+    START_BYTE             = 679
+    BYTES                  = 5
+    NOT_APPLICABLE_CONSTANT = -9999
+    UNKNOWN_CONSTANT       = -9998
+    NULL_CONSTANT          = -9997
+    DESCRIPTION            = "The number of spectral bands in image or other
+                              object."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 43
+    NAME                   = CENTER_LATITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 685
+    BYTES                  = 7
+    FORMAT                 = "F7.3"
+    NOT_APPLICABLE_CONSTANT = -99.999
+    UNKNOWN_CONSTANT       = -98.888
+    NULL_CONSTANT          = -97.777
+    DESCRIPTION            = "A reference latitude for certain map
+                              projections."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 44
+    NAME                   = CENTER_LONGITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 693
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "A reference longitude for certain map
+                              projections."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 45
+    NAME                   = MAP_RESOLUTION
+    UNIT                   = "PIXEL/DEGREE"
+    DATA_TYPE              = ASCII_REAL
+    START_BYTE             = 702
+    BYTES                  = 12
+    FORMAT                 = "F12.7"
+    NOT_APPLICABLE_CONSTANT = -999.9999999
+    UNKNOWN_CONSTANT       = -998.8888888
+    NULL_CONSTANT          = -997.7777777
+    DESCRIPTION            = "The scale of a given map."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 46
+    NAME                   = MAXIMUM_LATITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 715
+    BYTES                  = 7
+    FORMAT                 = "F7.3"
+    NOT_APPLICABLE_CONSTANT = -99.999
+    UNKNOWN_CONSTANT       = -98.888
+    NULL_CONSTANT          = -97.777
+    DESCRIPTION            = "The northernmost latitude of a spatial area."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 47
+    NAME                   = MINIMUM_LATITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 723
+    BYTES                  = 7
+    FORMAT                 = "F7.3"
+    NOT_APPLICABLE_CONSTANT = -99.999
+    UNKNOWN_CONSTANT       = -98.888
+    NULL_CONSTANT          = -97.777
+    DESCRIPTION            = "The southernmost latitude of a spatial area."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 48
+    NAME                   = WESTERNMOST_LONGITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 731
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "The minimum numerical value of longitude unless
+                              it crosses the Prime Meridian."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 49
+    NAME                   = EASTERNMOST_LONGITUDE
+    UNIT                   = DEGREE
+    DATA_TYPE              = ASCII_REAL
+    START_BYTE             = 740
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "The maximum numercial value of longitude unless
+                              it crosses the Prime Meridian."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 50
+    NAME                   = LOWER_RIGHT_LATITUDE
+    UNIT                   = DEGREE
+    DATA_TYPE              = ASCII_REAL
+    START_BYTE             = 749
+    BYTES                  = 7
+    FORMAT                 = "F7.3"
+    NOT_APPLICABLE_CONSTANT = -99.999
+    UNKNOWN_CONSTANT       = -98.888
+    NULL_CONSTANT          = -97.777
+    DESCRIPTION            = "Actual latitude of the surface point at the
+                              edge of the FOV on the antisunward (right-hand)
+                              side of the groundtrack at the observation
+                              start."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 51
+    NAME                   = LOWER_RIGHT_LONGITUDE
+    UNIT                   = DEGREE
+    DATA_TYPE              = ASCII_REAL
+    START_BYTE             = 757
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "Actual longitude of the surface point at the
+                              edge of the FOV on the antisunward (right-hand)
+                              side of the groundtrack at the observation
+                              start."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 52
+    NAME                   = LOWER_LEFT_LATITUDE
+    UNIT                   = DEGREE
+    DATA_TYPE              = ASCII_REAL
+    START_BYTE             = 766
+    BYTES                  = 7
+    FORMAT                 = "F7.3"
+    NOT_APPLICABLE_CONSTANT = -99.999
+    UNKNOWN_CONSTANT       = -98.888
+    NULL_CONSTANT          = -97.777
+    DESCRIPTION            = "Actual latitude of the surface point at the
+                              edge of the FOV on the sunward (left-hand) side
+                              of the groundtrack at the observation start."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 53
+    NAME                   = LOWER_LEFT_LONGITUDE
+    UNIT                   = DEGREE
+    DATA_TYPE              = ASCII_REAL
+    START_BYTE             = 774
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "Actual longitude of the surface point at the
+                              edge of the FOV on the sunward (left-hand) side
+                              of the groundtrack at the observation start."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 54
+    NAME                   = UPPER_RIGHT_LATITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 783
+    BYTES                  = 7
+    FORMAT                 = "F7.3"
+    NOT_APPLICABLE_CONSTANT = -99.999
+    UNKNOWN_CONSTANT       = -98.888
+    NULL_CONSTANT          = -97.777
+    DESCRIPTION            = "Actual latitude of the surface point at the
+                              edge of the FOV on the antisunward (right-hand)
+                              side of the groundtrack at the observation
+                              end."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 55
+    NAME                   = UPPER_RIGHT_LONGITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 791
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "Actual longitude of the surface point at the
+                              edge of the FOV on the antisunward (right-hand)
+                              side of the groundtrack at the observation
+                              end."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 56
+    NAME                   = UPPER_LEFT_LATITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 800
+    BYTES                  = 7
+    FORMAT                 = "F7.3"
+    NOT_APPLICABLE_CONSTANT = -99.999
+    UNKNOWN_CONSTANT       = -98.888
+    NULL_CONSTANT          = -97.777
+    DESCRIPTION            = "Actual latitude of the surface point at the
+                              edge of the FOV on the sunward (left-hand) side
+                              of the groundtrack at the observation end."
+  END_OBJECT               = COLUMN
+
+ OBJECT                    = COLUMN
+    COLUMN_NUMBER          = 57
+    NAME                   = UPPER_LEFT_LONGITUDE
+    DATA_TYPE              = ASCII_REAL
+    UNIT                   = DEGREE
+    START_BYTE             = 808
+    BYTES                  = 8
+    FORMAT                 = "F8.3"
+    NOT_APPLICABLE_CONSTANT = -999.999
+    UNKNOWN_CONSTANT       = -998.888
+    NULL_CONSTANT          = -997.777
+    DESCRIPTION            = "Actual longitude of the surface point at the
+                              edge of the FOV on the sunward (left-hand) side
+                              of the groundtrack at the observation end."
+  END_OBJECT               = COLUMN
+
+END_OBJECT                 = INDEX_TABLE
+END

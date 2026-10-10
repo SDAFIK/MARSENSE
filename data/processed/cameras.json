@@ -1,0 +1,285 @@
+{
+  "products": {
+    "navcam": {
+      "product_id": "urn:nasa:pds:mars2020_navcam_ops_calibrated:data:nlf_0013_0668099766_737fdr_n0030028ncam00112_0a00llj",
+      "version_id": "5.0",
+      "instrument": [
+        "Navigation Camera Left"
+      ],
+      "sclk": "668099766.737",
+      "sclk_stop": "668099766.957",
+      "clock_partition": 1,
+      "mini_header_sclk": null,
+      "places_observation_sclk": "668099766.737",
+      "utc_start": "2021-03-04T03:17:46.042Z",
+      "sol": 13,
+      "rmc": {
+        "SITE": 3,
+        "DRIVE": 28,
+        "POSE": 4,
+        "ARM": 0,
+        "SHA": 0,
+        "DRILL": 0,
+        "RSM": 2,
+        "HGA": 0,
+        "BITCAR": 0,
+        "SEAL": 0
+      },
+      "processing_level": "Derived",
+      "dimensions": {
+        "Band": 3,
+        "Line": 960,
+        "Sample": 1280
+      },
+      "file_name": "NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.IMG",
+      "axis_order": [
+        "Band",
+        "Line",
+        "Sample"
+      ],
+      "array_offset": 53760,
+      "array_type": "SignedMSB2",
+      "scaling_factor": "1",
+      "value_offset": "0",
+      "axis_index_order": "Last Index Fastest",
+      "camera_model": {
+        "model_type": "CAHVORE",
+        "xml": "<ns0:Camera_Model_Parameters xmlns:ns0=\"http://pds.nasa.gov/pds4/geom/v1\">\n            <ns0:model_type>CAHVORE</ns0:model_type>\n            <ns0:calibration_source_id>1</ns0:calibration_source_id>\n            <ns0:CAHVORE_Model>\n              <ns0:Vector_Center>\n                <ns0:x_position unit=\"m\">0.703491</ns0:x_position>\n                <ns0:y_position unit=\"m\">0.790739</ns0:y_position>\n                <ns0:z_position unit=\"m\">-1.87313</ns0:z_position>\n              </ns0:Vector_Center>\n              <ns0:Vector_Axis>\n                <ns0:x_unit>-0.722693</ns0:x_unit>\n                <ns0:y_unit>0.101832</ns0:y_unit>\n                <ns0:z_unit>0.683637</ns0:z_unit>\n              </ns0:Vector_Axis>\n              <ns0:Vector_Horizontal>\n                <ns0:x_pixel>-915.218</ns0:x_pixel>\n                <ns0:y_pixel>-2858.81</ns0:y_pixel>\n                <ns0:z_pixel>446.797</ns0:z_pixel>\n              </ns0:Vector_Horizontal>\n              <ns0:Vector_Vertical>\n                <ns0:x_pixel>1636.19</ns0:x_pixel>\n                <ns0:y_pixel>-250.973</ns0:y_pixel>\n                <ns0:z_pixel>2502.44</ns0:z_pixel>\n              </ns0:Vector_Vertical>\n              <ns0:Vector_Optical>\n                <ns0:x_unit>-0.722816</ns0:x_unit>\n                <ns0:y_unit>0.100411</ns0:y_unit>\n                <ns0:z_unit>0.683717</ns0:z_unit>\n              </ns0:Vector_Optical>\n              <ns0:Radial_Terms>\n                <ns0:c0>2.0e-06</ns0:c0>\n                <ns0:c1>0.049535</ns0:c1>\n                <ns0:c2>-0.015973</ns0:c2>\n              </ns0:Radial_Terms>\n              <ns0:Entrance_Terms>\n                <ns0:c0>-0.003612</ns0:c0>\n                <ns0:c1>0.013016</ns0:c1>\n                <ns0:c2>-0.023961</ns0:c2>\n              </ns0:Entrance_Terms>\n              <ns0:cahvore_model_type>2</ns0:cahvore_model_type>\n              <ns0:cahvore_model_parameter>0.0</ns0:cahvore_model_parameter>\n            </ns0:CAHVORE_Model>\n            <ns0:Coordinate_Space_Reference>\n              <ns0:Coordinate_Space_Indexed>\n                <ns0:coordinate_space_frame_type>ROVER_NAV_FRAME</ns0:coordinate_space_frame_type>\n                <ns0:Coordinate_Space_Index>\n                  <ns0:index_id>SITE</ns0:index_id>\n                  <ns0:index_value_number>3</ns0:index_value_number>\n                </ns0:Coordinate_Space_Index>\n                <ns0:Coordinate_Space_Index>\n                  <ns0:index_id>DRIVE</ns0:index_id>\n                  <ns0:index_value_number>28</ns0:index_value_number>\n                </ns0:Coordinate_Space_Index>\n                <ns0:Coordinate_Space_Index>\n                  <ns0:index_id>POSE</ns0:index_id>\n                  <ns0:index_value_number>4</ns0:index_value_number>\n                </ns0:Coordinate_Space_Index>\n              </ns0:Coordinate_Space_Indexed>\n            </ns0:Coordinate_Space_Reference>\n            <ns0:Quaternion_Model_Transform>\n              <ns0:qcos>0.0670054</ns0:qcos>\n              <ns0:qsin1>0.36312</ns0:qsin1>\n              <ns0:qsin2>-0.0278419</ns0:qsin2>\n              <ns0:qsin3>0.928913</ns0:qsin3>\n            </ns0:Quaternion_Model_Transform>\n            <ns0:Vector_Model_Transform>\n              <ns0:x>0.804897</ns0:x>\n              <ns0:y>0.559453</ns0:y>\n              <ns0:z>-1.91903</ns0:z>\n            </ns0:Vector_Model_Transform>\n          </ns0:Camera_Model_Parameters>\n          "
+      },
+      "label_sha256": "e86015deb2cdaef5c7a1348af29c28bdec7a22dac0b5a2a3456a493f65d4f9a8",
+      "classification": "DERIVED",
+      "footprint": null,
+      "spatial_uncertainty_m": null,
+      "limitations": [
+        "Camera distortion, depth and pose uncertainty are not validated; rover location is not an image footprint.",
+        "Mechanism values have no exact validity interval in this table; retained as candidates only."
+      ],
+      "source_url": "https://planetarydata.jpl.nasa.gov/img/data/mars2020/mars2020_navcam_ops_calibrated/data/sol/00013/ids/fdr/ncam/",
+      "raw_file": "data/nasa/cameras/NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.IMG",
+      "raw_sha256": "031d39bcfa2bb9e8f26add9ef80676b2442c369728f9871d59b31ca39b5132a2",
+      "processed_file": "data/processed/navcam-calibrated.npz",
+      "processed_sha256": "29ccc98b870c709c7975a4b245ffa51c5f5fd17da9116fbf9a88cd663660455c",
+      "preview_file": "data/processed/navcam-preview.png",
+      "preview_processing": "1\u201399 percentile display stretch; not quantitative radiometry",
+      "places_exact_interval": {
+        "frame": "ROVER",
+        "site": "3",
+        "drive": "28",
+        "pose": "4",
+        "arm": "0",
+        "sha": "0",
+        "drill": "0",
+        "rsm": "2",
+        "hga": "0",
+        "bitcar": "0",
+        "seal": "0",
+        "min_sclk": "668099764",
+        "max_sclk": "668099798",
+        "min_approx_sclk": "668099764",
+        "max_approx_sclk": "668099798"
+      },
+      "places_observations": [
+        {
+          "sclk": "668099766.737",
+          "inst": "NAVCAM_LEFT",
+          "duration": "0.002511"
+        }
+      ],
+      "mechanism_candidates": [
+        {
+          "frame": "INMOTION",
+          "site": "3",
+          "drive": "28",
+          "rsm": "2",
+          "min_sclk": "",
+          "max_sclk": "",
+          "approx_min_sclk": "",
+          "approx_max_sclk": "",
+          "enc_azimuth": "6.16673",
+          "enc_elevation": "0.842799",
+          "res_azimuth": "6.15857",
+          "res_elevation": "0.840255"
+        }
+      ],
+      "drive_anchor": {
+        "frame": "ROVER",
+        "site": "3",
+        "drive": "28",
+        "pose": "-1",
+        "landing_x": "3.310",
+        "landing_y": "-1.408",
+        "landing_z": "0.189",
+        "northing": "1093299.695",
+        "easting": "4354494.086",
+        "planetocentric_latitude": "18.444627146",
+        "planetodetic_latitude": "18.346169209",
+        "longitude": "77.450885729",
+        "elevation": "-2569.910",
+        "map_pixel_line": "15081.22",
+        "map_pixel_sample": "54416.34",
+        "dem_pixel_line": "3770.30",
+        "dem_pixel_sample": "13604.09",
+        "roll": "-1.183",
+        "pitch": "-0.034",
+        "yaw": "132.832",
+        "quat_s": "0.400073367",
+        "quat_v1": "-0.003856616",
+        "quat_v2": "-0.009576106",
+        "quat_v3": "0.916424970",
+        "areoid": "3394507.076",
+        "radius": "3391937.166",
+        "sclk": "668099638",
+        "sol": "13"
+      },
+      "orientation_scope": "Best tactical site/drive anchor; pose=-1, not exact image pose",
+      "rover_local_m": [
+        49.805660192753294,
+        274.27267954600677
+      ],
+      "operational_region_overlap": true
+    },
+    "mastcamz": {
+      "product_id": "urn:nasa:pds:mars2020_mastcamz_sci_calibrated:data:zl0_0015_0668273255_213rad_n0030110zcam08000_1000lua",
+      "version_id": "1.0",
+      "instrument": [
+        "Mast Camera Zoom Left"
+      ],
+      "sclk": "668273442.102",
+      "sclk_stop": "668273442.119",
+      "clock_partition": 1,
+      "mini_header_sclk": "668273438.367",
+      "places_observation_sclk": "668273438.367",
+      "utc_start": "2021-03-06T03:32:22.675Z",
+      "sol": 15,
+      "rmc": {
+        "SITE": 3,
+        "DRIVE": 110,
+        "POSE": 4,
+        "ARM": 0,
+        "SHA": 0,
+        "DRILL": 0,
+        "RSM": 46,
+        "HGA": 102,
+        "BITCAR": 0,
+        "SEAL": 0
+      },
+      "processing_level": "Calibrated",
+      "dimensions": {
+        "Line": 1200,
+        "Sample": 1648
+      },
+      "file_name": "ZL0_0015_0668273255_213RAD_N0030110ZCAM08000_1000LUA01.IMG",
+      "axis_order": [
+        "Line",
+        "Sample"
+      ],
+      "array_offset": 49440,
+      "array_type": "SignedMSB2",
+      "scaling_factor": "2.014896381e-06",
+      "value_offset": "0.001318487572",
+      "axis_index_order": "Last Index Fastest",
+      "camera_model": {
+        "model_type": "CAHVOR",
+        "xml": "<ns0:Camera_Model_Parameters xmlns:ns0=\"http://pds.nasa.gov/pds4/geom/v1\">\n            <ns0:model_type>CAHVOR</ns0:model_type>\n            <ns0:calibration_source_id>1</ns0:calibration_source_id>\n            <ns0:CAHVOR_Model>\n              <ns0:Vector_Center>\n                <ns0:x_position unit=\"m\">0.817794</ns0:x_position>\n                <ns0:y_position unit=\"m\">0.425758</ns0:y_position>\n                <ns0:z_position unit=\"m\">-1.96361</ns0:z_position>\n              </ns0:Vector_Center>\n              <ns0:Vector_Axis>\n                <ns0:x_unit>0.771054</ns0:x_unit>\n                <ns0:y_unit>-0.214734</ns0:y_unit>\n                <ns0:z_unit>0.599484</ns0:z_unit>\n              </ns0:Vector_Axis>\n              <ns0:Vector_Horizontal>\n                <ns0:x_pixel>4411.38</ns0:x_pixel>\n                <ns0:y_pixel>12762.4</ns0:y_pixel>\n                <ns0:z_pixel>283.289</ns0:z_pixel>\n              </ns0:Vector_Horizontal>\n              <ns0:Vector_Vertical>\n                <ns0:x_pixel>-7310.9</ns0:x_pixel>\n                <ns0:y_pixel>2325.28</ns0:y_pixel>\n                <ns0:z_pixel>11106.5</ns0:z_pixel>\n              </ns0:Vector_Vertical>\n              <ns0:Vector_Optical>\n                <ns0:x_unit>0.76742</ns0:x_unit>\n                <ns0:y_unit>-0.212713</ns0:y_unit>\n                <ns0:z_unit>0.604843</ns0:z_unit>\n              </ns0:Vector_Optical>\n              <ns0:Radial_Terms>\n                <ns0:c0>0.000159571</ns0:c0>\n                <ns0:c1>0.145372</ns0:c1>\n                <ns0:c2>-0.0201508</ns0:c2>\n              </ns0:Radial_Terms>\n            </ns0:CAHVOR_Model>\n            <ns0:Coordinate_Space_Reference>\n              <ns0:Coordinate_Space_Indexed>\n                <ns0:coordinate_space_frame_type>ROVER_NAV_FRAME</ns0:coordinate_space_frame_type>\n                <ns0:Coordinate_Space_Index>\n                  <ns0:index_id>SITE</ns0:index_id>\n                  <ns0:index_value_number>3</ns0:index_value_number>\n                </ns0:Coordinate_Space_Index>\n                <ns0:Coordinate_Space_Index>\n                  <ns0:index_id>DRIVE</ns0:index_id>\n                  <ns0:index_value_number>110</ns0:index_value_number>\n                </ns0:Coordinate_Space_Index>\n                <ns0:Coordinate_Space_Index>\n                  <ns0:index_id>POSE</ns0:index_id>\n                  <ns0:index_value_number>4</ns0:index_value_number>\n                </ns0:Coordinate_Space_Index>\n              </ns0:Coordinate_Space_Indexed>\n            </ns0:Coordinate_Space_Reference>\n            <ns0:Quaternion_Model_Transform>\n              <ns0:qcos>0.938736</ns0:qcos>\n              <ns0:qsin1>-0.0468432</ns0:qsin1>\n              <ns0:qsin2>-0.311739</ns0:qsin2>\n              <ns0:qsin3>-0.139284</ns0:qsin3>\n            </ns0:Quaternion_Model_Transform>\n            <ns0:Vector_Model_Transform>\n              <ns0:x>0.805032</ns0:x>\n              <ns0:y>0.559422</ns0:y>\n              <ns0:z>-1.91903</ns0:z>\n            </ns0:Vector_Model_Transform>\n            <ns0:Interpolation>\n              <ns0:interpolation_algorithm>Piecewise Bilinear</ns0:interpolation_algorithm>\n              <ns0:interpolation_variable>Zoom</ns0:interpolation_variable>\n              <ns0:interpolation_value>8652.0</ns0:interpolation_value>\n            </ns0:Interpolation>\n          </ns0:Camera_Model_Parameters>\n          "
+      },
+      "label_sha256": "704b3d8ff8fe9b62bc5b3a37e02afd854f6d6a9298e5193a9ed4e424a413191e",
+      "classification": "DERIVED",
+      "footprint": null,
+      "spatial_uncertainty_m": null,
+      "limitations": [
+        "Camera distortion, depth and pose uncertainty are not validated; rover location is not an image footprint.",
+        "No exact PLACES observation-clock match; label clock variants remain unresolved.",
+        "Mechanism values have no exact validity interval in this table; retained as candidates only."
+      ],
+      "source_url": "https://planetarydata.jpl.nasa.gov/img/data/mars2020/mars2020_mastcamz_sci_calibrated/data/0015/rad/",
+      "raw_file": "data/nasa/cameras/ZL0_0015_0668273255_213RAD_N0030110ZCAM08000_1000LUA01.IMG",
+      "raw_sha256": "5f62b0e19b479b981b6d0d2d3bca5b6a3254c7bb7fc4f94f49e9cda8c431a6de",
+      "processed_file": "data/processed/mastcamz-calibrated.npz",
+      "processed_sha256": "dd9f93919113172acb1649c7ab6b955456179ca14405153e22a1b781cabe08e8",
+      "preview_file": "data/processed/mastcamz-preview.png",
+      "preview_processing": "1\u201399 percentile display stretch; not quantitative radiometry",
+      "places_exact_interval": {
+        "frame": "ROVER",
+        "site": "3",
+        "drive": "110",
+        "pose": "4",
+        "arm": "0",
+        "sha": "0",
+        "drill": "0",
+        "rsm": "46",
+        "hga": "102",
+        "bitcar": "0",
+        "seal": "0",
+        "min_sclk": "668273298",
+        "max_sclk": "668274523",
+        "min_approx_sclk": "668273298",
+        "max_approx_sclk": "668274523"
+      },
+      "places_observations": [],
+      "mechanism_candidates": [
+        {
+          "frame": "INMOTION",
+          "site": "3",
+          "drive": "110",
+          "rsm": "46",
+          "min_sclk": "",
+          "max_sclk": "",
+          "approx_min_sclk": "",
+          "approx_max_sclk": "",
+          "enc_azimuth": "2.87173",
+          "enc_elevation": "0.949079",
+          "res_azimuth": "2.86701",
+          "res_elevation": "0.946483"
+        }
+      ],
+      "drive_anchor": {
+        "frame": "ROVER",
+        "site": "3",
+        "drive": "110",
+        "pose": "-1",
+        "landing_x": "-1.655",
+        "landing_y": "2.023",
+        "landing_z": "0.140",
+        "northing": "1093294.730",
+        "easting": "4354497.517",
+        "planetocentric_latitude": "18.444543383",
+        "planetodetic_latitude": "18.346169209",
+        "longitude": "77.450946754",
+        "elevation": "-2569.862",
+        "map_pixel_line": "15101.08",
+        "map_pixel_sample": "54430.07",
+        "dem_pixel_line": "3775.27",
+        "dem_pixel_sample": "13607.52",
+        "roll": "0.865",
+        "pitch": "-0.394",
+        "yaw": "-15.111",
+        "quat_s": "0.991286816",
+        "quat_v1": "0.007032754",
+        "quat_v2": "-0.004397844",
+        "quat_v3": "-0.131459682",
+        "areoid": "3394507.093",
+        "radius": "3391937.232",
+        "sclk": "668187928",
+        "sol": "14"
+      },
+      "orientation_scope": "Best tactical site/drive anchor; pose=-1, not exact image pose",
+      "rover_local_m": [
+        53.23717300642114,
+        269.30765305740726
+      ],
+      "operational_region_overlap": true
+    }
+  },
+  "source_hashes": {
+    "mech_rsm.csv": "43596c839263019d988019617c25b7cd3cf8b448dad42293e0517fd870a45e92",
+    "mech_rsm.csv.xml": "7a8188bf69cc8342d0d471cf388e000010bf2e9e8758960740f96c5a356536cc",
+    "nav-label.xml": "4b7fba4f54d8ddfce5d1a68a1904f87387cd5b6c02d0b9242e348e98ac4d1ebd",
+    "NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.xml": "e86015deb2cdaef5c7a1348af29c28bdec7a22dac0b5a2a3456a493f65d4f9a8",
+    "observations.csv": "df6afa4c4375cd47a0efbdc324326f28428724fc3c1f602540d51522ad256951",
+    "observations.csv.xml": "ead4268e435df4ec215302dac772727cd7f9babc9b04ce3c836441a77b48b116",
+    "places-sis.pdf": "ca3eb9d2a0d992cedf96860f30537ac508e15fb0e2417fb74c5b80cb31418d1a",
+    "sclk_table.csv": "b771796bd0ecb1c75e451065aa094838fae6966bb628aceae32cc15360473654",
+    "sclk_table.csv.xml": "19bb89f940cc8ce65c44e33da545a6262ebd360d5aa4743752ce6f918c24fd55",
+    "ZL0_0015_0668273255_213RAD_N0030110ZCAM08000_1000LUA01.xml": "704b3d8ff8fe9b62bc5b3a37e02afd854f6d6a9298e5193a9ed4e424a413191e"
+  }
+}

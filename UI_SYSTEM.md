@@ -98,3 +98,22 @@ components/states and all six final screen designs with responsive/accessibility
 rules. Implement from that context. Product Design: capture and inspect final
 desktop/tablet/mobile/error/offline/pending/conflict/no-route screens, report
 findings and fix them. Tool capability availability is not proof of an artifact.
+
+
+## Current reference UI pass — 2026-10-10
+
+The user supplied four visual references and explicitly requested an update.
+Current styles in frontend/src/app/mission-console.css use charcoal #101213
+background, #181c1e panels, #24292c raised surfaces, #343a3d borders, #edece7
+text, #acb3b5 muted text, #a0d9b5 verified accent and #efb482 provisional accent.
+Local Arial/Helvetica and Consolas continue to avoid font-network dependencies.
+The new layout uses a compact utility rail, five workflow links, square panels,
+left observation/route tools, central NASA map and right human review.
+The map refits its mission extent on container resize.
+
+Actual NASA imagery, canonical route distances and evidence decisions remain
+authoritative; generated reference charts and distorted text are not science
+data. This update is a reference-guided implementation, not a completed Figma
+artifact or pixel-exact copy. Scientific source gaps and existing WCAG-audit
+limitations remain documented. Visual evidence and adaptation rationale are
+in design-qa.md.

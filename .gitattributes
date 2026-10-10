@@ -1,0 +1,8 @@
+# Preserve downloaded NASA byte hashes and fixed-record scientific files.
+data/nasa/** -text
+*.IMG binary
+*.bin binary
+*.npz binary
+*.png binary
+*.jpg binary
+*.jpeg binary

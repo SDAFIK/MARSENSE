@@ -1,0 +1,151 @@
+{
+  "created": "2025-07-16T21:29:54.264831+00:00",
+  "modified": "2025-07-16T21:29:54.536123+00:00",
+  "id": 15995036,
+  "conceptrecid": "15995035",
+  "doi": "10.5281/zenodo.15995036",
+  "conceptdoi": "10.5281/zenodo.15995035",
+  "doi_url": "https://doi.org/10.5281/zenodo.15995036",
+  "metadata": {
+    "title": "AI4Mars: A Dataset for Terrain-Aware Autonomous Driving on Mars",
+    "doi": "10.5281/zenodo.15995036",
+    "publication_date": "2022-10-22",
+    "description": "<div>\n<p>This dataset was built for training and validating terrain classification models for Mars, which may be useful in future autonomous rover efforts. It consists of ~425K semantic segmentation full image labels and ~50K images from Perseverance, Curiosity, Opportunity, and Spirit rovers, collected through crowdsourcing. Each image was labeled by ~5-10 people to ensure greater quality and agreement of the crowdsourced labels. It also includes ~1.5K validation labels annotated by the rover planners and scientists from NASA&rsquo;s MSL (Mars Science Laboratory) mission, which operates the Curiosity rover, and MER (Mars Exploration Rovers) mission, which operated the Spirit and Opportunity rovers.</p>\n<p>NOTE: the 10 per-subject labels included in the dataset have been combined, resulting in a total of ~50K actual labels provided. The unmerged dataset is provided for context, but is uncleaned and may contain some invalid data. Labels will visually look like black and white images: semantic classes have pixel values of 0-3. Further information on dataset usage may be found in the related papers and in the documentation files contained in the dataset.</p>\n<p>Data was collected using the <a href=\"https://www.zooniverse.org/projects/hiro-ono/ai4mars\">Zooniverse crowdsourcing platform</a>.</p>\n<p><strong>Attribution:<br></strong>If using this dataset in your work, please cite one of the related papers.</p>\n</div>",
+    "access_right": "open",
+    "creators": [
+      {
+        "name": "Swan, Robert",
+        "affiliation": "NASA Jet Propulsion Laboratory",
+        "orcid": "0000-0002-7601-6805"
+      },
+      {
+        "name": "Ono, Masahiro",
+        "affiliation": "Jet Propulsion Laboratory",
+        "orcid": "0000-0002-9247-1306"
+      },
+      {
+        "name": "Atha, Deegan",
+        "affiliation": null,
+        "orcid": "0000-0002-4675-7899"
+      }
+    ],
+    "keywords": [
+      "Mars",
+      "Space Exploration",
+      "Robotics",
+      "Semantic Segmentation",
+      "Deep Learning",
+      "AI"
+    ],
+    "related_identifiers": [
+      {
+        "identifier": "10.1109/AERO53065.2022.9843615",
+        "relation": "isSupplementTo",
+        "resource_type": "publication-conferencepaper",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1109/CVPRW53098.2021.00226",
+        "relation": "isSupplementTo",
+        "resource_type": "publication-conferencepaper",
+        "scheme": "doi"
+      }
+    ],
+    "version": "0.6",
+    "language": "eng",
+    "resource_type": {
+      "title": "Dataset",
+      "type": "dataset"
+    },
+    "license": {
+      "id": "cc-by-4.0"
+    },
+    "relations": {
+      "version": [
+        {
+          "index": 0,
+          "is_last": true,
+          "parent": {
+            "pid_type": "recid",
+            "pid_value": "15995035"
+          }
+        }
+      ]
+    }
+  },
+  "title": "AI4Mars: A Dataset for Terrain-Aware Autonomous Driving on Mars",
+  "links": {
+    "self": "https://zenodo.org/api/records/15995036",
+    "self_html": "https://zenodo.org/records/15995036",
+    "preview_html": "https://zenodo.org/records/15995036?preview=1",
+    "doi": "https://doi.org/10.5281/zenodo.15995036",
+    "self_doi": "https://doi.org/10.5281/zenodo.15995036",
+    "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.15995036",
+    "reserve_doi": "https://zenodo.org/api/records/15995036/draft/pids/doi",
+    "parent": "https://zenodo.org/api/records/15995035",
+    "parent_html": "https://zenodo.org/records/15995035",
+    "parent_doi": "https://doi.org/10.5281/zenodo.15995035",
+    "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.15995035",
+    "self_iiif_manifest": "https://zenodo.org/api/iiif/record:15995036/manifest",
+    "self_iiif_sequence": "https://zenodo.org/api/iiif/record:15995036/sequence/default",
+    "files": "https://zenodo.org/api/records/15995036/files",
+    "media_files": "https://zenodo.org/api/records/15995036/media-files",
+    "latest": "https://zenodo.org/api/records/15995036/versions/latest",
+    "latest_html": "https://zenodo.org/records/15995036/latest",
+    "versions": "https://zenodo.org/api/records/15995036/versions",
+    "draft": "https://zenodo.org/api/records/15995036/draft",
+    "access_links": "https://zenodo.org/api/records/15995036/access/links",
+    "access_grants": "https://zenodo.org/api/records/15995036/access/grants",
+    "access_users": "https://zenodo.org/api/records/15995036/access/users",
+    "access_request": "https://zenodo.org/api/records/15995036/access/request",
+    "access": "https://zenodo.org/api/records/15995036/access",
+    "communities": "https://zenodo.org/api/records/15995036/communities",
+    "communities-suggestions": "https://zenodo.org/api/records/15995036/communities-suggestions",
+    "request_deletion": "https://zenodo.org/api/records/15995036/request-deletion",
+    "file_modification": "https://zenodo.org/api/records/15995036/file-modification",
+    "quota_increase": "https://zenodo.org/api/records/15995036/quota-increase",
+    "requests": "https://zenodo.org/api/records/15995036/requests"
+  },
+  "updated": "2025-07-16T21:29:54.536123+00:00",
+  "recid": "15995036",
+  "revision": 3,
+  "files": [
+    {
+      "id": "c002973d-31f6-4f31-86f9-9b1f0e1f2afe",
+      "key": "ai4mars-dataset-merged-0.6.zip",
+      "size": 16232481989,
+      "checksum": "md5:daf80a86021253292e6c425f97baa5c6",
+      "links": {
+        "self": "https://zenodo.org/api/records/15995036/files/ai4mars-dataset-merged-0.6.zip/content"
+      }
+    },
+    {
+      "id": "51582daa-7a55-4914-8ea6-d32cd264fa86",
+      "key": "ai4mars-labels-unmerged.zip",
+      "size": 1565964853,
+      "checksum": "md5:49fc7a969dfddc0c06d0020edda432c2",
+      "links": {
+        "self": "https://zenodo.org/api/records/15995036/files/ai4mars-labels-unmerged.zip/content"
+      }
+    }
+  ],
+  "swh": {},
+  "owners": [
+    {
+      "id": "1366627"
+    }
+  ],
+  "status": "published",
+  "stats": {
+    "downloads": 4689,
+    "unique_downloads": 1908,
+    "views": 3737,
+    "unique_views": 3333,
+    "version_downloads": 4689,
+    "version_unique_downloads": 1908,
+    "version_unique_views": 3333,
+    "version_views": 3737
+  },
+  "state": "done",
+  "submitted": true
+}

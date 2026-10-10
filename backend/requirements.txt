@@ -1,0 +1,11 @@
+fastapi>=0.115,<1
+uvicorn>=0.34,<1
+sqlalchemy>=2.0,<3
+pydantic-settings>=2.7,<3
+python-multipart>=0.0.20,<1
+shapely>=2.0,<3
+numpy>=2.0,<3
+pillow>=11,<13
+opencv-python-headless>=4.10,<5
+rasterio>=1.4,<2
+geopandas>=1.0,<2

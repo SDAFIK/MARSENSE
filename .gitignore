@@ -3,6 +3,10 @@
 node_modules/
 .next/
 .next-e2e/
+.next-auth-e2e/
+.next-local/
+.next-ui-review/
+.next-ui-review-build/
 *.tsbuildinfo
 __pycache__/
 .pytest_cache/

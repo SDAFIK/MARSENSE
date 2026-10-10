@@ -1,0 +1,33 @@
+{
+    "NAV": {
+        "0": "soil",
+        "1": "bedrock",
+        "2": "sand",
+        "3": "big rock",
+        "255": null
+    },
+    "M2020_GEO": {
+        "0": "bedrock_massive",
+        "1": "bedrock_layered (angled)",
+        "2": "bedrock_layered (flat)",
+        "3": "bedrock_layered (unsure)",
+        "4": "bedrock_conglomerate",
+        "5": "bedrock_holey",
+        "6": "bedrock_unsure",
+        "10": "float rock(s)_massive",
+        "11": "float rock(s)_layered (angled)",
+        "12": "float rock(s)_layered (flat)",
+        "13": "float rock(s)_layered (unsure)",
+        "14": "float rock(s)_conglomerate",
+        "15": "float rock(s)_holey",
+        "16": "float rock(s)_mixed",
+        "17": "float rock(s)_unsure",
+        "20": "sand_dune",
+        "21": "sand_ripples",
+        "22": "sand_sand",
+        "30": "pebbles",
+        "40": "vein (rare)",
+        "50": "hill/peak",
+        "255": null
+    }
+}

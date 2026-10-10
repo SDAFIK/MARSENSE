@@ -1,0 +1,8 @@
+{
+  "backend/routing.py": "6cc96c29e3ef17d62286f4e2004fb73ee99db4f29f19837584b60561c5d70b08",
+  "scripts/process_dem.py": "598e006cfb7064cb95159e96e8a16383f68205a86f38f4e32496f3b26299e757",
+  "scripts/cache_hirise_dtm.py": "3f78bf54877e6d0066b2c6a2f9d7e7e3ff61346820cba00a9798a62c5ae3ec7f",
+  "scripts/debug_dtm.py": "dd163e1fc18b00bd359819f909ffa4880703c896cd3eb3a36ce9032d6d055ccb",
+  "tests/test_s1_coverage.py": "94c45d8cd88b3fb676e8592abf959f309e915a11d7b4fa8b11c6f60f2567b26f",
+  "frontend/src/components/living-map.tsx": "a864c297bc26dfd8ac2fbb5e444e8c18a1bb637aeb930f747c20ae115fcee955"
+}

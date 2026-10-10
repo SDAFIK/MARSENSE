@@ -1,0 +1,12 @@
+{
+  "backend/camera.py": "a5ce9a4a22ae805e3ff342be7dcda17a9211c257fc9a266873539bf85a7c1498",
+  "backend/main.py": "8e954e57943fa192c6ae4accf27e4bd46331a0ad742c19fe600656d5a41f3de6",
+  "backend/service.py": "7405932dad47d88444e94887f74acdb117b12e3d7f3f8a338638edfea96ff27f",
+  "scripts/cache_cameras.py": "513c01e220c08a851f9f0c838e02af325960347aa5ae7fdb6fb6a3f47c11caac",
+  "scripts/process_cameras.py": "940791338941e674d94c9e62ede32f4933df1b50e34a99419d161535af918f76",
+  "tests/test_s3_camera.py": "83a1f1d686818b4c04ec7c6ba49ca21287d9de55de756c589fe12d55bc43c2d1",
+  "frontend/src/components/mission-workspace.tsx": "7ae7d320debd9820f5875b0b0cb47f67643775a84ce3efb163fee4fabd39cdef",
+  "frontend/src/lib/types.ts": "8f0a49da5ed2a0b525bdec2032319e378e5d61ca6368ec0edf80d1c9b1070613",
+  "frontend/src/app/globals.css": "98469f88a307d16bd133bc7c2d8a3b0971db743dbe07c17e6ce2194685501633",
+  "data/nasa/cameras/source.json": "e7d47e1068b687fe2777df5592168a7b956d3536972d6be2898aa9e5b6122d00"
+}

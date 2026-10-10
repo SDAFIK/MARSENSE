@@ -13,6 +13,7 @@ implemented and must preserve existing persisted history.
 | GET /observations/{id} | observation identity | Original inference, asset digest, footprint, timestamp, metadata note |
 | GET /observations/{id}/original | observation identity | Exact validated original upload as private no-sniff attachment; unavailable for replay/older records without originals |
 | GET /evidence/{id} | evidence identity | Evidence, consequence and verification metadata |
+| GET /evidence/{id}/history | evidence identity | Separate immutable human decisions and confirmed interpretations; explicit legacy-decision absence |
 | POST /evidence/{id}/verify | JSON decision, reviewer, note, optional human_terrain | Final/pending Evidence; atomic state/route/history update; repeated same final decision is idempotent |
 | GET /assets/{asset_id} | allowlisted cached name or generated upload ID | JPEG/PNG; no arbitrary filesystem access |
 
@@ -51,3 +52,17 @@ Safety of retries: committed confirmation is idempotent. Upload/observe is
 currently not deduplicated; add idempotency keys before exposing unreliable-network
 automatic retries. Transport failure must not be interpreted as proof a write
 did not commit; refetch the evidence record before issuing another decision.
+
+## Authentication and ancestry endpoints (S5/S6)
+POST /api/auth/login accepts username/password and sets an HttpOnly cookie.
+GET /api/auth/session returns public user identity, required and read_only flags.
+POST /api/auth/logout revokes the stored session. Authenticated mutations require
+an approved Origin. Production mutation cannot use the legacy read-only token.
+Mission Control/Admin roles can verify and declare sources; Astronaut can observe.
+GET /api/evidence/{id}/ancestry returns support/conflict IDs, intersection coverage,
+source assertions and supersession history. POST /api/evidence/{id}/source records
+a permanent source/episode assertion. VerifyRequest optionally accepts supersedes
+IDs with a new CONFIRMED decision; partial replacement, priors and unrelated
+unresolved conflicts are rejected. Session reviewer identity overrides request
+reviewer text. Evidence snapshots optionally expose superseded_by for current-map
+filtering; historical final decisions are not changed.

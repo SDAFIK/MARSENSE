@@ -1,0 +1,1017 @@
+/* Reference-driven mission console. NASA image pixels and mission data stay intact. */
+:root {
+  --bg: #101213;
+  --panel: #181c1e;
+  --raised: #24292c;
+  --border: #343a3d;
+  --text: #edece7;
+  --muted: #acb3b5;
+  --mint: #a0d9b5;
+  --orange: #efb482;
+}
+body {
+  background: var(--bg);
+}
+.small-mono,
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.7px;
+}
+.button,
+.panel,
+select,
+input,
+textarea,
+.badge {
+  border-radius: 0;
+}
+.button {
+  min-height: 42px;
+}
+.secondary {
+  background: #24292c;
+  border-color: #4a5256;
+}
+.secondary:hover {
+  background: #343b3e;
+}
+select,
+input,
+textarea {
+  background: #111517;
+  border-color: #475054;
+}
+.wordmark > svg {
+  color: #e3e1d7;
+}
+.app-shell {
+  grid-template-columns: 56px minmax(0, 1fr);
+  grid-template-rows: 56px 1fr;
+}
+.app-header {
+  height: 56px;
+  padding: 0 20px;
+  background: #111415;
+}
+.wordmark {
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+.wordmark .small-mono {
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.header-right {
+  gap: 18px;
+}
+.demo-indicator {
+  font-size: 10px;
+}
+.sidebar {
+  padding: 12px 5px;
+  background: #121618;
+}
+.sidebar-project,
+.sidebar-bottom {
+  display: none;
+}
+.sidebar nav {
+  gap: 10px;
+}
+.nav-link {
+  position: relative;
+  justify-content: center;
+  padding: 12px 0;
+  min-height: 44px;
+  border-radius: 0;
+}
+.nav-link svg {
+  width: 20px;
+  height: 20px;
+  color: #b0b7b9;
+}
+.nav-link.active {
+  background: #282f30;
+  border-color: #4d5955;
+  color: var(--mint);
+}
+.nav-link.active svg {
+  color: var(--mint);
+}
+.nav-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.nav-link:hover .nav-label,
+.nav-link:focus-visible .nav-label {
+  width: max-content;
+  height: auto;
+  clip-path: none;
+  left: 48px;
+  z-index: 10;
+  background: #252c2f;
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.nav-active-dot {
+  display: none;
+}
+.workspace {
+  padding: 0 16px;
+  width: 100%;
+  max-width: none;
+}
+.workflow-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 47px;
+  border-bottom: 1px solid var(--border);
+  margin: 0 -16px 14px;
+  padding: 0 16px;
+}
+.workflow-tabs a {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+}
+.workflow-tabs a.active {
+  border-color: var(--mint);
+  color: var(--text);
+  background: #1b2022;
+}
+.workflow-tabs a:hover {
+  background: #242a2c;
+  color: var(--text);
+}
+.workflow-authority {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.workspace-heading {
+  margin-bottom: 14px;
+  gap: 16px;
+}
+.workspace-heading h1 {
+  font-size: 21px;
+  letter-spacing: 0.2px;
+  margin: 4px 0;
+}
+.workspace-heading .eyebrow {
+  font-size: 10px;
+}
+.workspace-heading p.muted {
+  display: none;
+}
+.view-mission .workspace-heading {
+  min-height: 38px;
+  margin-bottom: 10px;
+}
+.view-mission .workspace-heading .eyebrow {
+  display: none;
+}
+.eva-select {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.eva-select .small-mono {
+  font-size: 10px;
+}
+.eva-select select {
+  min-width: 212px;
+  padding: 8px 10px;
+}
+.mission-status-strip,
+.view-mission .mission-status-strip {
+  background: #191e20;
+  border-color: var(--border);
+  border-radius: 0;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  gap: 12px;
+}
+.mission-status-strip .small-mono {
+  font-size: 10px;
+}
+.mission-status-strip .human-authority {
+  color: var(--muted);
+}
+.view-mission .mission-status-strip {
+  grid-template-columns: 1fr 1fr;
+  padding: 7px 12px;
+}
+.view-mission .mission-status-strip > div {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+.view-mission .mission-status-strip > div:first-child,
+.view-mission .mission-status-strip .human-authority {
+  display: none;
+}
+.mission-console {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 260px;
+  align-items: start;
+  gap: 12px;
+}
+.mission-tools,
+.mission-map-column,
+.mission-action-column {
+  min-width: 0;
+}
+.mission-tools,
+.mission-action-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.panel {
+  background: var(--panel);
+}
+.panel-heading {
+  background: #272d30;
+  padding: 9px 12px;
+  min-height: 38px;
+}
+.panel-heading h2 {
+  font-size: 12px;
+  font-weight: 600;
+}
+.panel-heading .small-mono {
+  font-size: 10px;
+}
+.panel-body {
+  padding: 14px;
+}
+.mission-tools .panel-heading {
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.mission-tools .panel-heading .small-mono {
+  display: none;
+}
+.mission-tools .observation-image {
+  height: 145px;
+}
+.observation-image > span {
+  font-size: 10px;
+  background: #101315df;
+}
+.mission-tools .observation-panel .panel-body > p:first-child {
+  display: none;
+}
+.mission-tools .field-label {
+  margin-top: 0;
+}
+.mission-tools .upload-button {
+  flex-wrap: wrap;
+  font-size: 11px;
+  gap: 5px;
+  padding: 10px 0;
+}
+.mission-tools .upload-button span {
+  font-size: 10px;
+}
+.mission-tools .route-overview {
+  gap: 6px;
+}
+.mission-tools .route-overview h3 {
+  font-size: 16px;
+}
+.mission-tools .route-overview > strong {
+  font-size: 21px;
+}
+.mission-tools .route-difference {
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+.mission-console .map-panel {
+  height: clamp(460px, calc(100vh - 205px), 760px);
+  border-radius: 0;
+  border-color: #786953;
+  background: #252521;
+}
+.map-toolbar {
+  background: #161a1cf5;
+  border-color: #454748;
+  padding: 8px 12px;
+}
+.map-toolbar > span:first-child {
+  color: var(--text);
+  font-size: 11px;
+}
+.map-expand-button {
+  background: #252b2e;
+  border: 1px solid #535c60;
+  border-radius: 0;
+  min-height: 36px;
+  font-size: 11px;
+  padding: 7px 9px;
+}
+.map-location {
+  background: #161a1de8;
+  border-color: #c7bca7;
+  padding: 9px 12px;
+  left: 14px;
+  top: 65px;
+}
+.map-location .eyebrow,
+.map-location > span:last-child {
+  color: #d3d0c8;
+  font-size: 10px;
+}
+.map-location strong {
+  font-size: 12px;
+}
+.map-controls {
+  top: 65px;
+  border-radius: 0;
+}
+.map-controls button {
+  background: #202628ed;
+  width: 40px;
+  height: 40px;
+}
+.map-controls button:hover {
+  background: #3d4648;
+}
+.map-layer {
+  left: 12px;
+  bottom: 93px;
+  border-radius: 0;
+  background: #171d20f2;
+  border-color: #596166;
+}
+.map-layer select {
+  width: 190px;
+  font-size: 11px;
+  min-height: 38px;
+}
+.map-overlay-switches {
+  right: 12px;
+  bottom: 93px;
+  border-radius: 0;
+  background: #171d20f2;
+  border-color: #596166;
+  gap: 10px;
+  padding: 10px;
+}
+.map-legend {
+  bottom: 20px;
+  background: #171c1ff5;
+  padding: 10px 12px;
+  gap: 12px;
+  font-size: 10px;
+}
+.line.alpha {
+  background: #f1eee6;
+}
+.map-attribution {
+  background: #101416ed;
+  font-size: 9px;
+}
+.map-details {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  background: #181d1f;
+  padding: 12px;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+.map-details .eyebrow {
+  font-size: 10px;
+}
+.region-states > div {
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+.region-states > div > span:last-child {
+  font-size: 10px;
+}
+.assumption-note {
+  border-left: 0;
+  border-top: 1px solid var(--border);
+  padding: 10px 0 0;
+}
+.assumption-note p {
+  font-size: 12px;
+  color: #d0d3d1;
+}
+.comparison-pair {
+  gap: 8px;
+}
+.comparison-pair .small-mono {
+  font-size: 10px;
+  letter-spacing: 0.3px;
+}
+.comparison-pair strong {
+  font-size: 16px;
+}
+.review-summary,
+.review-panel textarea,
+.review-panel details p,
+.provenance,
+.annotation-note,
+.cost-breakdown {
+  font-size: 11px;
+}
+.consequence-copy {
+  color: #c8cdca;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.badge {
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  padding: 4px 7px;
+}
+.badge.neutral {
+  background: #292e31;
+  color: #d2d6d4;
+}
+.alert-banner {
+  background: #38291d;
+  border-color: #956b42;
+}
+.alert-banner strong {
+  font-size: 12px;
+}
+.alert-banner span {
+  font-size: 11px;
+}
+.review-panel .primary {
+  background: #edbf6f;
+  color: #211c12;
+}
+.review-panel .primary:hover:not(:disabled) {
+  background: #f6d092;
+}
+.review-actions {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.review-actions button {
+  font-size: 11px;
+  min-height: 36px;
+  border-radius: 0;
+}
+.source-status dl {
+  margin: 0 0 12px;
+  font-size: 11px;
+}
+.source-status dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.source-status dt {
+  color: var(--muted);
+}
+.source-status dd {
+  margin: 0;
+  text-align: right;
+}
+.source-status .text-link {
+  font-size: 11px;
+}
+.first-observation {
+  padding: 22px 16px;
+}
+.first-observation h2 {
+  font-size: 18px;
+  margin-top: 16px;
+}
+.first-observation p {
+  font-size: 12px;
+}
+.mission-journey {
+  border-radius: 0;
+  margin: 12px 0;
+}
+.mission-journey > * {
+  font-size: 11px;
+  padding: 12px;
+}
+.mission-journey a:hover {
+  background: #2a3234;
+}
+.view-mission .workspace > .memory-panel {
+  margin-bottom: 12px;
+}
+.view-mission .workspace > .memory-panel .timeline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.timeline li {
+  min-width: 0;
+}
+.timeline .small-mono,
+.timeline p {
+  font-size: 11px;
+}
+.inheritance-banner {
+  border-radius: 0;
+  background: #1c2924;
+  padding: 16px;
+}
+.workspace-footer {
+  font-size: 10px;
+  margin-top: 18px;
+  padding: 12px 0;
+}
+.evidence-list-item {
+  background: #151a1d;
+  border-radius: 0;
+}
+.evidence-list-item.selected {
+  background: #293632;
+}
+.map-panel.map-expanded,
+.mission-console .map-panel.map-expanded {
+  position: fixed;
+  inset: 12px;
+  height: auto;
+  width: auto;
+  border-radius: 0;
+  z-index: 1000;
+  box-shadow: 0 0 0 30px #101213;
+}
+.auth-panel {
+  margin: 14px 0;
+}
+
+/* Introduction reference: centered identity, readable workflow, real image panels. */
+.reference-landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #141719;
+}
+.intro-header {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.intro-header > .small-mono {
+  margin-left: auto;
+  color: var(--muted);
+}
+.intro-stage {
+  position: relative;
+  min-height: calc(100vh - 116px);
+  flex: 1;
+  padding: 40px 60px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.intro-title {
+  text-align: center;
+}
+.intro-title .eyebrow {
+  font-size: 11px;
+}
+.intro-title h1 {
+  font-size: clamp(50px, 6.5vw, 94px);
+  letter-spacing: 9px;
+  font-weight: 500;
+  margin: 20px 0 5px;
+  line-height: 1.05;
+}
+.intro-subtitle {
+  font-size: 19px;
+  letter-spacing: 3px;
+  color: #d0d5d4;
+}
+.intro-workflow {
+  width: min(1100px, 100%);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 42px 0 20px;
+}
+.intro-workflow a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 22px;
+  gap: 10px;
+  border-block: 1px solid #444c50;
+}
+.intro-workflow a:hover,
+.intro-workflow a:focus-visible {
+  background: #242b2e;
+}
+.intro-workflow .small-mono {
+  color: var(--mint);
+}
+.intro-workflow strong {
+  font-size: clamp(18px, 2.2vw, 30px);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.intro-workflow a > span:last-of-type {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 160px;
+}
+.intro-step-arrow {
+  position: absolute;
+  right: -10px;
+  top: 56px;
+  color: #e2e4df;
+  z-index: 1;
+}
+.intro-message {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 560px;
+}
+.intro-message p {
+  font-size: 14px;
+  color: var(--muted);
+}
+.intro-message strong {
+  font-size: 16px;
+  font-weight: 400;
+}
+.intro-message .button {
+  margin-top: 14px;
+  padding-inline: 22px;
+}
+.intro-message > .small {
+  font-size: 11px;
+}
+.intro-asset {
+  position: absolute;
+  width: 220px;
+  border: 1px solid #4b5257;
+  background: #1c2225;
+}
+.intro-asset .panel-heading {
+  min-height: 30px;
+  padding: 5px 9px;
+}
+.intro-asset h2,
+.intro-asset .small-mono {
+  font-size: 10px;
+}
+.intro-asset p {
+  padding: 7px 9px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.intro-image {
+  position: relative;
+  height: 110px;
+}
+.intro-image img {
+  object-fit: cover;
+}
+.intro-orbital {
+  left: 24px;
+  top: 22px;
+}
+.intro-ground {
+  right: 24px;
+  bottom: 22px;
+}
+.intro-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--muted);
+}
+.intro-footer > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 1600px) {
+  .mission-console {
+    grid-template-columns: 260px minmax(0, 1fr) 330px;
+  }
+}
+@media (max-width: 1200px) {
+  .mission-console {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+  .mission-console .mission-action-column {
+    grid-column: 2;
+  }
+  .mission-tools {
+    grid-row: 1 / span 2;
+  }
+  .workflow-authority {
+    display: none;
+  }
+  .wordmark .small-mono {
+    display: inline;
+  }
+  .intro-stage {
+    padding-inline: 30px;
+  }
+  .intro-title h1 {
+    font-size: 68px;
+  }
+  .intro-orbital {
+    width: 180px;
+  }
+}
+@media (max-width: 960px) {
+  .app-shell {
+    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-rows: 56px 1fr;
+  }
+  .sidebar {
+    border-right: 1px solid var(--border);
+    border-bottom: 0;
+    padding: 12px 4px;
+  }
+  .sidebar nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .nav-link {
+    flex-direction: row;
+    padding: 10px 0;
+  }
+  .workflow-tabs a {
+    padding: 0 16px;
+  }
+  .workspace {
+    padding-inline: 12px;
+  }
+  .workflow-tabs {
+    margin-inline: -12px;
+    padding-inline: 12px;
+  }
+  .mission-status-strip {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .mission-console {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+  .intro-header > .small-mono {
+    display: none;
+  }
+  .intro-header > .button {
+    margin-left: auto;
+  }
+  .intro-stage {
+    padding: 180px 20px 220px;
+  }
+  .intro-title h1 {
+    font-size: 60px;
+  }
+  .intro-workflow a {
+    padding: 15px 12px;
+  }
+  .intro-workflow strong {
+    font-size: 20px;
+  }
+}
+@media (max-width: 720px) {
+  .app-shell {
+    display: block;
+  }
+  .app-header {
+    padding: 0 14px;
+    height: 56px;
+  }
+  .app-header .wordmark {
+    font-size: 19px;
+  }
+  .app-header .brand-divider,
+  .app-header .wordmark .small-mono {
+    display: none;
+  }
+  .cache-indicator {
+    font-size: 9px;
+  }
+  .sidebar {
+    padding: 4px 10px;
+    border-bottom: 1px solid var(--border);
+    border-right: 0;
+  }
+  .sidebar nav {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .nav-link {
+    width: 44px;
+    min-height: 44px;
+  }
+  .nav-link:hover .nav-label,
+  .nav-link:focus-visible .nav-label {
+    left: 0;
+    top: 42px;
+  }
+  .sidebar .nav-link:last-child .nav-label {
+    left: auto;
+    right: 0;
+  }
+  .workflow-tabs {
+    gap: 0;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .workflow-tabs a {
+    padding: 0 7px;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+  .workspace-heading {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .workspace-heading h1 {
+    font-size: 23px;
+  }
+  .eva-select {
+    width: 100%;
+    flex-direction: row;
+  }
+  .eva-select .small-mono {
+    text-align: left;
+    font-size: 9px;
+  }
+  .eva-select select {
+    min-width: 0;
+    flex: 1;
+  }
+  .mission-status-strip,
+  .view-mission .mission-status-strip {
+    grid-template-columns: 1fr 1fr;
+    padding: 10px;
+  }
+  .mission-status-strip > div:first-child {
+    display: none;
+  }
+  .mission-console {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .mission-console > * {
+    width: 100%;
+  }
+  .mission-console .mission-map-column {
+    order: -1;
+  }
+  .mission-console .map-panel {
+    height: 480px;
+  }
+  .mission-tools .observation-image {
+    height: 160px;
+  }
+  .mission-journey {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mission-journey > * {
+    font-size: 10px;
+    padding: 10px 8px;
+  }
+  .view-mission .workspace > .memory-panel .timeline {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .map-location {
+    max-width: calc(100% - 80px);
+  }
+  .map-layer {
+    bottom: 94px;
+  }
+  .map-layer select {
+    width: 182px;
+  }
+  .map-overlay-switches {
+    bottom: 143px;
+    font-size: 10px;
+  }
+  .map-legend {
+    font-size: 10px;
+    gap: 10px;
+  }
+  .map-expand-button {
+    font-size: 10px;
+    padding-inline: 7px;
+  }
+  .map-toolbar > span:first-child {
+    font-size: 10px;
+  }
+  .map-panel.map-expanded,
+  .mission-console .map-panel.map-expanded {
+    inset: 0;
+    height: auto;
+  }
+  .astronaut-links {
+    flex-wrap: wrap;
+  }
+  .reference-landing .wordmark {
+    font-size: 17px;
+  }
+  .intro-header {
+    padding: 10px 14px;
+    gap: 12px;
+  }
+  .intro-header .button {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+  .intro-stage {
+    padding: 32px 18px;
+    min-height: 0;
+  }
+  .intro-title .eyebrow {
+    font-size: 9px;
+  }
+  .intro-title h1 {
+    font-size: 44px;
+    letter-spacing: 4px;
+  }
+  .intro-subtitle {
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+  .intro-workflow {
+    grid-template-columns: 1fr;
+    margin: 30px 0 24px;
+  }
+  .intro-workflow a {
+    display: grid;
+    grid-template-columns: 25px 100px 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 16px 5px;
+    border-top: 0;
+  }
+  .intro-workflow a:first-child {
+    border-top: 1px solid #444c50;
+  }
+  .intro-workflow strong {
+    font-size: 18px;
+  }
+  .intro-workflow a > span:last-of-type {
+    font-size: 11px;
+  }
+  .intro-step-arrow {
+    display: none;
+  }
+  .intro-asset {
+    position: static;
+    width: 100%;
+  }
+  .intro-orbital {
+    order: 3;
+    margin-top: 30px;
+  }
+  .intro-ground {
+    order: 4;
+    margin-top: 14px;
+  }
+  .intro-image {
+    height: 150px;
+  }
+  .intro-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 16px;
+    font-size: 10px;
+  }
+}

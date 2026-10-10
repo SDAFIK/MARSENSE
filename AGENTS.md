@@ -1,11 +1,14 @@
 # MARSENSE engineering context
 
-Current user instruction (2026-10-10): stop implementation and complete Gate 0
-only. Run Toolkit to-spec, grilling, domain-modeling, codebase-design and
-to-tickets in that order, then cross-check all required documents. Do not resume
-application implementation or later gates until the user explicitly resumes it.
-Existing services and saved mission data are preserved; stopping implementation
-does not authorize terminating processes or resetting mission history.
+> Current instruction: scientific completion resumed under SCIENTIFIC_COMPLETION_REQUEST.md. Start with S1 and pass each gate before continuing through S10. Preserve working behavior, services and mission history; no automatic public publication.
+
+> Earlier scope instructions below are historical; the latest scientific completion request governs current execution.
+
+Current user instruction (2026-10-10): resume scientific completion under
+docs/SCIENTIFIC_COMPLETION_REQUEST.md, sequentially S1–S10. The earlier Gate
+0-only pause is historical. Do not redesign the product or rewrite passing core
+behavior. Do not advance beyond an unpassed scientific gate or automatically
+publish. Preserve existing services and saved mission data.
 
 Read README and docs/IMPLEMENTATION_STATUS.md before changes. Main product reference: docs/MAIN_PROJECT_NOTES.md, extracted from the user's authoritative Word file. PROJECT_SPEC.md supplies the frozen engineering constraints. Preserve the NASA prior → ground evidence → discrepancy → mission consequence → human verification → footprint knowledge → rerouting → durable future-EVA memory flow.
 

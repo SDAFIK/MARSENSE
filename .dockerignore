@@ -1,0 +1,14 @@
+.venv
+.tmp
+**/node_modules
+**/.next*
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/test-results
+**/playwright-report
+data/runtime
+.env*
+docs/screenshots
+ai/checkpoints

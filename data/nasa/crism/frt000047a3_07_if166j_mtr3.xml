@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<?xml-model href="https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1M00.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://pds.nasa.gov/pds4/cart/v1/PDS4_CART_1M00_1970.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://pds.nasa.gov/pds4/disp/v1/PDS4_DISP_1M00_1510.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://pds.nasa.gov/pds4/proc/v1/PDS4_PROC_1M00_1300.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://pds.nasa.gov/pds4/geom/v1/PDS4_GEOM_1M00_1970.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://pds.nasa.gov/pds4/mission/mro/v1/PDS4_MRO_1M00_1320.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+
+<Product_Observational xmlns="http://pds.nasa.gov/pds4/pds/v1" 
+    xmlns:cart="http://pds.nasa.gov/pds4/cart/v1" 
+    xmlns:disp="http://pds.nasa.gov/pds4/disp/v1" 
+    xmlns:geom="http://pds.nasa.gov/pds4/geom/v1" 
+    xmlns:img="http://pds.nasa.gov/pds4/img/v1" 
+    xmlns:mro="http://pds.nasa.gov/pds4/mission/mro/v1" 
+    xmlns:proc="http://pds.nasa.gov/pds4/proc/v1" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://pds.nasa.gov/pds4/pds/v1       https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1M00.xsd      http://pds.nasa.gov/pds4/cart/v1       https://pds.nasa.gov/pds4/cart/v1/PDS4_CART_1M00_1970.xsd      http://pds.nasa.gov/pds4/disp/v1       https://pds.nasa.gov/pds4/disp/v1/PDS4_DISP_1M00_1510.xsd      http://pds.nasa.gov/pds4/proc/v1       https://pds.nasa.gov/pds4/proc/v1/PDS4_PROC_1M00_1300.xsd     http://pds.nasa.gov/pds4/geom/v1       https://pds.nasa.gov/pds4/geom/v1/PDS4_GEOM_1M00_1970.xsd     http://pds.nasa.gov/pds4/mission/mro/v1    https://pds.nasa.gov/pds4/mission/mro/v1/PDS4_MRO_1M00_1320.xsd     ">
+  <Identification_Area>
+    <logical_identifier>urn:nasa:pds:mro_crism_mtrdr:data_mtrdr:frt000047a3_07_if166j_mtr3</logical_identifier>
+    <version_id>1.0</version_id>
+    <title>frt000047a3_07_if166j_mtr3 MTRDR IF</title>
+    <information_model_version>1.22.0.0</information_model_version>
+    <product_class>Product_Observational</product_class>
+    <Alias_List>
+      <Alias>
+        <alternate_id>FRT000047A3_07_IF166J_MTR3</alternate_id>
+        <comment>PDS3 PRODUCT_ID</comment>
+      </Alias>
+    </Alias_List>
+    <Modification_History>
+      <Modification_Detail>
+        <modification_date>2024-01-01</modification_date>
+        <version_id>1.0</version_id>
+        <description>PDS4 conversion.</description>
+      </Modification_Detail>
+    </Modification_History>
+  </Identification_Area>
+  <Observation_Area>
+    <Time_Coordinates>
+      <start_date_time>2007-02-26T04:34:15.930Z</start_date_time>
+      <stop_date_time>2007-02-26T04:36:23.656Z</stop_date_time>
+      <solar_longitude unit="deg">190.545216</solar_longitude>
+    </Time_Coordinates>
+    <Investigation_Area>
+      <name>MARS RECONNAISSANCE ORBITER</name>
+      <type>Mission</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:investigation:mission.mars_reconnaissance_orbiter</lid_reference>
+        <reference_type>data_to_investigation</reference_type>
+      </Internal_Reference>
+    </Investigation_Area>
+    <Observing_System>
+      <Observing_System_Component>
+        <name>MARS RECONNAISSANCE ORBITER</name>
+        <type>Host</type>
+        <Internal_Reference>
+          <lid_reference>urn:nasa:pds:context:instrument_host:spacecraft.mro</lid_reference>
+          <reference_type>is_instrument_host</reference_type>
+        </Internal_Reference>
+      </Observing_System_Component>
+      <Observing_System_Component>
+        <name>COMPACT RECONNAISSANCE IMAGING SPECTROMETER FOR MARS</name>
+        <type>Instrument</type>
+        <Internal_Reference>
+          <lid_reference>urn:nasa:pds:context:instrument:crism.mro</lid_reference>
+          <reference_type>is_instrument</reference_type>
+        </Internal_Reference>
+      </Observing_System_Component>
+    </Observing_System>
+    <Target_Identification>
+      <name>Mars</name>
+      <type>Planet</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:target:planet.mars</lid_reference>
+        <reference_type>data_to_target</reference_type>
+      </Internal_Reference>
+    </Target_Identification>
+    <Mission_Area>
+      <mro:MRO_Parameters>
+        <mro:product_type>MTRDR</mro:product_type>
+        <mro:product_version_id>3</mro:product_version_id>
+        <mro:orbit_number>2743</mro:orbit_number>
+        <mro:spacecraft_clock_start_count>2/0856931674:55424</mro:spacecraft_clock_start_count>
+        <mro:spacecraft_clock_stop_count>2/0856931802:37490</mro:spacecraft_clock_stop_count>
+        <mro:producer_institution_name>Johns Hopkins University Applied Physics Laboratory</mro:producer_institution_name>
+        <mro:CRISM_Parameters>
+          <mro:observation_type>FRT</mro:observation_type>
+          <mro:observation_id>16#000047A3#</mro:observation_id>
+          <mro:observation_number>16#07#</mro:observation_number>
+          <mro:activity_id>IF166</mro:activity_id>
+          <mro:sensor_id>J</mro:sensor_id>
+          <mro:CRISM_Temperatures>
+            <mro:detector_temperature unit="degC">-163.131</mro:detector_temperature>
+            <mro:optical_bench_temperature unit="degC">-49.276</mro:optical_bench_temperature>
+            <mro:spectrometer_housing_temperature unit="degC">-73.193</mro:spectrometer_housing_temperature>
+            <mro:sphere_temperature unit="degC">-49.555</mro:sphere_temperature>
+            <mro:fpe_temperature unit="degC">0.128</mro:fpe_temperature>
+          </mro:CRISM_Temperatures>
+        </mro:CRISM_Parameters>
+      </mro:MRO_Parameters>
+    </Mission_Area>
+    <Discipline_Area>
+      <disp:Display_Settings>
+        <Local_Internal_Reference>
+          <local_identifier_reference>image_cube</local_identifier_reference>
+          <local_reference_type>display_settings_to_array</local_reference_type>
+        </Local_Internal_Reference>
+        <disp:Display_Direction>
+          <disp:horizontal_display_axis>Sample</disp:horizontal_display_axis>
+          <disp:horizontal_display_direction>Left to Right</disp:horizontal_display_direction>
+          <disp:vertical_display_axis>Line</disp:vertical_display_axis>
+          <disp:vertical_display_direction>Top to Bottom</disp:vertical_display_direction>
+        </disp:Display_Direction>
+      </disp:Display_Settings>
+      <geom:Geometry>
+        <geom:Geometry_Orbiter>
+          <geom:geometry_start_time_utc>2007-02-26T04:34:15.930Z</geom:geometry_start_time_utc>
+          <geom:geometry_stop_time_utc>2007-02-26T04:36:23.656Z</geom:geometry_stop_time_utc>
+          <geom:Orbiter_Identification>
+            <geom:Geometry_Target_Identification>
+              <geom:name>Mars</geom:name>
+            </geom:Geometry_Target_Identification>
+          </geom:Orbiter_Identification>
+          <geom:Distances>
+            <geom:Distances_Specific>
+              <geom:target_heliocentric_distance unit="km">216029080.054156</geom:target_heliocentric_distance>
+            </geom:Distances_Specific>
+          </geom:Distances>
+          <geom:Surface_Geometry>
+            <geom:Surface_Geometry_Min_Max>
+              <geom:minimum_latitude unit="deg">18.4428140</geom:minimum_latitude>
+              <geom:maximum_latitude unit="deg">18.6879740</geom:maximum_latitude>
+              <geom:minimum_longitude unit="deg">77.375951</geom:minimum_longitude>
+              <geom:maximum_longitude unit="deg">77.642025</geom:maximum_longitude>
+            </geom:Surface_Geometry_Min_Max>
+          </geom:Surface_Geometry>
+        </geom:Geometry_Orbiter>
+      </geom:Geometry>
+      <cart:Cartography>
+        <Local_Internal_Reference>
+          <local_identifier_reference>image_cube</local_identifier_reference>
+          <local_reference_type>cartography_parameters_to_image_object</local_reference_type>
+        </Local_Internal_Reference>
+        <cart:Spatial_Domain>
+          <cart:Bounding_Coordinates>
+            <cart:west_bounding_coordinate unit="deg">77.375951</cart:west_bounding_coordinate>
+            <cart:east_bounding_coordinate unit="deg">77.642025</cart:east_bounding_coordinate>
+            <cart:north_bounding_coordinate unit="deg">18.6879740</cart:north_bounding_coordinate>
+            <cart:south_bounding_coordinate unit="deg">18.4428140</cart:south_bounding_coordinate>
+          </cart:Bounding_Coordinates>
+        </cart:Spatial_Domain>
+        <cart:Spatial_Reference_Information>
+          <cart:Horizontal_Coordinate_System_Definition>
+            <cart:Planar>
+              <cart:Map_Projection>
+                <cart:map_projection_name>Equirectangular</cart:map_projection_name>
+                <cart:Equirectangular>
+                  <cart:latitude_of_projection_origin unit="deg">0</cart:latitude_of_projection_origin>
+                  <cart:standard_parallel_1 unit="deg">15.0000000</cart:standard_parallel_1>
+                  <cart:longitude_of_central_meridian unit="deg">0</cart:longitude_of_central_meridian>
+                </cart:Equirectangular>
+              </cart:Map_Projection>
+              <cart:Planar_Coordinate_Information>
+                <cart:planar_coordinate_encoding_method>Coordinate Pair</cart:planar_coordinate_encoding_method>
+                <cart:Coordinate_Representation>
+                  <cart:pixel_resolution_x unit="m/pixel">18.0</cart:pixel_resolution_x>
+                  <cart:pixel_resolution_y unit="m/pixel">18.0</cart:pixel_resolution_y>
+                  <cart:pixel_scale_x unit="pixel/deg">3291.7295733</cart:pixel_scale_x>
+                  <cart:pixel_scale_y unit="pixel/deg">3291.7295733</cart:pixel_scale_y>
+                </cart:Coordinate_Representation>
+              </cart:Planar_Coordinate_Information>
+              <cart:Geo_Transformation>
+                <cart:upperleft_corner_x unit="m">4428368.8000002</cart:upperleft_corner_x>
+                <cart:upperleft_corner_y unit="m">1107310.6000008</cart:upperleft_corner_y>
+              </cart:Geo_Transformation>
+            </cart:Planar>
+            <cart:Geodetic_Model>
+              <cart:latitude_type>Planetocentric</cart:latitude_type>
+              <cart:a_axis_radius unit="m">3394839.8133163117</cart:a_axis_radius>
+              <cart:b_axis_radius unit="m">3394839.8133163117</cart:b_axis_radius>
+              <cart:c_axis_radius unit="m">3394839.8133163117</cart:c_axis_radius>
+              <cart:longitude_direction>Positive East</cart:longitude_direction>
+            </cart:Geodetic_Model>
+          </cart:Horizontal_Coordinate_System_Definition>
+        </cart:Spatial_Reference_Information>
+      </cart:Cartography>
+      <proc:Processing_Information>
+        <Local_Internal_Reference>
+          <local_identifier_reference>image_cube</local_identifier_reference>
+          <local_reference_type>processing_information_to_data_object</local_reference_type>
+        </Local_Internal_Reference>
+        <proc:Process>
+          <proc:Software>
+            <proc:Software_Program>
+              <proc:name>mtrdr_pipeline</proc:name>
+              <proc:program_version>1.0</proc:program_version>
+              <proc:program_stop_date_time>2017-07-17T15:02:42Z</proc:program_stop_date_time>
+            </proc:Software_Program>
+          </proc:Software>
+        </proc:Process>
+      </proc:Processing_Information>
+    </Discipline_Area>
+  </Observation_Area>
+  <Reference_List>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:mro_crism_mtrdr:document:crism_dpsis</lid_reference>
+      <reference_type>data_to_document</reference_type>
+    </Internal_Reference>
+    <Source_Product_Internal>
+      <lidvid_reference>urn:nasa:pds:mro_crism_ter:data_ter:frt000047a3_07_if166j_ter3::1.0</lidvid_reference>
+      <reference_type>data_to_calibrated_source_product</reference_type>
+      <comment>CRISM TER product used as a source to calculate this one.</comment>
+    </Source_Product_Internal>
+    <Source_Product_Internal>
+      <lidvid_reference>urn:nasa:pds:mro_crism_ddr:data_ddr:frt000047a3_07_de166l_ddr1::1.0</lidvid_reference>
+      <reference_type>data_to_derived_source_product</reference_type>
+      <comment>CRISM DDR product used as a source to calculate this one.</comment>
+    </Source_Product_Internal>
+  </Reference_List>
+  <File_Area_Observational>
+    <File>
+      <file_name>frt000047a3_07_if166j_mtr3.img</file_name>
+      <creation_date_time>2017-07-17T15:02:42Z</creation_date_time>
+    </File>
+    <Array_3D_Image>
+      <name>Spectral Image Cube frt000047a3_07_if166j_mtr3</name>
+      <local_identifier>image_cube</local_identifier>
+      <offset unit="byte">0</offset>
+      <axes>3</axes>
+      <axis_index_order>Last Index Fastest</axis_index_order>
+      <description>
+                This Map-Projected Targeted RDR label describes a multiple-band
+                image file containing calibrated and corrected spectral data
+                in units of corrected I over F.
+            </description>
+      <Element_Array>
+        <data_type>IEEE754LSBSingle</data_type>
+      </Element_Array>
+      <Axis_Array>
+        <axis_name>Band</axis_name>
+        <elements>489</elements>
+        <sequence_number>1</sequence_number>
+      </Axis_Array>
+      <Axis_Array>
+        <axis_name>Line</axis_name>
+        <elements>808</elements>
+        <sequence_number>2</sequence_number>
+      </Axis_Array>
+      <Axis_Array>
+        <axis_name>Sample</axis_name>
+        <elements>847</elements>
+        <sequence_number>3</sequence_number>
+      </Axis_Array>
+      <Special_Constants>
+        <missing_constant>65535</missing_constant>
+      </Special_Constants>
+    </Array_3D_Image>
+  </File_Area_Observational>
+  <File_Area_Observational_Supplemental>
+    <File>
+      <file_name>frt000047a3_07_if166j_mtr3.hdr</file_name>
+    </File>
+    <Stream_Text>
+      <offset unit="byte">0</offset>
+      <parsing_standard_id>7-Bit ASCII Text</parsing_standard_id>
+      <description>
+                The ENVI header is a separate ASCII file that includes basic image
+                data file characteristics and allows the image data to be loaded
+                directly into the ENVI image processing software available bands
+                list.
+            </description>
+      <record_delimiter>Carriage-Return Line-Feed</record_delimiter>
+    </Stream_Text>
+  </File_Area_Observational_Supplemental>
+  <File_Area_Observational_Supplemental>
+    <File>
+      <file_name>frt000047a3_07_if166j_mtr3.lbl</file_name>
+    </File>
+    <Stream_Text>
+      <offset unit="byte">0</offset>
+      <parsing_standard_id>PDS3</parsing_standard_id>
+      <description>PDS3 label</description>
+      <record_delimiter>Carriage-Return Line-Feed</record_delimiter>
+    </Stream_Text>
+  </File_Area_Observational_Supplemental>
+</Product_Observational>

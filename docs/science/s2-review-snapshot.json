@@ -1,0 +1,9 @@
+{
+  "ai/train.py": "254f64458bc8f89dff72437f0444971f8e21f441deff529ad9ba42a050a5fa01",
+  "ai/perception.py": "df33417e9324a45bcce58c1a0701bafcdca0a22e17717632d484538d792dec12",
+  "scripts/cache_ai4mars.py": "39a6df0e48a1a4867a87962f8f7947a194269974584d410c96608dcaf4c421ba",
+  "scripts/range_archive.py": "7fd37d13e08ce00bf98331876a8821261e46d3d025caf600cd2cd55a3f879de8",
+  "scripts/model_card.py": "79d5ab4d0c2cbc0af6518ace3ccb7f59ef3d513b73ae61391f6ecb80369eda60",
+  "tests/test_s2_training.py": "476a444db11b6558197671bf111d29a1b88f5803b1b24d163db569c1d3c7d15b",
+  "tests/test_s2_genuine_model.py": "1107827e42b83ada343aa959ca7761deacb714505f33ad9236c394222ad4ab48"
+}

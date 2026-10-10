@@ -958,9 +958,9 @@ The master prompt is retained verbatim in docs/MASTER_PROMPT.md. It supplies the
 engineering constraints and exact Gate 0 deliverables; the Word notes remain
 the frozen product reference. Root documents are the required target contracts.
 Companion docs describe implementation snapshots and cannot reduce acceptance.
-On 2026-10-10 the user stopped implementation and requested Gate 0 only. No
-application implementation, deployment or later gate follows this checkpoint
-automatically. Workflow evidence and reconciliation: docs/GATE_0_REVIEW.md.
+At the earlier 2026-10-10 checkpoint the user requested Gate 0 only. The
+latest user request explicitly resumes implementation; see
+docs/RESUMPTION_REVIEW.md for current execution scope. Workflow evidence and reconciliation: docs/GATE_0_REVIEW.md.
 
 Problem: prior maps may omit human-scale terrain or current conditions. Mission
 decisions must respond to supported evidence without losing NASA provenance,

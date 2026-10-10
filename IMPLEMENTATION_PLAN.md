@@ -1,12 +1,15 @@
 # Sequential engineering gates and tickets
 
+> Current instruction: scientific completion resumed under SCIENTIFIC_COMPLETION_REQUEST.md. Start with S1 and pass each gate before continuing through S10. Preserve working behavior, services and mission history; no automatic public publication.
+
+> Earlier scope instructions below are historical; the latest scientific completion request governs current execution.
+
 Source authority: frozen request + preserved PROJECT_SPEC.md and the user-confirmed
 MARSENSE_Final_Project_Notes.docx, extracted at docs/MAIN_PROJECT_NOTES.md.
 Current implementation: docs/IMPLEMENTATION_STATUS.md. Owner: MARSENSE engineering.
 
-Current execution scope: Gate 0 only, per the user's stop instruction. Gates
-1-20 are a plan and historical observations, not authorization to resume
-implementation in this chat.
+Current execution scope: the user explicitly resumed implementation. Follow
+Gates 1–20 sequentially after the revalidation in docs/RESUMPTION_REVIEW.md.
 
 Every gate follows: acceptance/spec → meaningful behavior test first → smallest
 coherent implementation → checks → spec/code review → docs/status → coherent
@@ -64,8 +67,8 @@ Gate 12. No DigitalOcean infrastructure is provisioned at this checkpoint.
 
 ## Small tickets from the to-tickets workflow
 
-Execution is stopped by the user's Gate 0-only instruction. All tickets are
-TODO/on hold, including partially implemented behaviors awaiting final acceptance.
+Execution has resumed. Tickets remain TODO or REVIEW until their acceptance
+evidence is recorded; existing partial code is assessed before further edits.
 Owner of each: MARSENSE engineering, with QA review. Each row inherits these
 non-goals: no frozen-product redesign, optional instruments, fabricated science,
 automatic confirmation, unrelated platforms, destructive reset or early hosting.

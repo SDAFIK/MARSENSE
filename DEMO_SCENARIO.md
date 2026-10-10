@@ -1,66 +1,29 @@
-# Deterministic Jezero Marswalk
+# Demonstrating MARSENSE
 
-Frozen mandatory story: Habitat → Delta Outcrop, with Area 14 learned from
-ground evidence. All EVA coordinates and habitat/target geometry are illustrative.
-The visible orbital imagery and PIA26072 Navcam photo are real cached NASA assets.
-The ground-photo footprint is simulated, not an actual registered astronaut pose.
+Open http://127.0.0.1:3000/mission. Existing saved history remains intact; if
+Route Beta is already present, inspect Before & After and Exploration Memory.
+Never reset the user's database to repeat a demonstration. For a clean Alpha
+scenario, use a different MARSENSE_DATABASE_URL and separate local service ports.
 
-## Initial fixture
+1. Explore the mission map; Open full map expands it, Escape closes it. Toggle
+   routes/evidence and CTX/HiRISE. The source crop is approximately 1.2 × 0.8 km.
+2. Analyze Boulder field on Route Alpha. The labeled replay annotation and
+   simulated footprint challenge the low-obstacle assumption provisionally.
+3. Inspect expected versus observed terrain and the mission consequence. Confirm
+   only after human review; weak/UNKNOWN persistent terrain needs manual identity.
+4. Route Beta reflects footprint-supported terrain cost; original NASA prior,
+   raw observation and Route Alpha remain in history. No route is safety-certified.
+5. Reload and switch to Future EVA: inherited knowledge persists.
+6. Evidence Inspector shows calibrated camera context/unknown footprints, CRISM
+   target coverage/no mineral identity, source declarations and evidence ancestry.
+   Duplicate bytes/same acquisition episode cannot establish independent support.
+7. For contradictory later evidence, explicitly name the confirmed IDs to supersede
+   and explain the reassessment. Full retired-footprint coverage is required; old
+   decisions stay immutable. Source declarations are permanent human assertions.
+8. In authenticated configuration, sign in as a provisioned Mission Control/Admin
+   reviewer. Confirmation records the server session identity, not the submitted
+   display name. Sign out revokes the session. Writable demo is loopback-only.
 
-Mars analysis extent: 1,200×800 m. Habitat=(120,400); Delta Outcrop=(1080,400).
-Area 14 supported observation footprint=[520,320]..[680,480] m within corridor.
-Orbital expected interpretation: low-obstacle soil. Alpha direct route length:
-960 m on a 40 m grid. Assumption A17: low obstacle density supports Alpha segment
-3, target access and the declared retraced return corridor.
-
-Fresh seeds display Area 14/A17 and create EVA-specific segment identities.
-The internal assumption ID remains assumption-corridor. Older stored missions
-need non-destructive migration, and target-only/return dependencies still need
-full acceptance at Gates 2/6/9. Display names do not authorize deleting history.
-
-## Required final demonstration
-
-1. Open Mission Control. Cached NASA prior, Habitat, Delta Outcrop, Alpha and
-   orbital-only Area 14 are visible.
-2. Select/upload the cached known ground image. Real validated local perception
-   executes; model version/calibration limitations are inspectable.
-3. Show expected low obstruction versus observed high rock abundance/rough
-   terrain; classify significant discrepancy when evidence supports it.
-4. Explain A17 and Alpha segment 3/target/return dependence. Issue a clearly
-   provisional safety warning when a possible safety consequence exists. Keep
-   evidence provisional and Alpha coordinates unchanged.
-5. Astronaut reviews and confirms with named reviewer and rationale. Preserve
-   raw observation/inference, NASA prior and all decisions.
-6. Only the supported footprint becomes ground-observed. Revised costs trigger
-   A*; Beta avoids verified obstacles when preferable. Show actual Alpha/Beta
-   lengths and WHY traced to evidence, assumption and decision.
-7. Before/after comparison visibly separates prior from verified map knowledge.
-8. Reload; restart backend; confirmed discovery remains.
-9. Switch to future EVA. The next astronaut inherits verified knowledge and route
-   reevaluation. Do not reset saved evidence to create that transition.
-10. Repeat with external internet/NASA/model downloads blocked.
-
-## Existing replay fallback
-
-Current "Boulder field" selection reads a curated replay annotation, deliberately
-labeled in the UI. It proves branch logic, verification/persistence/routing and
-inheritance, and currently passes browser acceptance. It does **not** execute AI
-on the NASA image. Matching soil/minor/weak/failure/dynamic fixtures use the same
-photo with different scenario annotations; they are regression fixtures, not six
-scientific observations of that photo. Keep them separate from the final
-known-image inference acceptance.
-
-For testing use the isolated DB created by scripts/e2e_backend.py. For a separate
-judge rehearsal set MARSENSE_DATABASE_URL to a new .tmp/rehearsal.db before
-starting the backend. Existing runtime database is never deleted automatically.
-Do not add a public reset endpoint that erases mission history.
-
-## Demo package and freeze
-
-Must include exact bounded real imagery/ground assets, normalized terrain/DEM
-and selected science/pose products, provenance/checksum manifest, validated local
-model/inference, mission fixture, pinned software, startup scripts and demo steps.
-Record data/model hashes and final commit; verify a cold offline start. Current
-cache includes imagery/public-release photo and partial MOLA/PLACES/DTM context;
-required scientific/model work
-keeps the complete competition demo gate open.
+This demonstrates validated prototype workflows, not scientific model accuracy.
+The experimental model's low measured quality keeps automatic classification
+disabled; see MODEL_CARD.md and NASA_SOURCE_MATRIX.md.

@@ -33,3 +33,5 @@ Primary sources:
 - [PDS Mars 2020 Navcam calibrated bundle](https://pds.nasa.gov/ds-view/pds/viewBundle.jsp?identifier=urn:nasa:pds:mars2020_navcam_ops_calibrated)
 - [PDS Mars 2020 Mastcam-Z calibrated bundle](https://pds.nasa.gov/ds-view/pds/viewBundle.jsp?identifier=urn:nasa:pds:mars2020_mastcamz_sci_calibrated)
 - [PDS CRISM](https://pds-geosciences.wustl.edu/missions/mro/crism.htm)
+
+Resumption update: scripts/cache_hirise_dtm.py obtained DTEEC_045994_1985_046060_1985_U01 by exact ranges, with 100% valid mission-node coverage. PDS label verifies source CRS, meter elevation and Mars 2000 datum. The 40 m nearest-sample/gradient products are coarse planning context and are not silently applied to existing routes. Original zero-coverage candidate remains retained. CTX/HiRISE corners now reflect actual rounded pixels and effective resolution. See root NASA_DATA.md for official source links and remaining required gaps.

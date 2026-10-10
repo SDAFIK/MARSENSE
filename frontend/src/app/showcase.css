@@ -1,0 +1,536 @@
+/* Showcase continuation, authorized by the later full-website request. */
+.app-shell:not(.view-mission) .workspace {
+  padding: 0 10px 14px;
+}
+.app-shell:not(.view-mission) .workspace-heading {
+  margin: 0;
+  min-height: 48px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.app-shell:not(.view-mission) .workspace-heading h1 {
+  font-size: 16px;
+  margin: 0;
+}
+.app-shell:not(.view-mission) .workspace-heading .eyebrow {
+  display: none;
+}
+.app-shell:not(.view-mission) .workspace-heading .button {
+  min-height: 30px;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+.structured-evidence,
+.spatial-memory,
+.astronaut-console {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) 294px;
+  gap: 8px;
+  margin: 8px 0;
+  min-height: calc(100dvh - 152px);
+}
+.structured-evidence .panel,
+.spatial-memory .panel,
+.astronaut-console .panel {
+  border-radius: 1px;
+  margin: 0;
+  min-width: 0;
+}
+.structured-evidence .panel-heading,
+.spatial-memory .panel-heading,
+.astronaut-console .panel-heading {
+  min-height: 30px;
+  padding: 6px 10px;
+}
+.structured-evidence .panel-heading h2,
+.spatial-memory .panel-heading h2,
+.astronaut-console .panel-heading h2 {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.structured-evidence .panel-body,
+.spatial-memory .panel-body,
+.astronaut-console .panel-body {
+  padding: 12px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.structured-evidence h3,
+.spatial-memory h3,
+.astronaut-console h3 {
+  font-size: 14px;
+}
+.structured-evidence nav,
+.evidence-records {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+}
+.structured-evidence nav button,
+.evidence-records button,
+.spatial-event-list button {
+  background: #1a2024;
+  color: var(--text);
+  padding: 12px 9px;
+  border: 1px solid var(--border);
+  text-align: left;
+  font-size: 10px;
+  min-height: 44px;
+}
+.structured-evidence nav button.selected,
+.evidence-records button[aria-pressed="true"],
+.spatial-event-list button[aria-pressed="true"] {
+  border-left: 2px solid var(--mint);
+  background: #24302d;
+}
+.evidence-records button {
+  display: grid;
+  gap: 5px;
+}
+.evidence-records small {
+  color: var(--muted);
+}
+.evidence-image-stage {
+  display: flex;
+  flex-direction: column;
+}
+.evidence-source-image {
+  position: relative;
+  flex: 1;
+  min-height: 530px;
+}
+.evidence-source-image img {
+  object-fit: cover;
+}
+.evidence-image-stage > p {
+  padding: 0 10px;
+}
+.structured-evidence dl {
+  font-size: 11px;
+}
+.structured-evidence dd {
+  margin: 3px 0 10px;
+}
+.structured-evidence dt {
+  color: var(--muted);
+}
+.structured-evidence pre {
+  max-height: 350px;
+  overflow: auto;
+  font-size: 9px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.structured-evidence .review-actions {
+  display: grid;
+  gap: 5px;
+}
+.structured-evidence .review-panel {
+  border: 0;
+}
+.spatial-event-list {
+  display: grid;
+  gap: 7px;
+  padding: 8px;
+}
+.spatial-event-list button {
+  display: grid;
+  gap: 5px;
+  border-left: 2px solid #657871;
+}
+.spatial-event-list span,
+.spatial-event-list small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.spatial-event-list strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.spatial-memory-map,
+.astronaut-map-stage {
+  min-width: 0;
+}
+.spatial-memory-map .map-panel,
+.astronaut-map-stage .map-panel {
+  height: 100%;
+  min-height: 650px;
+}
+.memory-inheritance {
+  grid-column: 1/-1;
+}
+.memory-inheritance .inheritance-banner {
+  margin: 0;
+  padding: 14px;
+  border-radius: 0;
+}
+.memory-inheritance h2 {
+  font-size: 16px;
+}
+.inherited-row {
+  border-left: 2px solid var(--mint);
+  padding: 8px;
+  background: #1b2723;
+  font-size: 11px;
+}
+.astronaut-context-buttons {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+.astronaut-console .alert-banner {
+  display: block;
+  font-size: 11px;
+}
+.astronaut-console .alert-banner strong {
+  font-size: 12px;
+}
+.astronaut-console .alert-banner p {
+  font-size: 11px;
+}
+.astronaut-console .primary,
+.structured-evidence .primary {
+  background: var(--mint);
+  color: #0b1913;
+}
+.astronaut-console .route-overview strong {
+  font-size: 23px;
+}
+.astronaut-console .route-panel .panel-body {
+  padding: 12px;
+}
+.spatial-comparison {
+  margin: 8px 0;
+}
+.aligned-maps {
+  height: calc(100dvh - 290px);
+  min-height: 480px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.aligned-map {
+  position: absolute;
+  inset: 0;
+}
+.aligned-map .map-panel {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  margin: 0;
+}
+.aligned-map .map-toolbar,
+.aligned-map .map-location,
+.aligned-map .map-legend {
+  display: none;
+}
+.aligned-map .map-attribution {
+  background: #111619de;
+  padding: 4px 8px;
+}
+.comparison-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #eeeae1;
+  pointer-events: none;
+}
+.comparison-label {
+  position: absolute;
+  top: 12px;
+  background: #12181ae8;
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  font-size: 11px;
+  pointer-events: none;
+}
+.before-label {
+  left: 12px;
+}
+.after-label {
+  right: 12px;
+  color: var(--mint);
+}
+.comparison-controls {
+  display: flex;
+  gap: 18px;
+  padding: 12px;
+  margin: 8px 0;
+  align-items: center;
+}
+.comparison-controls > div:first-child {
+  flex: 1;
+}
+.comparison-controls input[type="range"] {
+  width: 100%;
+  accent-color: var(--mint);
+}
+.comparison-controls label {
+  font-size: 11px;
+}
+.comparison-controls > p {
+  max-width: 360px;
+}
+.comparison-toggles {
+  display: flex;
+  gap: 5px;
+}
+.comparison-toggles .button {
+  padding: 6px 10px;
+  min-height: 34px;
+  font-size: 11px;
+}
+.comparison-toggles button[aria-pressed="true"] {
+  border-color: var(--mint);
+}
+.showcase-landing {
+  min-height: 100dvh;
+  background: #07090b;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.landing-terrain {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.64;
+}
+.landing-shade {
+  position: absolute;
+  inset: 0;
+  background: #07090b99;
+}
+.showcase-landing header,
+.showcase-landing section,
+.showcase-landing footer {
+  position: relative;
+  z-index: 1;
+}
+.showcase-landing header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 30px;
+  border-bottom: 1px solid #77777733;
+}
+.showcase-landing section {
+  margin: auto;
+  width: min(930px, 94%);
+  text-align: center;
+  padding: 60px 20px;
+}
+.showcase-landing h1 {
+  font-size: clamp(50px, 8vw, 108px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 5px;
+  margin: 12px 0;
+}
+.landing-subtitle {
+  font-size: clamp(13px, 2vw, 22px);
+  letter-spacing: 3px;
+}
+.landing-sequence {
+  display: flex;
+  justify-content: center;
+  margin: 75px 0 60px;
+  gap: 10px;
+}
+.landing-sequence > div {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  position: relative;
+}
+.landing-sequence strong {
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: clamp(13px, 2vw, 22px);
+}
+.landing-sequence > div:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  top: -35px;
+  width: 115%;
+  height: 70px;
+  border-top: 1px solid #eeeae166;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: workflow-line 6s ease-in-out infinite;
+}
+.landing-sequence > div:nth-child(2)::after {
+  transform: rotate(180deg);
+  top: -2px;
+  animation-delay: 1s;
+}
+.landing-sequence > div:nth-child(3)::after {
+  animation-delay: 2s;
+}
+@keyframes workflow-line {
+  50% {
+    opacity: 0.2;
+  }
+}
+.landing-copy {
+  font-size: 15px;
+  line-height: 1.7;
+}
+.landing-enter {
+  background: #32240a;
+  border: 1px solid #b68a35;
+  color: #f1e8d6;
+  margin: 20px auto 10px;
+  width: fit-content;
+  padding: 12px 26px;
+  font-size: 12px;
+}
+.landing-enter:hover {
+  background: #4a350c;
+}
+.showcase-landing footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 10px;
+  color: #b4b4b1;
+}
+.map-marker.event-location > span:first-child {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #eeeae1;
+  background: #c08b4244;
+}
+@media (max-width: 1099px) {
+  .structured-evidence,
+  .spatial-memory,
+  .astronaut-console {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .structured-evidence > aside:last-child,
+  .spatial-memory > aside:last-of-type,
+  .astronaut-context {
+    grid-column: 1/-1;
+  }
+  .comparison-controls {
+    flex-wrap: wrap;
+  }
+  .comparison-controls > p {
+    max-width: none;
+  }
+}
+@media (max-width: 600px) {
+  .app-shell:not(.view-mission) .workspace {
+    grid-column: 2;
+    padding: 0 6px 10px;
+  }
+  .app-shell:not(.view-mission) .workspace-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .structured-evidence,
+  .spatial-memory,
+  .astronaut-console {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .structured-evidence > section,
+  .spatial-memory-map,
+  .astronaut-map-stage {
+    grid-row: 1;
+  }
+  .evidence-source-image {
+    min-height: 400px;
+  }
+  .structured-evidence > aside:last-child,
+  .spatial-memory > aside:last-of-type,
+  .astronaut-context {
+    grid-column: 1;
+  }
+  .spatial-memory-map .map-panel,
+  .astronaut-map-stage .map-panel {
+    min-height: 480px;
+    height: 480px;
+  }
+  .aligned-maps {
+    min-height: 470px;
+  }
+  .comparison-label {
+    font-size: 9px;
+    max-width: 130px;
+  }
+  .comparison-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .comparison-toggles {
+    justify-content: center;
+  }
+  .showcase-landing header {
+    padding: 16px;
+  }
+  .showcase-landing header .small-mono {
+    display: none;
+  }
+  .showcase-landing section {
+    padding: 40px 4px;
+  }
+  .landing-sequence {
+    gap: 4px;
+    margin: 65px 0 50px;
+  }
+  .landing-sequence > div {
+    gap: 4px;
+  }
+  .landing-sequence svg {
+    width: 16px;
+  }
+  .landing-copy {
+    font-size: 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+.session-access {
+  position: relative;
+  font-size: 11px;
+}
+.session-access > summary {
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.session-access .auth-panel {
+  position: absolute;
+  top: 38px;
+  right: 0;
+  z-index: 30;
+  width: min(380px, 85vw);
+  max-height: 80dvh;
+  overflow: auto;
+  padding: 15px;
+  background: #15191c;
+}
+.astronaut-context-buttons .button {
+  min-height: 44px;
+}
+.map-marker.astronaut > span:last-child {
+  position: absolute;
+  top: 48px;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .recovery-map {
+    height: 390px;
+  }
+}

@@ -48,3 +48,7 @@ manual; the first scenario and stack are already specified. The source question 
 concurrent chat recorded the user-supplied path and authority confirmation; this
 audit verified the original file directly. No unresolved source question or
 repeated product questions remain. Remaining choices above are ordinary engineering choices.
+
+D19 — Latest user request explicitly resumes implementation. The earlier pause and concurrent-chat ownership notes are historical; follow sequential gate acceptance while preserving live services/history. See RESUMPTION_REVIEW.md.
+
+D20 — Latest supplied AGENTS instruction restores Gate 0-only scope. “finish it” completes that scope; it does not explicitly resume later gates. Existing implementation checkpoints are retained as history.

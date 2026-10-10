@@ -1,0 +1,2 @@
+# Install using https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu

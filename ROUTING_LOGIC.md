@@ -80,3 +80,40 @@ the visible route with a fake path or show zero meters as a successful traverse.
 An algorithm error during verification must roll back the combined transaction
 and report failure with prior saved state retained. A valid no-path result is
 distinct from an execution failure and must be stored with explicit planning status.
+
+## Scientific completion S1 — current checkpoint
+
+Official covering product: DTEEC_045994_1985_046060_1985_U01, selected from
+https://hirise.lpl.arizona.edu/dtm/ESP_045994_1985 . Attached PDS metadata
+and source byte hashes are retained in data/processed/hirise-covering-slope.json.
+Native coverage bounds, equirectangular planetocentric source CRS, 1.0096633268711 m
+pixel size, IEEE missing constant and Mars 2000 equipotential vertical datum
+are recorded. Native source radius differs from the mission analysis radius;
+sampling explicitly converts through planetocentric longitude/latitude.
+
+Reproduce with `.venv\Scripts\python.exe -m scripts.cache_hirise_dtm`; cached
+exact PDS ranges enable offline reuse. Raw range bytes, sampled elevation TIFF
+and derived slope NPZ remain separate. All 651 operational cells have valid
+elevation. Ingestion and configured slope loading now reject incomplete
+operational coverage; loader requires matching Mars analysis CRS metadata.
+Missing configured files are errors. Empty slope configuration remains visibly
+unavailable rather than measured zero slope.
+
+Enable explicitly for a new/local validation run using
+`MARSENSE_SLOPE_PATH=data/processed/hirise-covering-slope.npz`. Existing services
+and saved routes were not silently restarted or rewritten. MARSENSE prototype
+route weights: slope cost = edge length * slope degrees / 10; slopes above
+20 degrees excluded. These are configuration choices, not NASA EVA-safe limits.
+
+Diagnostic: docs/science/s1-dtm-alignment.png and s1-route.geojson, generated
+by `python -m scripts.debug_dtm`. White route overlays the identical 40 m
+node grid on elevation and slope. GeoJSON rendering longitude/latitude is
+presentation only; metric coordinates remain in feature properties. HiRISE
+rendering now uses its own actual crop bounds; CTX/HiRISE switching updates
+the image coordinates together with the URL. No product redesign.
+
+Checks cover real cached coverage and known samples, grid/route intersection,
+partial no-data refusal, CRS mismatch, independent PROJ round trip, synthetic
+plane gradient sanity and cost changes. The coarse 40 m slope cannot validate
+foot-scale obstacles or operational EVA safety. Complete regression results
+are recorded in STATUS.md after execution. S2 remains pending until S1 review passes.
