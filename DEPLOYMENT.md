@@ -5,9 +5,13 @@ exploration decision support built from NASA-derived data and validated prototyp
 workflows. Public deployment was requested on 2026-10-10; it has not been performed. Source/model
 limits in NASA_SOURCE_MATRIX.md remain; this is not operational EVA software.
 
-## Latest deployment request: GitHub
+## Latest deployment request: Vercel and public GitHub
 
-The complete project is pushed to the private `SDAFIK/MARSENSE` repository.
+The complete project is pushed to the public `SDAFIK/MARSENSE` repository.
+The user subsequently selected Vercel rather than GitHub Pages. See
+[Vercel setup](docs/VERCEL_DEPLOYMENT.md). Vercel sign-in and an externally
+reachable durable backend are still required; no live website URL is recorded
+until a deployment has been verified.
 GitHub Pages is not enabled. Pages serves static files and cannot run this
 application's FastAPI backend, identity sessions, uploads or persistent SQLite
 mission store. Source delivery alone is not a running full-system deployment.

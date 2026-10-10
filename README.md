@@ -174,7 +174,7 @@ git commit -m "Describe the concrete change"
 git push
 ```
 
-Use `codex/` prefixes for new agent branches. Inspect staged files before committing; never add credentials or runtime databases. The repository is private by default. A GitHub push is source delivery, not an application deployment.
+Use `codex/` prefixes for new agent branches. Inspect staged files before committing; never add credentials or runtime databases. The repository is public at the user's request. A GitHub push is source delivery, not an application deployment.
 
 ## Deployment and scientific development
 
