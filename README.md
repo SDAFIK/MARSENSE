@@ -6,6 +6,11 @@ MARSENSE is an astronaut-focused Mars exploration **research prototype**. It pre
 
 [Repository](https://github.com/SDAFIK/MARSENSE) · [Source matrix](NASA_SOURCE_MATRIX.md) · [Scientific audit](SCIENTIFIC_AUDIT.md) · [API contract](API_CONTRACT.md) · [Visual fidelity report](docs/design/MISSION_CONTROL_FIDELITY.md)
 
+Frontend source and setup: [frontend/README.md](frontend/README.md).
+The public GitHub source is up to date. Backend hosting is deferred at the
+user's request; the Redscape Vercel import is prepared, but no live website
+deployment has been verified.
+
 ![Mission Control](docs/screenshots/visual-recovery/mission-1440x900.png)
 
 ## The astronaut workflow

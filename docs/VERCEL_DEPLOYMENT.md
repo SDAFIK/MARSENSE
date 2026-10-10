@@ -34,8 +34,11 @@ identity, backup and recovery steps. Alternatively, a separately specified
 database/object-storage migration would be needed for an entirely serverless
 system; it has not been performed.
 
-The Vercel browser sign-in was opened for the user. Deployment remains pending
-account access and a usable public backend origin. GitHub is public; GitHub
+Vercel sign-in is verified. The import form is prepared as `redscape`, using
+the `frontend` root and Next.js preset. The user deferred backend provisioning
+and requested frontend source/documentation delivery to GitHub. No paid server
+has been created. Deployment remains pending a usable public backend origin.
+GitHub is public; GitHub
 Pages was not enabled and no separate showcase repository was created.
 
 References: https://vercel.com/docs/frameworks/backend/fastapi and
