@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("full map preserves mission framing and closes with Escape", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/mission");
   await page
     .getByRole("button", { name: "Open full map", exact: true })
