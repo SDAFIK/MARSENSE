@@ -1,0 +1,37 @@
+name: Reviewed dependency refresh
+on:
+  workflow_dispatch:
+  push:
+    branches: ['codex/**']
+    paths: ['.github/workflows/dependency-refresh.yml']
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Generate patched dependency candidate (no lifecycle scripts)
+        working-directory: frontend
+        run: |
+          npm install --package-lock-only --ignore-scripts --save-exact 'next@^16.4.1' 'maplibre-gl@6.18.0'
+          npm install --package-lock-only --ignore-scripts --save-dev --save-exact 'eslint-config-next@^16.4.1' 'vitest@5.1.0'
+          npm audit fix --package-lock-only --ignore-scripts || true
+      - name: Audit candidate
+        working-directory: frontend
+        run: |
+          npm audit --omit=dev --audit-level=high
+          npm audit --audit-level=high
+      - name: Emit reviewed candidate files
+        if: always()
+        working-directory: frontend
+        run: |
+          echo "Candidate package and lockfile (no credentials)"
+          base64 -w 1000 package.json | sed 's/^/MARSENSE_PACKAGE:/'
+          base64 -w 1000 package-lock.json | sed 's/^/MARSENSE_LOCK:/'
