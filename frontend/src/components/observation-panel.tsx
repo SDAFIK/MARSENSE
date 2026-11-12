@@ -16,6 +16,7 @@ export default function ObservationPanel({
   busy: boolean;
   setBusy: (busy: boolean) => void;
 }) {
+  const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<"demo" | "production" | "showcase" | null>(null);
   const [canReplay, setCanReplay] = useState(false);
   const [canUpload, setCanUpload] = useState(false);
@@ -29,7 +30,6 @@ export default function ObservationPanel({
       .catch(() => setError("Unable to determine workspace permissions. Retry after reconnecting."));
   }, []);
   const [scenario, setScenario] = useState("obstacles");
-  const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [bounds, setBounds] = useState({
     x: 520,

@@ -42,7 +42,7 @@ export default function AuthPanel({ compact = false }: { compact?: boolean }) {
     try {
       await api("/showcase/reset", jsonRequest({}));
       sessionStorage.setItem("marsense-mission", "eva-01");
-      window.location.assign("/mission");
+      window.location.href = new URL("/mission", window.location.origin).href;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Showcase reset failed");
     } finally { setBusy(false); }
