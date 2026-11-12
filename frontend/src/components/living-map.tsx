@@ -245,6 +245,8 @@ export default function LivingMap({
         ?.render_corners as
         [Coordinate, Coordinate, Coordinate, Coordinate] | undefined;
       if (!corners) throw new Error("Cached imagery metadata is unavailable");
+      // MapLibre v6 requires an explicit worker URL when bundled by Next.js.
+      maplibregl.setWorkerUrl(new URL("maplibre-gl/dist/maplibre-gl-worker.mjs", import.meta.url).toString());
       instance = new maplibregl.Map({
         container: container.current,
         style: {
