@@ -18,7 +18,7 @@ export default function SpatialMemory({
   const event = events.find((e) => e.id === selectedId);
   const evidence = snapshot.evidence.find((e) => e.id === event?.evidence_id);
   return (
-    <div className="spatial-memory">
+    <div className="spatial-memory"><section className="memory-hero"><p className="eyebrow">EXPLORATION MEMORY</p><h2>Knowledge that Lives On</h2><p>Every verified observation becomes part of the living map.</p><div className="memory-stats"><span>{snapshot.events.length} recorded events</span><span>{snapshot.evidence.filter(e=>e.source_type!=="orbital" && e.verification_state==="CONFIRMED").length} confirmed ground records</span><span>{snapshot.mission.inherited_evidence.length} inherited records</span></div></section>
       <aside className="panel">
         <div className="panel-heading">
           <h2>MISSION TIMELINE · {snapshot.mission.eva}</h2>
@@ -59,7 +59,7 @@ export default function SpatialMemory({
               <p>{event.detail}</p>
               {evidence && (
                 <>
-                  <span className="badge green">
+                  <span className={`badge ${evidence.verification_state === "CONFIRMED" ? "green" : "amber"}`}>
                     {label(evidence.verification_state)}
                   </span>
                   <p>

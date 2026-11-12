@@ -100,8 +100,9 @@ export default function StructuredEvidence({
       </aside>
       <section className="evidence-image-stage panel">
         <div className="panel-heading">
-          <h2>{section}</h2>
+          <h2>Expected vs observed · {section}</h2>
         </div>
+        <div className="evidence-paired"><figure><div className="evidence-pair-image"><Image unoptimized fill sizes="(max-width:720px) 90vw, 420px" src="/api/assets/jezero-hirise.png" alt="Cached NASA orbital terrain"/></div><figcaption>EXPECTED · NASA orbital prior<br/><strong>{label(selected?.expected_value ?? prior?.observed_value ?? "unknown")}</strong></figcaption></figure><figure><div className="evidence-pair-image"><Image unoptimized fill sizes="(max-width:720px) 90vw, 420px" src={selected?.raw_asset_reference ?? "/api/assets/ground-navcam.jpg"} alt="Ground evidence or cached Navcam example"/></div><figcaption>OBSERVED · {selected ? label(selected.source_type) : "Cached example · no observation"}<br/><strong>{selected ? label(selected.observed_value) : "Awaiting observation"}</strong></figcaption></figure></div>
         <div className="evidence-source-image">
           <Image
             unoptimized

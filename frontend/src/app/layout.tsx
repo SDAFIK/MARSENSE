@@ -4,6 +4,7 @@ import "./globals.css";
 import "./mission-console.css";
 import "./visual-recovery.css";
 import "./showcase.css";
+import "./product.css";
 export const metadata: Metadata = {
   title: "MARSENSE · The Living Mars Map",
   description:

@@ -1,0 +1,95 @@
+/* Reference-driven product restoration. Preserve real map geometry and source imagery. */
+:root { --bg:#061019; --panel:#091923; --raised:#102532; --border:#203b4c; --text:#edf3f8; --muted:#a8b9c9; --orange:#ffa033; --mint:#63dfb6; }
+body {background:var(--bg);}
+.brand-stack{display:flex;flex-direction:column;line-height:1.05;letter-spacing:1px;font-size:21px;font-weight:800;white-space:nowrap}
+.brand-stack>span>span,.product-home h1 span,.product-login h1 span{color:#ff8c27}
+.brand-stack small{font-size:8px;letter-spacing:2px;color:var(--text);margin-top:5px}
+.wordmark>svg{color:var(--orange)}
+.app-header{background:#030d15;border-bottom-color:var(--border)}
+.app-shell .panel{background:var(--panel);border-color:var(--border);border-radius:8px}
+.app-shell .button{border-radius:6px}
+.app-shell .button.primary,.product-home .button.primary{background:linear-gradient(100deg,#ffb04e,#ff9027);color:#17100a;border:1px solid #ffb25d}
+.app-shell .button.primary:hover,.product-home .button.primary:hover{background:#ffc075}
+.app-shell .review-panel .primary{background:#28cfa0;color:#051a14}
+.app-shell .secondary{background:#0c202c;border-color:#284658}
+.app-shell .secondary:hover{background:#183648}
+.app-shell .sidebar{background:linear-gradient(180deg,#06131d,#0a1c27);border-color:var(--border)}
+.app-shell .nav-link.active{background:linear-gradient(90deg,#52351c,#252523);border-color:#815328;color:#ffb34f}
+.app-shell .nav-link.active svg{color:#ffad44}
+.recovery-control .panel-heading{background:#0d202b;border-color:var(--border)}
+.recovery-workflow button[aria-selected=true]{color:#ffb34f;border-bottom-color:#ff9c2e;background:#2a241d}
+.recovery-inspector{background:var(--panel);border-color:var(--border);border-radius:8px}
+.recovery-evidence button,.spatial-event-list button,.structured-evidence nav button,.evidence-records button{background:#0c202c;border-color:#284658;border-radius:5px}
+.app-shell .workspace-heading h1{font-weight:650;letter-spacing:0;font-size:23px}
+.app-shell .workspace-heading{border-color:var(--border)}
+.session-access .auth-panel{background:#0a1b26;border-radius:8px}
+.access-link{font-size:11px;min-height:32px!important;padding:4px 8px!important}
+@media(min-width:1250px){
+ .app-shell{grid-template-columns:180px minmax(0,1fr)}
+ .app-shell .sidebar{padding:12px 8px;gap:14px}
+ .app-shell .sidebar-project,.app-shell .sidebar-bottom{display:flex;flex-direction:column;gap:8px}
+ .app-shell .sidebar-project{padding:8px}
+ .app-shell .sidebar-bottom{margin-top:auto;padding:12px 8px;background:linear-gradient(180deg,transparent,#07131ee8),url('/api/assets/ground-navcam.jpg') center/cover;border-radius:8px}
+ .app-shell .sidebar .nav-link{justify-content:flex-start;gap:9px;padding:10px 8px;border-radius:5px}
+ .app-shell .sidebar .nav-link .nav-label{position:static;width:auto;height:auto;clip-path:none;overflow:visible;font-size:11px;transform:none;background:none;border:0;padding:0}
+ .app-shell .recovery-columns{grid-template-columns:minmax(0,1fr) minmax(310px,35%);grid-template-rows:minmax(0,1fr) auto;gap:10px}
+ .recovery-map{grid-column:1;grid-row:1;min-height:360px}
+ .recovery-inspector{grid-column:2;grid-row:1/3}
+ .recovery-left{grid-column:1;grid-row:2;flex-direction:row;max-height:150px;overflow:auto}
+ .recovery-left>.panel{flex:1;min-width:155px}
+ .recovery-left .trace-image,.recovery-left .recovery-limit{display:none}
+ .recovery-control{min-height:720px;height:calc(100dvh - 56px)}
+}
+.product-home .landing-terrain{opacity:.85;object-position:center}
+.product-home .landing-shade{background:linear-gradient(90deg,#030b13f5 0%,#040c14d9 40%,#040c1433 100%),linear-gradient(0deg,#030b13 0%,transparent 70%)}
+.product-home header{margin:12px 2.5%;padding:12px 20px;border:1px solid #415263;border-radius:10px;background:#06121de8;gap:16px}
+.product-home header nav{display:flex;gap:24px;font-size:13px}
+.product-home .product-hero{position:relative;width:95%;margin:0 auto;text-align:left;padding:clamp(48px,8vh,105px) 2.5% 32px}
+.product-home .product-hero h1{font-weight:800;letter-spacing:-3px;font-size:clamp(46px,8vw,116px)}
+.product-home .landing-subtitle{font-weight:600;letter-spacing:5px}
+.product-home .landing-copy{max-width:530px;margin:24px 0;color:#d1dfeb;font-size:16px}
+.product-home .eyebrow{color:#e2c3a0;line-height:1.8;letter-spacing:2px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.hero-orbital{position:absolute;right:8%;top:12%;width: min(25%,280px);background:#071522d9;border:1px solid #a26a37;padding:8px;border-radius:8px}
+.hero-orbital img{width:100%;height:auto;object-fit:cover;border-radius:4px}
+.hero-orbital span{font-size:9px;letter-spacing:1px;display:block;padding:6px 0}
+.product-home .product-experience{width:95%;margin:0 auto;padding:16px 2.5%;text-align:left}
+.feature-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.feature-grid article{padding:16px;border:1px solid #5c534a;border-radius:9px;background:#101c26d9}
+.feature-grid svg{color:var(--orange);margin-bottom:8px}
+.feature-grid h2{font-weight:650;margin-bottom:6px}
+.feature-grid p{font-size:12px;color:#bccad4}
+.product-steps{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;padding:25px 0}
+.product-steps a{display:flex;gap:8px;align-items:center;font-size:12px}
+.product-steps span{border:1px solid #ff9c2e;border-radius:50%;width:30px;height:30px;display:grid;place-items:center;color:#ffb34f}
+.product-login{min-height:100dvh;position:relative;isolation:isolate;background:#05101a;padding:24px}
+.product-login>img{object-fit:cover;z-index:-2}
+.login-shade{position:absolute;inset:0;background:linear-gradient(90deg,#07101ac0,#030b13ed);z-index:-1}
+.product-login header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.product-login header>a:last-child{display:flex;align-items:center;gap:6px}
+.login-content{min-height:78vh;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center;max-width:1400px;margin:auto;padding:32px}
+.login-content h1{font-size:clamp(35px,6vw,86px);line-height:1.1;font-weight:750;margin:22px 0}
+.login-card{padding:clamp(20px,4vw,48px);border:1px solid #345568;background:#06131ded;border-radius:14px}
+.login-card h2{font-size:34px;color:#ffac4c;font-weight:650}
+.login-card .auth-panel{margin:20px 0;padding:0;border:0;background:transparent}
+.login-card .auth-panel form{display:grid;gap:16px;align-items:stretch}
+.login-card .auth-panel input{width:100%;padding:12px;border-radius:6px;background:#0e2432}
+.login-card .auth-panel .primary{background:#ffa033;color:#101010}
+.login-card>.button{margin-bottom:12px}
+.evidence-paired{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.evidence-paired figure{margin:0;min-width:0;background:#0b2330;border:1px solid #284658;border-radius:6px;overflow:hidden}
+.evidence-pair-image{position:relative;aspect-ratio:4/3}
+.evidence-pair-image img{object-fit:cover}
+.evidence-paired figcaption{padding:10px;font-size:11px;color:#bfd0db}
+.evidence-paired strong{font-size:14px;color:var(--text)}
+.evidence-image-stage .evidence-source-image{min-height:240px;margin:10px}
+.route-compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.route-compare-grid article{border:1px solid var(--border);border-radius:6px;padding:14px}
+.route-compare-grid h3{font-size:20px;margin:8px 0}
+.route-compare-grid p{font-size:12px;margin:6px 0;color:var(--muted)}
+.memory-hero{grid-column:1/-1;padding:25px;border-radius:8px;border:1px solid var(--border);background:linear-gradient(90deg,#06121ef5,#07172588),url('/api/assets/ground-navcam.jpg') center/cover}
+.memory-hero h2{font-size:clamp(24px,4vw,40px);font-weight:650;margin:8px 0}
+.memory-stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.memory-stats span{background:#0a1d2be8;border:1px solid #315369;border-radius:5px;padding:8px}
+@media(max-width:900px){.hero-orbital{display:none}.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-home header nav{display:none}.login-content{grid-template-columns:1fr;padding:20px 0}.product-login{padding:16px}.access-link{display:none}}
+@media(max-width:600px){.product-home header{padding:10px;gap:8px}.product-home header .button{font-size:10px;padding:8px}.product-home .brand-stack{font-size:16px}.product-home .brand-stack small{font-size:6px}.product-home .product-hero{padding:40px 2% 20px}.product-home .landing-subtitle{letter-spacing:2px}.feature-grid{grid-template-columns:1fr}.evidence-paired,.route-compare-grid{grid-template-columns:1fr}.product-steps{justify-content:flex-start}.app-shell .workspace-heading h1{font-size:19px}.app-shell .brand-stack{font-size:16px}.app-shell .brand-stack small{font-size:6px}}
