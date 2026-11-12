@@ -73,7 +73,47 @@ jobs:
       - name: Browser acceptance
         working-directory: frontend
         run: npm run test:e2e
+      - name: Publish seeded visual-review screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: seeded-visual-review
+          path: |
+            frontend/test-results/**/*-desktop.png
+            frontend/test-results/**/*-tablet.png
+            frontend/test-results/**/*-mobile.png
+          if-no-files-found: ignore
+          retention-days: 3
       - name: Authenticated browser acceptance
         working-directory: frontend
         run: npx playwright test --config=playwright.auth.config.ts
-      # Keep raw browser traces and session-bearing reports on the ephemeral runner.
+      - name: Isolated showcase browser acceptance
+        working-directory: frontend
+        run: npx playwright test --config=playwright.showcase.config.ts
+      - name: Publish confirmed showcase screenshot
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: showcase-confirmed-view
+          path: frontend/test-results/showcase/**/showcase-confirmed.png
+          if-no-files-found: ignore
+          retention-days: 3
+      # Only disposable fixture screenshots are uploaded; no raw traces or session reports.
+  dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Production dependency advisory gate
+        working-directory: frontend
+        run: npm audit --omit=dev --audit-level=high
+      - name: Development dependency advisory report
+        if: always()
+        working-directory: frontend
+        run: npm audit --audit-level=high
+
