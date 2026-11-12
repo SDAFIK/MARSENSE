@@ -8,7 +8,7 @@ type Session = {
   read_only: boolean;
   environment: "demo" | "production" | "showcase";
 };
-export default function AuthPanel({ compact = false }: { compact?: boolean }) {
+export default function AuthPanel({ compact = false, afterSignIn }: { compact?: boolean; afterSignIn?: "/mission" }) {
   const [session, setSession] = useState<Session | null>(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +28,9 @@ export default function AuthPanel({ compact = false }: { compact?: boolean }) {
         jsonRequest(logout ? {} : { username, password }),
       );
       setPassword("");
-      window.location.reload();
+      if (!logout && afterSignIn) {
+        window.location.href = new URL(afterSignIn, window.location.origin).href;
+      } else window.location.reload();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Sign in failed");
     } finally {

@@ -93,3 +93,23 @@ body {background:var(--bg);}
 .memory-stats span{background:#0a1d2be8;border:1px solid #315369;border-radius:5px;padding:8px}
 @media(max-width:900px){.hero-orbital{display:none}.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-home header nav{display:none}.login-content{grid-template-columns:1fr;padding:20px 0}.product-login{padding:16px}.access-link{display:none}}
 @media(max-width:600px){.product-home header{padding:10px;gap:8px}.product-home header .button{font-size:10px;padding:8px}.product-home .brand-stack{font-size:16px}.product-home .brand-stack small{font-size:6px}.product-home .product-hero{padding:40px 2% 20px}.product-home .landing-subtitle{letter-spacing:2px}.feature-grid{grid-template-columns:1fr}.evidence-paired,.route-compare-grid{grid-template-columns:1fr}.product-steps{justify-content:flex-start}.app-shell .workspace-heading h1{font-size:19px}.app-shell .brand-stack{font-size:16px}.app-shell .brand-stack small{font-size:6px}}
+
+/* Ground view, access states and mission-objective context. */
+.access-gate{max-width:680px;margin:48px auto!important;padding:32px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.access-gate h1{font-size:28px;font-weight:650}
+.access-gate p{max-width:520px;color:var(--muted)}
+.mission-objective{display:grid;gap:4px;padding:12px;margin:10px 0;border:1px solid var(--border);background:#0d2330;border-radius:6px}
+.mission-objective strong{font-size:16px}
+.mission-objective>span:last-child{font-size:11px;color:var(--orange)}
+.astronaut-map-stage{display:flex;flex-direction:column;gap:10px}
+.astronaut-map-stage .map-panel:not(.map-expanded){height:440px;min-height:440px}
+.ground-stage{min-width:0;overflow:hidden}
+.ground-stage-image{position:relative;min-height:250px;aspect-ratio:16/9;background:#1d242a}
+.ground-stage-image img{object-fit:cover}
+.ground-caption{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 12px;background:linear-gradient(transparent,#051019ef);display:grid;gap:4px}
+.ground-caption strong{font-size:18px}
+.ground-caption p{font-size:11px;color:#d1dbe3}
+.ground-actions{display:flex;flex-wrap:wrap;gap:7px;padding:10px}
+.ground-actions .button{min-height:38px;padding:8px 10px}
+@media(min-width:1250px){.astronaut-console{grid-template-columns:185px minmax(0,1fr) minmax(290px,30%)}.structured-evidence,.spatial-memory{grid-template-columns:175px minmax(0,1fr) minmax(275px,28%)}}
+@media(max-width:600px){.access-gate{margin:12px 6px!important;padding:16px}.access-gate h1{font-size:22px}.ground-stage-image{min-height:200px}.astronaut-map-stage .map-panel:not(.map-expanded){height:390px;min-height:390px}.product-login .wordmark>svg{display:block}.product-login .brand-stack{font-size:18px}.product-home .brand-stack{letter-spacing:0}.app-header .brand-stack{font-size:14px}.app-header .brand-stack small{letter-spacing:.5px}.app-header .eva-select select{width:145px}.app-header .session-access>summary{padding:6px 5px;font-size:10px}}

@@ -4,8 +4,9 @@ import type { Snapshot } from "@/lib/types";
 export default function RouteSummary({ snapshot }: { snapshot: Snapshot }) {
   const route = snapshot.routes.find(
     (r) => r.id === snapshot.mission.active_route_id,
-  )!;
-  const alpha = snapshot.routes[0];
+  );
+  const alpha = snapshot.routes.find((r) => r.version === 1);
+  if (!route) return <section className="panel route-panel"><div className="panel-heading"><h2>Traverse plan</h2></div><div className="panel-body">No active route is available. Reconnect or inspect the mission history.</div></section>;
   return (
     <section className="panel route-panel">
       <div className="panel-heading">
@@ -25,10 +26,8 @@ export default function RouteSummary({ snapshot }: { snapshot: Snapshot }) {
             <h3>{route.name}</h3>
           </div>
           <strong>
-            {route.distance_m.toLocaleString(undefined, {
-              maximumFractionDigits: 0,
-            })}
-            <small> m</small>
+            {route.status === "NO_ROUTE" ? "No route" : route.distance_m.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            {route.status !== "NO_ROUTE" && <small> m</small>}
           </strong>
         </div>
         <div className="waypoints">
@@ -36,12 +35,12 @@ export default function RouteSummary({ snapshot }: { snapshot: Snapshot }) {
           <ArrowRight size={16} />
           <span>{snapshot.target.name}</span>
         </div>
-        {route.version > 1 && (
+        {route.version > 1 && alpha && (
           <div className="route-difference">
             <span>Route Alpha {alpha.distance_m.toFixed(0)} m</span>
             <ArrowRight size={14} />
             <strong>
-              {route.name} {route.distance_m.toFixed(0)} m
+              {route.status === "NO_ROUTE" ? "No modeled route" : `${route.name} ${route.distance_m.toFixed(0)} m`}
             </strong>
           </div>
         )}

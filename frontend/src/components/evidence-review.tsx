@@ -12,7 +12,7 @@ export default function EvidenceReview({
 }: {
   evidence: Evidence;
   reviewer: string;
-  onVerified: () => Promise<void>;
+  onVerified: (updated: Evidence) => Promise<void>;
   detailed?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
@@ -36,7 +36,7 @@ export default function EvidenceReview({
     setBusy(true);
     setError(null);
     try {
-      await api(
+      const updated = await api<Evidence>(
         `/evidence/${evidence.id}/verify`,
         jsonRequest({
           decision,
@@ -48,7 +48,7 @@ export default function EvidenceReview({
             : {}),
         }),
       );
-      await onVerified();
+      await onVerified(updated);
     } catch (err) {
       setError(
         err instanceof Error
@@ -208,7 +208,7 @@ export default function EvidenceReview({
           <input value={supersedes} onChange={e => setSupersedes(e.target.value)} />
           <span className="small muted">Replacement must cover each entire footprint. Original decisions remain in history. Explain your reassessment in the review note above.</span>
         </label>}
-        {detailed && <EvidenceAncestry evidence={evidence} reviewer={reviewer} onVerified={onVerified} />}
+        {detailed && <EvidenceAncestry evidence={evidence} reviewer={reviewer} onVerified={async () => { await onVerified(evidence); }} />}
         {error && (
           <p role="alert" className="error-message">
             {error}
