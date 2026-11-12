@@ -13,52 +13,48 @@ test("primary acceptance: prior → observation → verify → Beta → reload �
   );
   await page.goto("/mission");
   await expect(
-    page.getByRole("heading", { name: "Mission Control" }),
-  ).toBeVisible();
+    page.getByRole("tab", { name: "EXPECT", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
   await expect(
-    page.getByRole("heading", { name: "Route Alpha" }),
-  ).toBeVisible();
+    page.getByRole("complementary", { name: "Mission trace and evidence" }),
+  ).toContainText("Route Alpha");
   await expect(
     page.getByRole("region", { name: "Interactive Jezero map" }),
   ).toBeVisible();
-  await page.screenshot({
-    path: "../docs/screenshots/mission-before-desktop.png",
-    fullPage: true,
-  });
+  await page.getByRole("tab", { name: "OBSERVE", exact: true }).click();
   await page.getByRole("button", { name: "Analyze terrain" }).click();
   await expect(
-    page
-      .getByRole("region", { name: "Evidence review" })
-      .getByText("PROVISIONAL SAFETY ALERT", { exact: true }),
-  ).toBeVisible();
+    page.getByRole("tab", { name: "COMPARE", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Significant Difference",
+  );
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Obstacle-Rich Terrain",
+  );
+  await page.getByRole("tab", { name: "VERIFY", exact: true }).click();
   await expect(
-    page.getByText("Significant Difference", { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Obstacle-Rich Terrain", { exact: true }),
-  ).toBeVisible();
+    page.getByRole("region", { name: "Evidence review" }),
+  ).toContainText("PROVISIONAL SAFETY ALERT");
   await page.getByRole("button", { name: "Confirm observation" }).click();
   await expect(
+    page.getByRole("tab", { name: "LEARN", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
     page.getByRole("heading", { name: "Route Beta", exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Ground Observed", { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Confirmed by A. Rahman", { exact: true }),
   ).toBeVisible();
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Route Beta", exact: true }),
-  ).toBeVisible();
+    page.getByRole("complementary", { name: "Mission trace and evidence" }),
+  ).toContainText("Route Beta");
+  await page.getByRole("tab", { name: "VERIFY", exact: true }).click();
   await expect(
     page.getByText("Confirmed by A. Rahman", { exact: true }),
   ).toBeVisible();
   await page.getByLabel("Active mission").selectOption("eva-02");
   await expect(
-    page.getByText("You’re starting where the last explorer left off."),
+    page.getByText("INHERITED FROM EVA-01", { exact: false }),
   ).toBeVisible();
-  await expect(page.getByText(/1 inherited by this EVA/)).toBeVisible();
   const state = (await (
     await request.get("/api/missions/eva-02")
   ).json()) as Snapshot;
@@ -84,16 +80,18 @@ for (const [size, width, height] of [
   ]) {
     test(`${view || "landing"} at ${size}: visible content, no overflow`, async ({
       page,
-    }) => {
+    }, testInfo) => {
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       await page.setViewportSize({ width, height });
       await page.goto(`/${view}`);
-      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-      if (view)
+      if (view === "mission") {
         await expect(
-          page.getByText("1 verified observation", { exact: true }),
+          page.getByRole("tablist", { name: "Mission workflow" }),
         ).toBeVisible();
+      } else
+        await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      if (view) await expect(page.getByLabel("Active mission")).toBeVisible();
       if (["mission", "astronaut", "comparison"].includes(view))
         await expect(page.locator(".map-canvas canvas").first()).toBeVisible();
       const overflow = await page.evaluate(
@@ -115,7 +113,7 @@ for (const [size, width, height] of [
         )
         .toBe(true);
       await page.screenshot({
-        path: `../docs/screenshots/${view || "landing"}-${size}.png`,
+        path: testInfo.outputPath(`${view || "landing"}-${size}.png`),
         fullPage: true,
       });
     });
@@ -138,17 +136,23 @@ test("service failure explains what remains usable and retry recovers", async ({
   await expect(
     page.getByRole("alert").filter({ hasText: "Mission service" }),
   ).toContainText("Saved evidence");
+  await expect(
+    page.getByRole("heading", { name: "Mission state unavailable" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Your evidence is preserved", { exact: true }),
+  ).toHaveCount(0);
   await page.unroute("**/api/missions/**");
   await page.getByRole("button", { name: "Retry connection" }).click();
   await expect(
-    page.getByRole("heading", { name: "Route Beta", exact: true }),
-  ).toBeVisible();
+    page.getByRole("complementary", { name: "Mission trace and evidence" }),
+  ).toContainText("Route Beta");
 });
 test("keyboard navigation reaches mission controls", async ({ page }) => {
   await page.goto("/mission");
   await expect(
-    page.getByRole("heading", { name: "Route Beta", exact: true }),
-  ).toBeVisible();
+    page.getByRole("complementary", { name: "Mission trace and evidence" }),
+  ).toContainText("Route Beta");
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Skip to main content" }),

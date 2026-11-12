@@ -50,7 +50,7 @@ export default function MissionWorkspace({ view }: { view: View }) {
   async function verified() {
     await refresh();
     setNotice(
-      "Human decision saved. Mission knowledge and route are up to date.",
+      "Review recorded. Check the mission state for its effect on knowledge and routing.",
     );
   }
   function switchEva(id: string) {
@@ -81,9 +81,13 @@ export default function MissionWorkspace({ view }: { view: View }) {
         <div className="loading-panel" role="status">
           <Database size={25} />
           <h2>
-            {loading ? "Loading the living map…" : "Your evidence is preserved"}
+            {loading ? "Loading the living map…" : "Mission state unavailable"}
           </h2>
-          <p>Reading mission state and the local NASA cache.</p>
+          <p>
+            {loading
+              ? "Reading mission state and the local NASA cache."
+              : "Reconnect to load saved evidence. Its current state cannot be verified while disconnected."}
+          </p>
         </div>
       )}
       {notice && (

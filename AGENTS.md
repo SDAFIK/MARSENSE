@@ -1,14 +1,42 @@
 # MARSENSE engineering context
 
-> Current instruction: scientific completion resumed under SCIENTIFIC_COMPLETION_REQUEST.md. Start with S1 and pass each gate before continuing through S10. Preserve working behavior, services and mission history; no automatic public publication.
+## Current working agreement — 2026-10-21
 
-> Earlier scope instructions below are historical; the latest scientific completion request governs current execution.
+Read and follow [the full user-supplied product engineering workflow](docs/PRODUCT_ENGINEERING_WORKFLOW.md).
+It governs how requested work is inspected, previewed, implemented and verified.
+Default to **PREVIEW-FIRST**. For major UI changes, new pages, features or
+redesigns: inspect the current implementation, explain the expected result,
+show an inspectable preview (desktop/mobile when relevant), give a compact
+change and verification plan, then wait for the user's approval before major
+implementation. AUTOPILOT applies only when the user explicitly selects it.
+Minor implementation details already covered by an approved plan do not need
+repeated approval.
 
-Current user instruction (2026-10-10): resume scientific completion under
-docs/SCIENTIFIC_COMPLETION_REQUEST.md, sequentially S1–S10. The earlier Gate
-0-only pause is historical. Do not redesign the product or rewrite passing core
-behavior. Do not advance beyond an unpassed scientific gate or automatically
-publish. Preserve existing services and saved mission data.
+Preserve the existing stack, approved design system, working functionality,
+user modifications, services and saved mission history. Implement requested
+features in small verified vertical slices. Trace UI actions through API,
+validation, business logic and persistence; distinguish mocks from real
+integrations. Do not introduce unrelated features or architectural rewrites.
+
+Use CURRENT MILESTONE / COMPLETED / NEXT / ISSUES for substantial progress
+updates. Report applicable checks as PASS, FAIL or NOT RUN; preserve the date
+and scope of older test evidence rather than presenting it as a fresh run.
+Inspect actual browser behavior, responsive layouts, motion and errors when
+relevant. Never invent screenshots, scientific claims or performance results.
+Keep existing status documents current and report external blockers precisely.
+
+The workflow adoption itself does not authorize a new redesign, hosting
+purchase, database migration or resumption of deferred backend deployment.
+The GitHub repository was made public at the user's explicit request; source
+publication is distinct from a verified live application deployment.
+
+## Scientific and product constraints
+
+When scientific completion resumes, use docs/SCIENTIFIC_COMPLETION_REQUEST.md
+and the recorded S1–S10 gate evidence. Do not restart passed gates without cause
+or advance beyond an unpassed gate. Earlier Gate 0-only pauses are historical.
+Preserve passing core behavior and keep unresolved scientific reliability
+limits visible even where prototype workflow checks pass.
 
 Read README and docs/IMPLEMENTATION_STATUS.md before changes. Main product reference: docs/MAIN_PROJECT_NOTES.md, extracted from the user's authoritative Word file. PROJECT_SPEC.md supplies the frozen engineering constraints. Preserve the NASA prior → ground evidence → discrepancy → mission consequence → human verification → footprint knowledge → rerouting → durable future-EVA memory flow.
 

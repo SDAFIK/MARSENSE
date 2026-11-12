@@ -1,3 +1,10 @@
+> 2026-10-21 rebuild addendum: restored missing camera/CRISM provenance UI;
+> corrected disconnected-state feedback; refreshed current-layout browser checks.
+> Fresh checks: 70 backend, 9 component, 24 browser cases across main/targeted
+> runs and 1 authenticated browser flow pass. Ruff/mypy/ESLint/TypeScript and
+> isolated production build pass. Details and initial failures: STATUS.md.
+> Local app health verified; no external publication. Scientific limits below remain.
+
 # Final prototype audit — 2026-10-10
 
 MARSENSE is a research and mission-concept prototype for evidence-aware Mars

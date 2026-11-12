@@ -240,6 +240,81 @@ export default function StructuredEvidence({
                   footprints are illustrative.
                 </p>
                 <details>
+                  <summary>Orbital CRISM science context</summary>
+                  {snapshot.data_status.manifest.crism?.available ? (
+                    <>
+                      <p>{snapshot.data_status.manifest.crism.product_id}</p>
+                      <p>
+                        DERIVED spectral browse ·{" "}
+                        {snapshot.data_status.manifest.crism.resolution_m}{" "}
+                        m/pixel. No mineral identity inferred.
+                      </p>
+                      <p>
+                        {snapshot.data_status.manifest.crism.channels?.join(
+                          " / ",
+                        )}
+                      </p>
+                      {snapshot.data_status.manifest.crism.limitations?.map(
+                        (limit) => (
+                          <p key={limit}>{limit}</p>
+                        ),
+                      )}
+                      <p>
+                        Source SHA-256:{" "}
+                        {snapshot.data_status.manifest.crism.source?.sha256 ??
+                          "Unavailable"}
+                      </p>
+                      {snapshot.data_status.manifest.crism.source?.url && (
+                        <a
+                          href={snapshot.data_status.manifest.crism.source.url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Official CRISM source
+                        </a>
+                      )}
+                    </>
+                  ) : (
+                    <p>
+                      {snapshot.data_status.manifest.crism?.reason ??
+                        "CRISM context unavailable."}
+                    </p>
+                  )}
+                </details>
+                {snapshot.data_status.manifest.cameras?.map((camera) => (
+                  <details key={camera.product_id}>
+                    <summary>
+                      Calibrated {camera.instrument.join(" / ")}
+                    </summary>
+                    <p>
+                      {camera.product_id} · version {camera.version_id}
+                    </p>
+                    <p>
+                      Sol {camera.sol} · SCLK {camera.sclk}
+                    </p>
+                    <p>
+                      PLACES interval match:{" "}
+                      {camera.clock_interval_matched ? "Yes" : "No"}.
+                      Observation clock match:{" "}
+                      {camera.observation_clock_matched ? "Yes" : "No"}.
+                    </p>
+                    <p>
+                      Image footprint unavailable. Spatial uncertainty unknown.
+                    </p>
+                    {camera.limitations.map((limit) => (
+                      <p key={limit}>{limit}</p>
+                    ))}
+                    <p>Source SHA-256: {camera.raw_sha256}</p>
+                    <a
+                      href={camera.source_url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Official camera source
+                    </a>
+                  </details>
+                ))}
+                <details>
                   <summary>NASA source manifest</summary>
                   <pre>
                     {JSON.stringify(snapshot.data_status.manifest, null, 2)}

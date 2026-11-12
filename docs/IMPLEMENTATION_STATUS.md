@@ -1,4 +1,45 @@
-> **Current prototype checkpoint — 2026-10-10:** S1–S10 workflow implementation,
+## Rebuild and regression checkpoint — 2026-10-21
+
+Followed the scientific-completion sequence using existing gate artifacts; preserved
+working core behavior, mission data and services. No product redesign or publication.
+
+Repairs: restored calibrated Navcam/Mastcam and CRISM provenance details in the
+Evidence Inspector's PROVENANCE section (product IDs, clocks, source hashes and
+uncertainty). The recent UI had dropped these required S3/S4 details. Corrected
+unsupported disconnected-state reassurance and review feedback. Browser acceptance
+now follows the current workflow tabs and Evidence hierarchy; it still verifies
+human confirmation, rerouting, reload persistence and future-EVA inheritance.
+
+Fresh verification: 70 backend tests PASS; 9 component tests PASS; Ruff and mypy
+PASS; ESLint and TypeScript PASS; production Next.js build PASS using isolated
+.next-ui-review-build output. Main browser run: 23 PASS, 1 failed due to an ambiguous
+source-text selector; the corrected scientific-context test then PASS on desktop
+and mobile. This covers all 24 browser cases across the two runs. Authenticated browser flow PASS after synchronizing tests with completed API
+transitions: sign-in, identity-bound confirmation and sign-out. Screenshots are
+test artifacts, not a redesign. Local API health returns ok/cache_available=true
+and http://127.0.0.1:3000/mission returns HTTP 200; local services are running.
+
+Environment notes: sandboxed API tests hung in Python's internal socketpair before
+application startup; isolated tests outside the sandbox passed. The first build
+hit a standalone-output permission error; the isolated production build passed.
+Tests used temporary databases. No saved user missions were reset.
+
+Scientific completion is still limited: model classification remains disabled;
+calibrated camera footprints are unknown; CRISM registration/coverage limitations
+remain. S1 passes coarse-grid prototype acceptance. S2–S8 workflow evidence does
+not certify scientific reliability. S10 container/TLS/remote deployment and backup
+rehearsal remain NOT RUN. Backend hosting remains deferred; no publication performed.
+
+> **Current working agreement — 2026-10-21:** The user-supplied
+> [product engineering workflow](PRODUCT_ENGINEERING_WORKFLOW.md) is adopted
+> through root AGENTS.md. Default PREVIEW-FIRST requires a proposal, visual
+> preview and user approval before major implementation. This was a
+> documentation-only update; application tests, builds and browser checks were
+> NOT RUN for this update. The test records below are historical evidence.
+> GitHub was made public and source pushed in the preceding delivery; backend
+> hosting remains deferred and no live application deployment has been verified.
+
+> **Historical prototype checkpoint — 2026-10-10:** S1–S10 workflow implementation,
 > source matrix, claim audit and deployment preparation are recorded in
 > [FINAL_AUDIT.md](../FINAL_AUDIT.md). Validation: 70 backend tests, 3 component tests,
 > 24 browser checks plus 1 authenticated browser flow; static checks and build pass.
