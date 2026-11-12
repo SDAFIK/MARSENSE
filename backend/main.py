@@ -16,7 +16,7 @@ from sqlalchemy import delete
 from starlette.requests import Request
 
 from ai.perception import Perception
-from backend.auth import Auth, Login, User, check_origin
+from backend.auth import Auth, AuthAudit, Login, User, check_origin
 from backend.config import ROOT, Settings
 from backend.domain import (
     Evidence,
@@ -33,7 +33,7 @@ from backend.knowledge import SourceDeclaration, declare_source, synthesis
 from backend.routing import load_slope
 from backend.seed import seed
 from backend.service import MissionService, identifier
-from backend.store import EntityRow, Store, all_of, get
+from backend.store import EntityRow, Store, all_of, get, put
 
 logging.basicConfig(level=logging.INFO, format='{"level":"%(levelname)s","event":"%(message)s"}')
 logger = logging.getLogger(__name__)
@@ -204,6 +204,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 delete(EntityRow).where(EntityRow.kind.not_in(["AuthSession", "AuthAudit"]))
             )
             seed(session, service.slope_grid)
+            put(session, AuthAudit(id=identifier("auth"), user_id=user.id, action="SHOWCASE_RESET"))
         return {"ok": True}
 
     @app.get("/api/evidence/{evidence_id}", response_model=Evidence, dependencies=protected)

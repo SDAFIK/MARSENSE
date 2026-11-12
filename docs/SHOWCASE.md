@@ -24,7 +24,7 @@ on 8443 targeting loopback port 8081. Check existing Funnel configuration and
 do not replace the production listener. Verify the actual origin, sign in,
 record the obstacle replay, confirm, inspect Beta and EVA-02, reload, then reset
 using the authenticated admin control. Reset clears only showcase mission
-entities; authentication records remain. Do not distribute admin credentials.
+entities; authentication records remain, and a reset audit event records the operator. Do not distribute admin credentials.
 
 No paid resources, no production data migration, no production volume deletion.
 The showcase is shared by invited users; concurrent presentations should be

@@ -17,9 +17,15 @@ export default function ObservationPanel({
   setBusy: (busy: boolean) => void;
 }) {
   const [mode, setMode] = useState<"demo" | "production" | "showcase" | null>(null);
+  const [canReplay, setCanReplay] = useState(false);
+  const [canUpload, setCanUpload] = useState(false);
   useEffect(() => {
-    api<{ environment: "demo" | "production" | "showcase" }>("/auth/session")
-      .then((session) => setMode(session.environment))
+    api<{ environment: "demo" | "production" | "showcase"; read_only: boolean; replay_enabled: boolean }>("/auth/session")
+      .then((session) => {
+        setMode(session.environment);
+        setCanReplay(session.replay_enabled);
+        setCanUpload(!session.read_only && session.environment !== "showcase");
+      })
       .catch(() => setError("Unable to determine workspace permissions. Retry after reconnecting."));
   }, []);
   const [scenario, setScenario] = useState("obstacles");
@@ -33,7 +39,7 @@ export default function ObservationPanel({
   });
   const fileInput = useRef<HTMLInputElement>(null);
   async function analyze() {
-    if (!mode || (mode === "production" && !file)) return;
+    if (file ? !canUpload : !canReplay) return;
     setBusy(true);
     setError(null);
     try {
@@ -99,7 +105,7 @@ export default function ObservationPanel({
       </div>
       <div className="panel-body">
         <p className="small muted">A closer look can change the way forward.</p>
-        {mode && mode !== "production" && <>
+        {canReplay && <>
         <label className="field-label" htmlFor="scenario">
           Demonstration observation
         </label>
@@ -121,7 +127,7 @@ export default function ObservationPanel({
         </select>
         </>}
         {mode === "production" && <p className="small muted">Production observations require a ground image. Curated replay is available in the isolated showcase.</p>}
-        {mode && mode !== "showcase" && <>
+        {canUpload && <>
         <button
           className="upload-button"
           disabled={busy}
@@ -183,7 +189,7 @@ export default function ObservationPanel({
         <button
           className="button primary full"
           onClick={analyze}
-          disabled={busy || !mode || (mode === "production" && !file)}
+          disabled={busy || (file ? !canUpload : !canReplay)}
         >
           <ScanLine size={16} />
           {busy ? "Analyzing observation…" : "Analyze terrain"}
