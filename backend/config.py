@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     )
     environment: Literal["demo", "production", "showcase"] = "demo"
     database_url: str = f"sqlite:///{ROOT / 'data/runtime/marsense.db'}"
+    runtime_dir: Path = ROOT / "data/runtime"
     cors_origins: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
     api_token: str = ""
     auth_users_file: str = ""

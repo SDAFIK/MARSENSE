@@ -503,6 +503,7 @@ export default function LivingMap({
     <section
       className={`map-panel ${compact ? "compact" : ""} ${expanded ? "map-expanded" : ""}`}
       aria-label="Living Mars map"
+      data-renderer={fallback ? "fallback" : ready ? "webgl" : "loading"}
     >
       <div className="map-toolbar">
         <span>

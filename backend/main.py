@@ -276,7 +276,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             and all(c in "0123456789abcdef" for c in name[7:-4])
         ):
             raise HTTPException(404, "Original upload is unavailable for this observation")
-        path = ROOT / "data/runtime/originals" / name.replace(".jpg", ".bin")
+        path = settings.runtime_dir / "originals" / name.replace(".jpg", ".bin")
         if not path.is_file():
             raise HTTPException(404, "Original upload unavailable; derivative evidence remains")
         return FileResponse(
@@ -330,11 +330,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         content = clean.getvalue()
         output = service.perception.infer(content)
         asset_id = identifier("upload") + ".jpg"
-        upload_dir = ROOT / "data/runtime/uploads"
+        upload_dir = settings.runtime_dir / "uploads"
         upload_dir.mkdir(parents=True, exist_ok=True)
         asset_path = upload_dir / asset_id
         asset_path.write_bytes(content)
-        original_dir = ROOT / "data/runtime/originals"
+        original_dir = settings.runtime_dir / "originals"
         original_dir.mkdir(parents=True, exist_ok=True)
         original_path = original_dir / asset_id.replace(".jpg", ".bin")
         try:
@@ -374,7 +374,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             authorize(request, authorization)
             if not all(c in "0123456789abcdef" for c in asset_id[7:-4]):
                 raise HTTPException(404, "Asset not found")
-            path = ROOT / "data/runtime/uploads" / asset_id
+            path = settings.runtime_dir / "uploads" / asset_id
         else:
             raise HTTPException(404, "Asset not found")
         if not path.is_file():

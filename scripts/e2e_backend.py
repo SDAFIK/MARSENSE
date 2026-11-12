@@ -13,7 +13,10 @@ from backend.main import create_app
 if __name__ == "__main__":
     (ROOT / ".tmp").mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="e2e-", dir=ROOT / ".tmp") as temporary:
-        settings = Settings(database_url=f"sqlite:///{Path(temporary) / 'e2e.db'}")
+        runtime = Path(temporary) / "runtime"
+        settings = Settings(
+            database_url=f"sqlite:///{Path(temporary) / 'e2e.db'}", runtime_dir=runtime
+        )
         if os.environ.get("MARSENSE_E2E_SHOWCASE") == "1":
             from backend.auth import password_hash
 
@@ -25,11 +28,39 @@ if __name__ == "__main__":
             }]))
             settings = Settings(
                 environment="showcase",
+                runtime_dir=runtime,
                 database_url=f"sqlite:///{Path(temporary) / 'showcase.db'}",
                 auth_users_file=str(user_file),
                 cors_origins=["http://localhost:3003"],
             )
             uvicorn.run(create_app(settings), host="127.0.0.1", port=8003)
+            sys.exit(0)
+        if os.environ.get("MARSENSE_E2E_PRODUCTION") == "1":
+            from backend.auth import password_hash
+
+            user_file = Path(temporary) / "production-users.json"
+            user_file.write_text(json.dumps([
+                {
+                    "id": "test-astronaut", "username": "astronaut",
+                    "name": "Test Astronaut", "role": "ASTRONAUT",
+                    "password_hash": password_hash("isolated-astronaut-test-password"),
+                },
+                {
+                    "id": "test-reviewer", "username": "reviewer",
+                    "name": "Test Reviewer", "role": "MISSION_CONTROL",
+                    "password_hash": password_hash("isolated-reviewer-test-password"),
+                },
+            ]))
+            settings = Settings(
+                environment="production",
+                database_url=f"sqlite:///{Path(temporary) / 'production.db'}",
+                runtime_dir=runtime,
+                auth_users_file=str(user_file),
+                cors_origins=["http://localhost:3004"],
+                model_path="",
+                slope_path="",
+            )
+            uvicorn.run(create_app(settings), host="127.0.0.1", port=8004)
             sys.exit(0)
         if os.environ.get("MARSENSE_E2E_AUTH") == "1":
             from backend.auth import password_hash
