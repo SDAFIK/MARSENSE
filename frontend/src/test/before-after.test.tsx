@@ -22,12 +22,15 @@ vi.mock("@/components/living-map", () => ({
 }));
 vi.mock("@/components/route-summary", () => ({ default: () => null }));
 const snapshot = {
-  mission: { id: "eva-01" },
+  mission: { id: "eva-01", active_route_id: "eva-01-alpha" },
   evidence: [],
+  routes: [{ id:"eva-01-alpha", mission_id:"eva-01", name:"Route Alpha", version:1, status:"ACTIVE", coordinates:[[120,400],[1080,400]], distance_m:960, cost:1104, cost_breakdown:{distance:960,uncertainty:144}, evidence_ids:[], explanation:"Illustrative orbital prior" }],
 } as unknown as Snapshot;
 describe("spatial before/after controls", () => {
   it("uses the same mission and locked extent for both map states", () => {
     render(<BeforeAfter snapshot={snapshot} />);
+    expect(screen.getByRole("heading", { name: "Route Alpha" })).toBeVisible();
+    expect(screen.getByText("Awaiting confirmed evidence")).toBeVisible();
     for (const name of ["prior-map", "after-map"]) {
       expect(screen.getByTestId(name)).toHaveAttribute("data-locked", "true");
       expect(screen.getByTestId(name)).toHaveAttribute(
