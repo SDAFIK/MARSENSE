@@ -133,7 +133,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "required": authentication_required,
             "read_only": settings.read_only,
             "environment": settings.environment,
-            "replay_enabled": settings.environment in {"demo", "showcase"} and not settings.read_only,
+            "replay_enabled": (
+                settings.environment in {"demo", "showcase"} and not settings.read_only
+            ),
         }
 
     @app.post("/api/auth/logout")
