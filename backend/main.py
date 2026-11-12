@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from PIL import Image, UnidentifiedImageError
 from starlette.requests import Request
+from sqlalchemy import delete
 
 from ai.perception import Perception
 from backend.auth import Auth, Login, User, check_origin
@@ -32,7 +33,7 @@ from backend.knowledge import SourceDeclaration, declare_source, synthesis
 from backend.routing import load_slope
 from backend.seed import seed
 from backend.service import MissionService, identifier
-from backend.store import Store, all_of, get
+from backend.store import EntityRow, Store, all_of, get
 
 logging.basicConfig(level=logging.INFO, format='{"level":"%(levelname)s","event":"%(message)s"}')
 logger = logging.getLogger(__name__)
@@ -49,7 +50,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     store: Store
     service = MissionService(Perception(settings.model_path), load_slope(settings.slope_path))
     auth = Auth(settings.auth_users_file)
-    authentication_required = settings.auth_required or settings.environment == "production"
+    if settings.environment == "showcase":
+        auth.cookie = "marsense_showcase_session"
+    authentication_required = settings.auth_required or settings.environment != "demo"
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
@@ -112,7 +115,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             auth.cookie,
             token,
             httponly=True,
-            secure=settings.environment == "production",
+            secure=settings.environment != "demo",
             samesite="strict",
             max_age=8 * 3600,
             path="/",
@@ -129,6 +132,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "user": user.model_dump(exclude={"password_hash"}) if user else None,
             "required": authentication_required,
             "read_only": settings.read_only,
+            "environment": settings.environment,
+            "replay_enabled": settings.environment in {"demo", "showcase"} and not settings.read_only,
         }
 
     @app.post("/api/auth/logout")
@@ -139,7 +144,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response.delete_cookie(
             auth.cookie,
             path="/",
-            secure=settings.environment == "production",
+            secure=settings.environment != "demo",
             httponly=True,
             samesite="strict",
         )
@@ -181,10 +186,21 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.post("/api/observations/demo", response_model=Evidence, dependencies=protected)
     def demo(request: ObserveRequest) -> Evidence:
-        if settings.environment != "demo":
+        if settings.environment not in {"demo", "showcase"}:
             raise HTTPException(404, "Demo replay is disabled")
         with store.session(write=True) as session:
             return service.demo(session, request)
+
+    @app.post("/api/showcase/reset", dependencies=protected)
+    def reset_showcase(user: User | None = Depends(authorize)) -> dict[str, bool]:
+        if settings.environment != "showcase":
+            raise HTTPException(404, "Showcase reset unavailable")
+        if not user or user.role != "ADMIN":
+            raise HTTPException(403, "Showcase administrator required")
+        with store.session(write=True) as session:
+            session.execute(delete(EntityRow).where(EntityRow.kind.not_in(["AuthSession", "AuthAudit"])))
+            seed(session, service.slope_grid)
+        return {"ok": True}
 
     @app.get("/api/evidence/{evidence_id}", response_model=Evidence, dependencies=protected)
     def evidence_detail(evidence_id: str) -> Evidence:
@@ -280,6 +296,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         footprint: Annotated[str, Form()],
         mission_id: Annotated[str, Form()] = "eva-01",
     ) -> Evidence:
+        if settings.environment == "showcase":
+            raise HTTPException(403, "Showcase uses curated replay; uploads belong in production")
         if file.content_type not in {"image/jpeg", "image/png"}:
             raise HTTPException(415, "Only JPEG and PNG images are supported")
         content = await file.read(settings.max_upload_bytes + 1)

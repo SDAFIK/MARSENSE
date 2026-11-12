@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Camera, ScanLine, Upload } from "lucide-react";
 import { api, jsonRequest } from "@/lib/api";
 import type { Evidence } from "@/lib/types";
@@ -16,6 +16,12 @@ export default function ObservationPanel({
   busy: boolean;
   setBusy: (busy: boolean) => void;
 }) {
+  const [mode, setMode] = useState<"demo" | "production" | "showcase" | null>(null);
+  useEffect(() => {
+    api<{ environment: "demo" | "production" | "showcase" }>("/auth/session")
+      .then((session) => setMode(session.environment))
+      .catch(() => setError("Unable to determine workspace permissions. Retry after reconnecting."));
+  }, []);
   const [scenario, setScenario] = useState("obstacles");
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -27,6 +33,7 @@ export default function ObservationPanel({
   });
   const fileInput = useRef<HTMLInputElement>(null);
   async function analyze() {
+    if (!mode || (mode === "production" && !file)) return;
     setBusy(true);
     setError(null);
     try {
@@ -92,6 +99,7 @@ export default function ObservationPanel({
       </div>
       <div className="panel-body">
         <p className="small muted">A closer look can change the way forward.</p>
+        {mode && mode !== "production" && <>
         <label className="field-label" htmlFor="scenario">
           Demonstration observation
         </label>
@@ -111,6 +119,9 @@ export default function ObservationPanel({
           <option value="failure">Model unavailable · manual review</option>
           <option value="dynamic">Visibility · expires after 30 minutes</option>
         </select>
+        </>}
+        {mode === "production" && <p className="small muted">Production observations require a ground image. Curated replay is available in the isolated showcase.</p>}
+        {mode !== "showcase" && <>
         <button
           className="upload-button"
           disabled={busy}
@@ -136,6 +147,7 @@ export default function ObservationPanel({
             setError(null);
           }}
         />
+        </>}
         {file && (
           <>
             <p className="small muted">
@@ -171,7 +183,7 @@ export default function ObservationPanel({
         <button
           className="button primary full"
           onClick={analyze}
-          disabled={busy}
+          disabled={busy || !mode || (mode === "production" && !file)}
         >
           <ScanLine size={16} />
           {busy ? "Analyzing observation…" : "Analyze terrain"}
@@ -180,7 +192,7 @@ export default function ObservationPanel({
         <p className="annotation-note">
           {file
             ? "Local image analysis · human review required"
-            : "Curated demo replay · simulated footprint"}
+            : mode === "production" ? "Upload an image to begin" : "Curated demo replay · simulated footprint"}
         </p>
       </div>
     </section>

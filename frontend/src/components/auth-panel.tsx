@@ -6,6 +6,7 @@ type Session = {
   user: { name: string; role: string } | null;
   required: boolean;
   read_only: boolean;
+  environment: "demo" | "production" | "showcase";
 };
 export default function AuthPanel({ compact = false }: { compact?: boolean }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -34,6 +35,18 @@ export default function AuthPanel({ compact = false }: { compact?: boolean }) {
       setBusy(false);
     }
   }
+  async function resetShowcase() {
+    if (!window.confirm("Reset only the isolated showcase mission history?")) return;
+    setBusy(true);
+    setError("");
+    try {
+      await api("/showcase/reset", jsonRequest({}));
+      sessionStorage.setItem("marsense-mission", "eva-01");
+      window.location.assign("/mission");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Showcase reset failed");
+    } finally { setBusy(false); }
+  }
   if (!session) return null;
   if (!session.required && !session.user && !session.read_only)
     return compact ? (
@@ -41,6 +54,7 @@ export default function AuthPanel({ compact = false }: { compact?: boolean }) {
     ) : null;
   const panel = (
     <section className="auth-panel panel" aria-label="Mission access">
+      {session.environment === "showcase" && <p><strong>ISOLATED SHOWCASE</strong> · Curated replay, simulated footprints. Separate mission history.</p>}
       {session.read_only && (
         <p>Read-only demonstration · mission changes are disabled.</p>
       )}
@@ -48,6 +62,9 @@ export default function AuthPanel({ compact = false }: { compact?: boolean }) {
         <div>
           <strong>{session.user.name}</strong> ·{" "}
           {session.user.role.replaceAll("_", " ")}
+          {session.environment === "showcase" && session.user.role === "ADMIN" && (
+            <button className="button secondary" disabled={busy} onClick={resetShowcase}>Reset showcase</button>
+          )}
           <button
             className="button secondary"
             disabled={busy}
@@ -99,7 +116,7 @@ export default function AuthPanel({ compact = false }: { compact?: boolean }) {
       open={session.required && !session.user}
     >
       <summary>
-        {session.user?.name ?? (session.required ? "SIGN IN" : "READ ONLY")}
+        {session.environment === "showcase" ? "SHOWCASE · " : ""}{session.user?.name ?? (session.required ? "SIGN IN" : "READ ONLY")}
       </summary>
       {panel}
     </details>
