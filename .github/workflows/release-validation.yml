@@ -76,14 +76,4 @@ jobs:
       - name: Authenticated browser acceptance
         working-directory: frontend
         run: npx playwright test --config=playwright.auth.config.ts
-      - name: Publish browser evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: browser-evidence
-          path: |
-            frontend/playwright-report/
-            frontend/test-results/
-            docs/screenshots/
-          if-no-files-found: ignore
-          retention-days: 7
+      # Keep raw browser traces and session-bearing reports on the ephemeral runner.
