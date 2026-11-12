@@ -26,7 +26,9 @@ class Settings(BaseSettings):
     def validate_production(self) -> "Settings":
         if self.environment == "showcase":
             if not self.auth_users_file or self.read_only or self.api_token:
-                raise ValueError("Showcase requires dedicated identities and writable authenticated access")
+                raise ValueError(
+                    "Showcase requires dedicated identities and writable authenticated access"
+                )
             if not self.database_url.endswith("/showcase.db"):
                 raise ValueError("Showcase requires a dedicated showcase.db database")
         if self.environment == "production" and not self.auth_users_file and not self.read_only:

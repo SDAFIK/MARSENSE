@@ -12,8 +12,8 @@ from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Respons
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from PIL import Image, UnidentifiedImageError
-from starlette.requests import Request
 from sqlalchemy import delete
+from starlette.requests import Request
 
 from ai.perception import Perception
 from backend.auth import Auth, Login, User, check_origin
@@ -198,7 +198,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if not user or user.role != "ADMIN":
             raise HTTPException(403, "Showcase administrator required")
         with store.session(write=True) as session:
-            session.execute(delete(EntityRow).where(EntityRow.kind.not_in(["AuthSession", "AuthAudit"])))
+            session.execute(
+                delete(EntityRow).where(EntityRow.kind.not_in(["AuthSession", "AuthAudit"]))
+            )
             seed(session, service.slope_grid)
         return {"ok": True}
 

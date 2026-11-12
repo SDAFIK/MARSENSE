@@ -121,7 +121,7 @@ export default function ObservationPanel({
         </select>
         </>}
         {mode === "production" && <p className="small muted">Production observations require a ground image. Curated replay is available in the isolated showcase.</p>}
-        {mode !== "showcase" && <>
+        {mode && mode !== "showcase" && <>
         <button
           className="upload-button"
           disabled={busy}
@@ -171,7 +171,7 @@ export default function ObservationPanel({
               ))}
             </div>
             <button className="text-button" onClick={() => setFile(null)}>
-              Use cached observation instead
+              {mode === "production" ? "Remove selected image" : "Use cached observation instead"}
             </button>
           </>
         )}

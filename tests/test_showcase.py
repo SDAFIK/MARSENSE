@@ -16,8 +16,12 @@ def test_showcase_replay_reset_and_production_isolation(tmp_path):
     origin = "https://showcase.example"
     headers = {"Origin": origin}
     common = {"auth_users_file": str(users), "cors_origins": [origin]}
-    production = Settings(environment="production", database_url=f"sqlite:///{tmp_path / 'production.db'}", **common)
-    showcase = Settings(environment="showcase", database_url=f"sqlite:///{tmp_path / 'showcase.db'}", **common)
+    production = Settings(
+        environment="production", database_url=f"sqlite:///{tmp_path / 'production.db'}", **common
+    )
+    showcase = Settings(
+        environment="showcase", database_url=f"sqlite:///{tmp_path / 'showcase.db'}", **common
+    )
     with TestClient(create_app(production), base_url=origin) as prod:
         with TestClient(create_app(showcase), base_url=origin) as demo:
             assert demo.post("/api/observations/demo", json={}, headers=headers).status_code == 401
@@ -44,7 +48,9 @@ def test_showcase_replay_reset_and_production_isolation(tmp_path):
             assert response.json()["verified_by"] == "Demo Reviewer"
             future = demo.get("/api/missions/eva-02").json()
             assert evidence["id"] in future["mission"]["inherited_evidence"]
-            assert demo.post("/api/showcase/reset", headers={"Origin": "https://wrong.example"}).status_code == 403
+            assert demo.post(
+                "/api/showcase/reset", headers={"Origin": "https://wrong.example"}
+            ).status_code == 403
             assert demo.post("/api/showcase/reset", headers=headers).status_code == 200
             assert not demo.get("/api/missions/eva-02").json()["mission"]["inherited_evidence"]
             assert demo.get(f"/api/evidence/{evidence['id']}").status_code == 404
