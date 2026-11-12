@@ -19,7 +19,7 @@ export default function Home() {
       <p className="landing-subtitle">THE LIVING MARS MAP</p>
       <p className="landing-copy">An evidence-aware Mars exploration prototype that learns from ground observations, compares them with NASA data, and helps future explorers inherit a more informed map.</p>
       <div className="hero-actions"><Link className="button primary" href="/mission">Enter Mission Control <ArrowRight size={18}/></Link><a className="button secondary" href="#experience">Explore the mission story</a></div>
-      <div className="hero-orbital"><Image unoptimized width={280} height={160} src="/api/assets/jezero-ctx.png" alt="Cached Jezero orbital imagery"/><span>JEZERO CRATER · 18.44° N, 77.45° E</span></div>
+      <div className="hero-orbital"><Image unoptimized loading="eager" width={280} height={160} src="/api/assets/jezero-ctx.png" alt="Cached Jezero orbital imagery"/><span>JEZERO CRATER · 18.44° N, 77.45° E</span></div>
     </section>
     <section id="experience" className="product-experience"><div className="feature-grid">{features.map(({icon:Icon,title,detail})=><article key={title}><Icon size={23}/><h2>{title}</h2><p>{detail}</p></article>)}</div><div className="product-steps">{["EXPECT","OBSERVE","COMPARE","VERIFY","LEARN"].map((s,i)=><Link key={s} href="/mission"><span>0{i+1}</span><strong>{s}</strong></Link>)}</div></section>
     <footer>Real cached NASA imagery · Illustrative mission geometry · Human verification required · Team Redscape</footer>
