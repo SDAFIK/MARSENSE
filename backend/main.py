@@ -336,8 +336,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             original_path.unlink(missing_ok=True)
             raise
 
-    @app.get("/api/assets/{asset_id}", dependencies=protected)
-    def asset(asset_id: str) -> FileResponse:
+    @app.get("/api/assets/{asset_id}")
+    def asset(
+        asset_id: str, request: Request, authorization: Annotated[str | None, Header()] = None
+    ) -> FileResponse:
         known = {"jezero-ctx.png", "ground-navcam.jpg", "jezero-hirise.png"}
         if asset_id in known:
             path = ROOT / "data/nasa" / asset_id
@@ -346,6 +348,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         elif asset_id == "crism-preview.png":
             path = ROOT / "data/nasa/crism/frt000047a3_07_brtanj_mtr3.png"
         elif asset_id.startswith("upload-") and asset_id.endswith(".jpg") and len(asset_id) == 43:
+            authorize(request, authorization)
             if not all(c in "0123456789abcdef" for c in asset_id[7:-4]):
                 raise HTTPException(404, "Asset not found")
             path = ROOT / "data/runtime/uploads" / asset_id
