@@ -1,0 +1,80 @@
+name: Production container smoke test
+
+on:
+  push:
+    branches: ['codex/**', master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: marsense-container-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      COMPOSE_PROJECT_NAME: marsense-ci
+      MARSENSE_DOMAIN: localhost
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build production images
+        run: |
+          export MARSENSE_USERS_FILE="$RUNNER_TEMP/marsense-users.json"
+          export MARSENSE_TLS_DIR="$RUNNER_TEMP/marsense-tls"
+          docker compose -f compose.production.yaml config --quiet
+          docker compose -f compose.production.yaml build
+      - name: Create disposable production identity and TLS
+        run: |
+          mkdir -p "$RUNNER_TEMP/marsense-tls"
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
+            -subj /CN=localhost -addext subjectAltName=DNS:localhost \
+            -keyout "$RUNNER_TEMP/marsense-tls/privkey.pem" \
+            -out "$RUNNER_TEMP/marsense-tls/fullchain.pem"
+          export MARSENSE_USERS_FILE="$RUNNER_TEMP/marsense-users.json"
+          export MARSENSE_TLS_DIR="$RUNNER_TEMP/marsense-tls"
+          printf "[]" > "$MARSENSE_USERS_FILE"
+          # Test-only identity; never use this password outside this isolated runner.
+          docker compose -f compose.production.yaml run --rm --no-deps \
+            -T --entrypoint python api -c 'import json; from backend.auth import password_hash; print(json.dumps([{"id":"ci-reviewer","username":"ci-reviewer","name":"CI Reviewer","role":"MISSION_CONTROL","password_hash":password_hash("isolated-container-test-only")}]))' \
+            > "$MARSENSE_USERS_FILE.tmp"
+          mv "$MARSENSE_USERS_FILE.tmp" "$MARSENSE_USERS_FILE"
+          chmod 644 "$MARSENSE_USERS_FILE"
+      - name: Verify HTTPS, authorization and persistent sessions
+        run: |
+          export MARSENSE_USERS_FILE="$RUNNER_TEMP/marsense-users.json"
+          export MARSENSE_TLS_DIR="$RUNNER_TEMP/marsense-tls"
+          docker compose -f compose.production.yaml up -d --wait --wait-timeout 120
+          cert="$MARSENSE_TLS_DIR/fullchain.pem"
+          cookies="$RUNNER_TEMP/marsense-cookies"
+          curl --fail --retry 12 --retry-all-errors --retry-delay 2 --cacert "$cert" https://localhost/api/health
+          curl --fail --cacert "$cert" https://localhost/ -o /dev/null
+          curl --fail --cacert "$cert" https://localhost/api/assets/ground-navcam.jpg -o /dev/null
+          test "$(curl -s --cacert "$cert" -o /dev/null -w '%{http_code}' https://localhost/api/missions/eva-01)" = 401
+          curl --fail --cacert "$cert" -c "$cookies" -H 'Origin: https://localhost' -H 'Content-Type: application/json' \
+            -d '{"username":"ci-reviewer","password":"isolated-container-test-only"}' https://localhost/api/auth/login
+          curl --fail --cacert "$cert" -b "$cookies" https://localhost/api/missions/eva-01 -o /dev/null
+          test "$(curl -s --cacert "$cert" -b "$cookies" -H 'Origin: https://localhost' -H 'Content-Type: application/json' -d '{}' -o /dev/null -w '%{http_code}' https://localhost/api/observations/demo)" = 404
+          docker compose -f compose.production.yaml restart api
+          curl --fail --retry 12 --retry-all-errors --retry-delay 2 --cacert "$cert" -b "$cookies" https://localhost/api/missions/eva-01 -o /dev/null
+          curl --fail --cacert "$cert" -b "$cookies" -H 'Origin: https://localhost' -X POST https://localhost/api/auth/logout
+          test "$(curl -s --cacert "$cert" -b "$cookies" -o /dev/null -w '%{http_code}' https://localhost/api/missions/eva-01)" = 401
+      - name: Container logs on failure
+        if: failure()
+        run: |
+          export MARSENSE_USERS_FILE="$RUNNER_TEMP/marsense-users.json"
+          export MARSENSE_TLS_DIR="$RUNNER_TEMP/marsense-tls"
+          docker compose -f compose.production.yaml logs --tail 80
+      - name: Remove disposable CI containers and volume
+        if: always()
+        run: |
+          export MARSENSE_USERS_FILE="$RUNNER_TEMP/marsense-users.json"
+          export MARSENSE_TLS_DIR="$RUNNER_TEMP/marsense-tls"
+          docker compose -f compose.production.yaml down -v --remove-orphans
