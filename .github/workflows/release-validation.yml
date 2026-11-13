@@ -100,6 +100,7 @@ jobs:
             frontend/test-results/production/**/login-*.png
             frontend/test-results/production/**/registration-*.png
             frontend/test-results/production/**/production-confirmed.png
+            frontend/test-results/production/**/guest-*-mobile.png
           if-no-files-found: ignore
           retention-days: 3
       - name: Isolated showcase browser acceptance

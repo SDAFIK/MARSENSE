@@ -162,3 +162,56 @@ test("self-service signup creates a private saved mission and personal login res
   await expect(page).toHaveURL(/\/mission$/);
   await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Beta");
 });
+
+
+test("guest mobile navigation connects astronaut evidence routes and future memory", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  const inspect = async (screen: string) => {
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    await page.screenshot({ path: testInfo.outputPath(`guest-${screen}-mobile.png`), fullPage: true });
+  };
+  await page.goto("/");
+  await page.getByRole("button", { name: "Launch Live Demo", exact: true }).click();
+  await expect(page.getByRole("tab", { name: "EXPECT", exact: true })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Alpha");
+  await page.getByRole("link", { name: "Astronaut View", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Ground observation view" })).toBeVisible();
+  await expect(page.getByLabel("Demonstration observation")).toBeVisible();
+  await expect(page.getByLabel("Upload ground image")).toHaveCount(0);
+  const analyzed = page.waitForResponse(response =>
+    response.url().endsWith("/api/public-demo/observations/demo") && response.request().method() === "POST");
+  await page.getByRole("button", { name: "Analyze terrain", exact: true }).click();
+  expect((await analyzed).ok()).toBeTruthy();
+  await expect(page.locator(".notice")).toContainText("Human review required");
+  await inspect("astronaut");
+
+  await page.getByRole("link", { name: "Evidence Inspector", exact: true }).click();
+  await expect(page.getByRole("navigation", { name: "Evidence hierarchy" })).toBeVisible();
+  await page.getByRole("button", { name: "HUMAN DECISION", exact: true }).click();
+  await page.getByRole("region", { name: "Evidence review" }).getByRole("button", { name: "Confirm observation" }).click();
+  await expect(page.getByText("Confirmed by Guest reviewer (simulation)", { exact: true })).toBeVisible();
+  await inspect("evidence");
+
+  await page.getByRole("link", { name: "Route Comparison", exact: true }).click();
+  await expect(page.locator(".route-compare-data")).toContainText("Route Beta");
+  await page.getByRole("button", { name: "After", exact: true }).click();
+  await expect(page.getByRole("slider", { name: "Before / After map slider" })).toHaveValue("0");
+  await inspect("comparison");
+
+  await page.getByRole("link", { name: "Exploration Memory", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Knowledge that Lives On" })).toBeVisible();
+  await expect(page.locator(".memory-stats")).toContainText("1 confirmed ground records");
+  await page.getByLabel("Active mission").selectOption("eva-02");
+  await expect(page.locator(".memory-stats")).toContainText("1 inherited records");
+  await inspect("memory");
+
+  await page.getByRole("link", { name: "Mission Control", exact: true }).click();
+  await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Beta");
+  await page.locator("summary").filter({ hasText: "GUEST DEMO" }).click();
+  await page.getByRole("button", { name: "Exit demo", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  expect(errors).toEqual([]);
+});

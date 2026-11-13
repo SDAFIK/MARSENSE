@@ -53,3 +53,8 @@ Scientific boundary: actual NASA pixels and computed prototype route geometry, m
 
 ## Operator handoff (Windows)
 After the exact candidate passes CI, fetch and fast-forward to that commit. From the repository root, run `powershell -File scripts/hosted-showcase.ps1 -ExpectedCommit <full-tested-sha> -ProductionOrigin https://<existing-host>` and then `powershell -File scripts/hosted-acceptance.ps1 -ProductionOrigin https://<existing-host> -ShowcaseOrigin https://<existing-host>:8443`. These repository-tracked scripts provision separate showcase identity and storage, check both public environments, and verify a replay/confirmation/reset against an unchanged production snapshot. They do not upgrade production or erase production data. Credentials are entered privately on the host. Actual browser acceptance and restore rehearsal remain separate gates.
+
+
+## Anonymous public demo release gate
+
+The previous authenticated hosted showcase passed. The new guest and persistent personal workspace release must additionally pass exact-head CI, full anonymous desktop/mobile browser navigation, two-guest isolation, and credential-free [hosted public demo acceptance](PUBLIC_DEMO.md) on the final production and Vercel origins. Preserve the original production mission store, identity mount and all new personal workspace data in future backups. The reference artwork is illustrative, not verified mission telemetry.
