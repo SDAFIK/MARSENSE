@@ -50,13 +50,14 @@ The left utility rail is global navigation. Mission Control workflow tabs change
 | Screen | Purpose |
 |---|---|
 | `/` | NASA-image introduction with the EXPECT → OBSERVE → COMPARE → LEARN story and one entry action |
+| `/login`, `/register`, `/account` | Mission access, invitation-only production registration, and administrator invitation/account management (new candidate) |
 | `/mission` | Compact mission trace, dominant Mars map, five local workflow contexts and a spatial event strip |
 | `/astronaut` | Target, modeled route distance/state, return assumption, relevant alert, WHY, COMPARE and evidence/review actions |
 | `/evidence` | NASA prior → ground observation → model inference → human interpretation → human decision → mission consequence → provenance → history |
-| `/memory` | Chronological events linked to evidence locations, durable local knowledge and future-EVA inheritance |
+| `/memory` | Searchable chronological events linked to evidence locations, durable local knowledge and future-EVA inheritance |
 | `/comparison` | Same aligned Mars-map extent, before/after slider and accessible whole-state toggles |
 
-Map controls include CTX/HiRISE selection, route/evidence overlays, zoom, mission fit and expanded view with Escape. Alpha stays off-white; only its affected demonstration segment is dashed amber. Beta is solid mint and progressively revealed. Workflow transitions and subtle introduction motion respect reduced-motion preferences. Keyboard arrows/Home/End operate workflow tabs and the comparison slider.
+Map controls include CTX/HiRISE selection, route/evidence overlays, zoom, mission fit, north reset, local metric scale/center and expanded view with Escape. Alpha stays off-white; only its affected demonstration segment is dashed amber. Beta is solid mint and progressively revealed. Workflow transitions and subtle introduction motion respect reduced-motion preferences. Keyboard arrows/Home/End operate workflow tabs and the comparison slider.
 
 ## What is real, illustrative and still unresolved
 
@@ -86,8 +87,8 @@ flowchart LR
 - **Frontend:** Next.js App Router, React, TypeScript, MapLibre GL and compact CSS panels.
 - **Backend:** FastAPI, Pydantic, SQLAlchemy and SQLite local fallback; geometry/provenance are represented as GeoJSON-compatible domain objects.
 - **Analysis:** explicit Mars metric CRS, Shapely/raster tooling and A* routing. MapLibre is presentation, not the distance/slope calculation engine.
-- **Inference:** conservative OpenCV fallback and optional TorchScript adapters; model output remains separate from human interpretations and final decisions.
-- **Identity:** local demonstration mode or identity-bound cookie sessions, roles, review attribution, origin checks and read-only operation.
+- **Inference:** conservative OpenCV fallback reports measured texture features without a fabricated numeric confidence; optional TorchScript adapters; model output remains separate from human interpretations and final decisions. Failed inference retains original bytes, and recorded retry attempts preserve the original observation.
+- **Identity:** local demonstration mode or identity-bound cookie sessions, roles, review attribution, origin checks, read-only operation and production invite-only registration. Bootstrap admin identities remain outside source control.
 - **Persistence:** append-preserving decisions/history, controlled supersession and overlap-bounded knowledge. Runtime stores are never reset by the test suite.
 
 ```text
@@ -174,7 +175,7 @@ The helper prompts privately for a password. Restrict file access to the service
 
 ## Verification
 
-Historical default-branch redesign results: **70 backend tests and 9 frontend tests pass**, with TypeScript, ESLint and the production Next.js build passing. Backend tests use temporary stores. Existing PyTorch/Starlette/raster deprecation warnings remain. Browser checks use isolated services and cover provisional evidence → human confirmation → Beta → reload → inheritance, local workflow keyboard navigation, spatial event selection, evidence history and the comparison slider.
+Verified baseline `c926819`: **110 test cases** (71 backend, 12 frontend component, 24 browser, 1 authenticated browser, 1 production-mode upload browser, 1 isolated showcase browser). TypeScript, lint, Next production build and separate container smoke passed. The later candidate passed 141 tests, including invitation registration, inference retry, uploaded-image preview and seven viewport widths; latest CI links are above. Backend and browser tests use disposable stores. The private genuine-checkpoint gate is not run by GitHub CI.
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q --basetemp=.tmp\verification
@@ -185,7 +186,7 @@ npm run test
 npm run build
 ```
 
-Existing browser suites are available through `npm run test:e2e`; their configuration starts isolated services. The automated browser suites were not rerun for the redesign; manual in-app-browser evidence and 1440×900, 1280×800, 834×1112 and 390×844 captures are recorded in the [fidelity report](docs/design/MISSION_CONTROL_FIDELITY.md).
+Run `npm run test:e2e` plus `npx playwright test --config=playwright.auth.config.ts`, `npx playwright test --config=playwright.production.config.ts`, and `npx playwright test --config=playwright.showcase.config.ts`. Each starts isolated services. Baseline CI #28 captured loaded desktop/tablet/mobile views. The [fidelity report](docs/design/MISSION_CONTROL_FIDELITY.md) records the earlier visual-reference work; fresh candidate screenshots must be inspected separately.
 
 ## Git and GitHub
 
@@ -204,7 +205,7 @@ Use `codex/` prefixes for new agent branches. Inspect staged files before commit
 
 ## Deployment and scientific development
 
-`compose.yaml`, `compose.production.yaml`, Dockerfiles and `deploy/` contain the existing local/production configuration. The later hosted baseline and protected staging are documented above; final candidate hosting, restore rehearsal and authenticated showcase remain operator release gates. Follow [DEPLOYMENT.md](DEPLOYMENT.md), not an assumed production-readiness claim.
+`compose.yaml`, `compose.production.yaml`, Dockerfiles and `deploy/` contain the existing local/production configuration. The existing host is running the verified baseline through Docker and Tailscale HTTPS. Follow [DEPLOYMENT.md](DEPLOYMENT.md), [free hosting](docs/FREE_HOSTING.md), [showcase isolation](docs/SHOWCASE.md) and [Vercel setup](docs/VERCEL_DEPLOYMENT.md). Hosted API acceptance, isolated showcase and restore rehearsal passed; browser walkthrough, final record comparison and Vercel production promotion remain release gates.
 
 The authoritative project concept is [MAIN_PROJECT_NOTES.md](docs/MAIN_PROJECT_NOTES.md); engineering constraints are frozen in [PROJECT_SPEC.md](PROJECT_SPEC.md). [NASA_SOURCE_MATRIX.md](NASA_SOURCE_MATRIX.md), [MODEL_CARD.md](MODEL_CARD.md), [SCIENTIFIC_AUDIT.md](SCIENTIFIC_AUDIT.md) and [FINAL_AUDIT.md](FINAL_AUDIT.md) separate measured prototype behavior from unresolved science. Preserve original NASA sources, actual model output, final human decisions, supported footprints and future-EVA memory when extending the system.
 
