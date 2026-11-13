@@ -69,13 +69,42 @@ $restoreEnv=Join-Path $backup 'restore.env'
 try {
     docker run -d --name $restoreName --network none --user 0 --mount "type=volume,source=$restore,target=/app/data/runtime" --mount "type=bind,source=$backup\users.json,target=/run/secrets/marsense-users.json,readonly" --env-file "$restoreEnv" $oldApi | Out-Null; NativeOK
     $healthy=$false
+    # Startup connection failures are expected. Windows PowerShell 5.1 can
+    # turn native stderr into a terminating error even when redirected.
+    $probe=@'
+import sys, urllib.request
+try:
+    with urllib.request.urlopen("http://127.0.0.1:8000/api/health", timeout=3) as response:
+        sys.exit(0 if response.status == 200 else 1)
+except Exception:
+    sys.exit(1)
+'@
     for($i=0;$i -lt 30;$i++){
-        docker exec $restoreName python -c "import urllib.request; assert urllib.request.urlopen('http://127.0.0.1:8000/api/health').status==200" 2>$null
-        if($LASTEXITCODE -eq 0){$healthy=$true;break}
+        $previousPreference=$ErrorActionPreference
+        try {
+            $ErrorActionPreference='Continue'
+            $probe | docker exec -i $restoreName python - 2>$null | Out-Null
+            $probeExit=$LASTEXITCODE
+        } finally { $ErrorActionPreference=$previousPreference }
+        if($probeExit -eq 0){$healthy=$true;break}
         Start-Sleep -Seconds 2
     }
+    if (-not $healthy) {
+        $previousPreference=$ErrorActionPreference
+        try {
+            $ErrorActionPreference='Continue'
+            docker inspect $restoreName --format '{{.State.Status}}' 
+            docker logs --tail 80 $restoreName 2>&1 | ForEach-Object { Write-Host $_ }
+        } finally { $ErrorActionPreference=$previousPreference }
+    }
     Check $healthy 'Restored copy boots original application in isolated container'
-} finally { docker rm -f $restoreName 2>$null | Out-Null }
+} finally {
+    $previousPreference=$ErrorActionPreference
+    try {
+        $ErrorActionPreference='Continue'
+        docker rm -f $restoreName 2>$null | Out-Null
+    } finally { $ErrorActionPreference=$previousPreference }
+}
 } catch {
     docker start $api | Out-Null
     throw
