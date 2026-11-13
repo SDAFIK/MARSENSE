@@ -20,8 +20,8 @@ from starlette.requests import Request
 
 from ai.perception import Perception
 from backend.auth import Auth, AuthAudit, InviteRequest, Login, Registration, User, check_origin
-from backend.cloud_bootstrap import initialize_fresh_cloud
 from backend.cloud_assets import enforce_cloud_quota, put_asset, read_asset
+from backend.cloud_bootstrap import initialize_fresh_cloud
 from backend.config import ROOT, Settings
 from backend.domain import (
     Evidence,
