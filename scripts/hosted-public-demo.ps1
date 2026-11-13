@@ -1,9 +1,14 @@
-param([Parameter(Mandatory=$true)][string]$Origin)
+param([Parameter(Mandatory=$true)][string]$Origin, [string]$ApiBase = $Origin)
 $ErrorActionPreference = 'Stop'
-$base = $Origin.TrimEnd('/')
-$uri = [Uri]$base
+$browserOrigin = $Origin.TrimEnd('/')
+$base = $ApiBase.TrimEnd('/')
+$uri = [Uri]$browserOrigin
 if ($uri.Scheme -ne 'https' -or $uri.AbsolutePath -ne '/' -or $uri.Query -or $uri.Fragment -or $uri.UserInfo) {
     throw 'Use the exact public HTTPS origin without a path or credentials.'
+}
+$apiUri = [Uri]$base
+if ($apiUri.Scheme -ne 'https' -or $apiUri.AbsolutePath -ne '/' -or $apiUri.Query -or $apiUri.Fragment -or $apiUri.UserInfo) {
+    throw 'Use a complete HTTPS API origin without a path or credentials.'
 }
 function Check($condition, $message) {
     if (-not $condition) { throw $message }
@@ -13,12 +18,12 @@ function Get-Guest($path, $token) {
     Invoke-RestMethod "$base/api/public-demo/$path" -Headers @{'X-Marsense-Demo'=$token}
 }
 function Post-Guest($path, $token, $body) {
-    $headers = @{Origin=$base}
+    $headers = @{Origin=$browserOrigin}
     if ($token) { $headers['X-Marsense-Demo'] = $token }
     Invoke-RestMethod "$base/api/public-demo/$path" -Method Post -Headers $headers -ContentType 'application/json' -Body ($body | ConvertTo-Json -Depth 10 -Compress)
 }
 function Denied($path, $token, $code) {
-    $headers = @{Origin=$base}
+    $headers = @{Origin=$browserOrigin}
     if ($token) { $headers['X-Marsense-Demo'] = $token }
     try {
         $null = Invoke-WebRequest "$base/api/$path" -Headers $headers -UseBasicParsing
