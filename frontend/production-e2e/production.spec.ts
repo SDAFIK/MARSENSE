@@ -130,3 +130,35 @@ test("guest launch needs no account and isolates the complete simulated mission"
   await page.getByRole("button", { name: "Exit demo" }).click();
   await expect(page).toHaveURL(/\/$/);
 });
+
+test("self-service signup creates a private saved mission and personal login restores it", async ({ page }) => {
+  await page.goto("/signup");
+  await page.getByLabel("Display name").fill("Personal Explorer");
+  await page.getByLabel("Username", { exact: true }).fill("personal-explorer");
+  await page.getByLabel("Password", { exact: true }).fill("isolated-personal-explorer-password");
+  await page.getByRole("button", { name: "Create my workspace" }).click();
+  await expect(page).toHaveURL(/\/mission$/);
+  await expect(page.getByRole("tab", { name: "EXPECT", exact: true })).toBeVisible();
+  await expect(page.locator("summary").filter({ hasText: "MY WORKSPACE" })).toBeVisible();
+  await page.getByRole("tab", { name: "OBSERVE", exact: true }).click();
+  await expect(page.getByLabel("Upload ground image")).toBeAttached();
+  const source = await page.request.get("/api/assets/ground-navcam.jpg");
+  await page.getByLabel("Upload ground image").setInputFiles({
+    name: "personal-fixture.jpg", mimeType: "image/jpeg", buffer: await source.body(),
+  });
+  await page.getByRole("button", { name: "Analyze terrain", exact: true }).click();
+  await expect(page.getByRole("tab", { name: "COMPARE", exact: true })).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: "VERIFY", exact: true }).click();
+  const review = page.getByRole("region", { name: "Evidence review" });
+  await review.getByLabel("Human terrain identification").selectOption("obstacle-rich terrain");
+  await review.getByRole("button", { name: "Confirm observation" }).click();
+  await expect(page.getByRole("heading", { name: "Route Beta", exact: true })).toBeVisible();
+  await page.locator("summary").filter({ hasText: "MY WORKSPACE" }).click();
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+  await expect(page).toHaveURL(/\/workspace-login$/);
+  await page.getByLabel("Username", { exact: true }).fill("personal-explorer");
+  await page.getByLabel("Password", { exact: true }).fill("isolated-personal-explorer-password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(/\/mission$/);
+  await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Beta");
+});

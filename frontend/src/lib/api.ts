@@ -1,4 +1,5 @@
 const DEMO_KEY = "marsense-guest-token";
+const WORKSPACE_KEY = "marsense-personal-workspace";
 const DEMO_VIEWS = new Set(["/mission", "/astronaut", "/evidence", "/memory", "/comparison"]);
 
 export function guestToken(): string | null {
@@ -9,7 +10,22 @@ export function clearGuestDemo() {
   sessionStorage.removeItem(DEMO_KEY);
 }
 
+export function workspaceMode() {
+  return typeof window !== "undefined" && sessionStorage.getItem(WORKSPACE_KEY) === "1";
+}
+
+export function clearWorkspaceMode() {
+  sessionStorage.removeItem(WORKSPACE_KEY);
+}
+
+export function enterWorkspace() {
+  clearGuestDemo();
+  sessionStorage.setItem(WORKSPACE_KEY, "1");
+  sessionStorage.setItem("marsense-mission", "eva-01");
+}
+
 export async function launchGuestDemo() {
+  clearWorkspaceMode();
   const previous = guestToken();
   if (previous) {
     const response = await fetch("/api/public-demo/auth/session", {
@@ -31,9 +47,15 @@ export async function api<T>(path: string, options?: RequestInit): Promise<T> {
     (path.startsWith("/missions/") || path.startsWith("/evidence/") ||
       path.startsWith("/observations/") || path === "/auth/session" ||
       path === "/auth/logout" || path === "/showcase/reset");
+  const useWorkspace = !useGuest && workspaceMode() &&
+    DEMO_VIEWS.has(window.location.pathname.replace(/\/$/, "")) &&
+    (path.startsWith("/missions/") || path.startsWith("/evidence/") ||
+      path.startsWith("/observations/") || path === "/auth/session" || path === "/auth/logout");
+  const prefix = useGuest ? "/public-demo" : useWorkspace ?
+    (path.startsWith("/auth/") ? "/workspaces" : "/workspaces/data") : "";
   const headers = useGuest ? new Headers(options?.headers) : undefined;
   if (headers && token) headers.set("X-Marsense-Demo", token);
-  const response = await fetch(`/api${useGuest ? "/public-demo" : ""}${path}`, {
+  const response = await fetch(`/api${prefix}${path}`, {
     ...options,
     ...(headers ? { headers } : {}),
     cache: "no-store",

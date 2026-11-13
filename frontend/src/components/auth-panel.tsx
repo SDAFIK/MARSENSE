@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { api, clearGuestDemo } from "@/lib/api";
-import { jsonRequest } from "@/lib/api";
+import { api, clearGuestDemo, clearWorkspaceMode, jsonRequest } from "@/lib/api";
 
 type Session = {
   user: { name: string; role: string } | null;
@@ -10,6 +9,7 @@ type Session = {
   read_only: boolean;
   registration_enabled?: boolean;
   public_demo?: boolean;
+  personal_workspace?: boolean;
   environment: "demo" | "production" | "showcase";
 };
 export default function AuthPanel({ compact = false, afterSignIn }: { compact?: boolean; afterSignIn?: "/mission" }) {
@@ -37,7 +37,12 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
         window.location.assign("/");
         return;
       }
-      if (!logout) clearGuestDemo();
+      if (session?.personal_workspace && logout) {
+        clearWorkspaceMode();
+        window.location.assign("/workspace-login");
+        return;
+      }
+      if (!logout) { clearGuestDemo(); clearWorkspaceMode(); }
       if (!logout && afterSignIn) {
         window.location.href = new URL(afterSignIn, window.location.origin).href;
       } else window.location.reload();
@@ -70,6 +75,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
   const panel = (
     <section className="auth-panel panel" aria-label="Mission access">
       {session.public_demo ? <p><strong>PRIVATE GUEST DEMO</strong> · Curated replay, simulated footprints. Your session expires after one hour; no production records are touched.</p> : session.environment === "showcase" && <p><strong>ISOLATED SHOWCASE</strong> · Curated replay, simulated footprints. Separate mission history.</p>}
+      {session.personal_workspace && <p><strong>PERSONAL WORKSPACE</strong> · Your saved mission and uploaded evidence are separate from all other accounts.</p>}
       {session.read_only && (
         <p>Read-only demonstration · mission changes are disabled.</p>
       )}
@@ -133,7 +139,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
       open={session.required && !session.user}
     >
       <summary>
-        {session.public_demo ? "GUEST DEMO · " : session.environment === "showcase" ? "SHOWCASE · " : ""}{session.user?.name ?? (session.required ? "SIGN IN" : "READ ONLY")}
+        {session.public_demo ? "GUEST DEMO" : session.personal_workspace ? "MY WORKSPACE" : `${session.environment === "showcase" ? "SHOWCASE · " : ""}${session.user?.name ?? (session.required ? "SIGN IN" : "READ ONLY")}`}
       </summary>
       {panel}
     </details>
