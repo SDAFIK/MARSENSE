@@ -22,7 +22,8 @@ test("production-mode real image upload, role separation, human decision and fut
     await expect.poll(() => page.locator(".product-login img").evaluateAll(
       (images) => images.length > 0 && images.every((image) => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0),
     )).toBe(true);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth - innerWidth, offenders: Array.from(document.querySelectorAll("body *")).filter(e => { const b = e.getBoundingClientRect(); return b.width > 0 && (b.right > innerWidth + 1 || b.left < -1) && getComputedStyle(e).position !== "fixed"; }).slice(0, 12).map(e => ({ tag: e.tagName, className: e.getAttribute("class"), right: Math.round(e.getBoundingClientRect().right) })) }));
+    expect(layout.overflow, JSON.stringify(layout.offenders)).toBeLessThanOrEqual(1);
     await page.screenshot({ path: testInfo.outputPath(`login-${name}.png`), fullPage: true });
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
