@@ -1,9 +1,9 @@
 name: MARSENSE hosted cloud smoke
 on:
   push:
-    branches: [codex/marsense-cloud-migration]
+    branches: [codex/marsense-cloud-migration, codex/marsense-product-recovery]
   pull_request:
-    branches: [codex/final-release-guard-2026-11-12]
+    branches: [codex/final-release-guard-2026-11-12, master]
   workflow_dispatch:
 permissions:
   contents: read
@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
       - name: Verify deployed health, origin enforcement and disposable guest mission
         env:
           API: https://marsense-cloud-api.onrender.com
@@ -58,3 +61,6 @@ jobs:
           finally:
               request("/api/public-demo/auth/logout", "POST", headers)
           PY
+      - name: Full two-guest mission acceptance (observe, verify, reroute, inherit, isolate, reset)
+        shell: pwsh
+        run: ./scripts/hosted-public-demo.ps1 -Origin 'https://redscape-5d9fw6ccz-sadib-dewans-projects.vercel.app' -ApiBase 'https://marsense-cloud-api.onrender.com'
