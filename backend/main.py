@@ -14,7 +14,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from PIL import Image, UnidentifiedImageError
-from sqlalchemy import delete
+from sqlalchemy import delete, text
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 
@@ -73,13 +73,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         auth.cookie = "marsense_showcase_session"
     authentication_required = settings.auth_required or settings.environment != "demo"
     registration_enabled = (
-        settings.environment == "production" and bool(settings.auth_users_file)
+        settings.environment == "production" and (bool(settings.auth_users_file) or is_postgres)
         and not settings.read_only
     )
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
-        nonlocal store
+        nonlocal store, auth
         if is_sqlite and database_path != ":memory:":
             Path(database_path).parent.mkdir(parents=True, exist_ok=True)
         store = Store(settings.database_url)
@@ -89,6 +89,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 if store.postgres and settings.environment == "production":
                     if not all_of(session, Mission):
                         raise ValueError("Cloud production requires a verified mission migration")
+                    if not settings.auth_users_file and not settings.read_only:
+                        users = [
+                            User.model_validate(payload) for payload in session.scalars(
+                                text("SELECT payload FROM marsense.bootstrap_users ORDER BY id")
+                            )
+                        ]
+                        if not users:
+                            raise ValueError("Cloud production requires migrated operator identities")
+                        auth = Auth("", users=users)
                 else:
                     seed(session, service.slope_grid)
             yield
