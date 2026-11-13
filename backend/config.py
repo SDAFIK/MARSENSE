@@ -32,7 +32,11 @@ class Settings(BaseSettings):
                 )
             if not self.database_url.endswith("/showcase.db"):
                 raise ValueError("Showcase requires a dedicated showcase.db database")
-        if self.environment == "production" and not self.auth_users_file and not self.read_only:
+        postgres = self.database_url.startswith(("postgresql://", "postgresql+psycopg://"))
+        if (
+            self.environment == "production" and not self.auth_users_file
+            and not self.read_only and not postgres
+        ):
             raise ValueError("Production mutations require an external authentication users file")
         if self.api_token and len(self.api_token) < 32:
             raise ValueError("Service read token must contain at least 32 characters")
