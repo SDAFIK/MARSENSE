@@ -50,7 +50,8 @@ class Store:
                 parsed = parsed.set(drivername="postgresql+psycopg")
             if parsed.drivername != "postgresql+psycopg":
                 raise ValueError("Cloud database requires psycopg")
-            if parsed.query.get("sslmode", "require") not in {"require", "verify-ca", "verify-full"}:
+            sslmode = parsed.query.get("sslmode", "require")
+            if sslmode not in {"require", "verify-ca", "verify-full"}:
                 if parsed.host not in {"localhost", "127.0.0.1"}:
                     raise ValueError("Cloud database requires TLS")
             if "sslmode" not in parsed.query:
