@@ -1,0 +1,47 @@
+name: MARSENSE PostgreSQL acceptance
+
+on:
+  push:
+    branches: ['codex/marsense-cloud-migration', master]
+  pull_request:
+    branches: [master, 'codex/final-release-guard-2026-11-12']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: marsense-cloud-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: marsense_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: disposable-ci-only-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d marsense_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      MARSENSE_TEST_POSTGRES_URL: postgresql+psycopg://postgres:disposable-ci-only-password@127.0.0.1:5432/marsense_test?sslmode=disable
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install cloud and test dependencies
+        run: python -m pip install -r backend/requirements-dev.txt
+      - name: Cloud source and database acceptance
+        run: python -m pytest -q tests/test_cloud_migration.py
+      - name: Backend lint
+        run: python -m ruff check backend scripts tests

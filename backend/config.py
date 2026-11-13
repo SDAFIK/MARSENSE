@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import model_validator
+from pydantic import SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -9,7 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="MARSENSE_", env_file=ROOT / ".env", extra="ignore"
+        env_prefix="MARSENSE_", env_file=ROOT / ".env", extra="ignore",
+        hide_input_in_errors=True
     )
     environment: Literal["demo", "production", "showcase"] = "demo"
     database_url: str = f"sqlite:///{ROOT / 'data/runtime/marsense.db'}"
@@ -18,6 +19,8 @@ class Settings(BaseSettings):
     api_token: str = ""
     auth_users_file: str = ""
     auth_required: bool = False
+    cloud_fresh_start: bool = False
+    cloud_admin_password: SecretStr = SecretStr("")
     read_only: bool = False
     model_path: str = ""
     slope_path: str = ""
@@ -32,8 +35,20 @@ class Settings(BaseSettings):
                 )
             if not self.database_url.endswith("/showcase.db"):
                 raise ValueError("Showcase requires a dedicated showcase.db database")
-        if self.environment == "production" and not self.auth_users_file and not self.read_only:
+        self.database_url = self.database_url.strip()
+        postgres = self.database_url.startswith(("postgresql://", "postgresql+psycopg://"))
+        if self.cloud_fresh_start and not postgres:
+            raise ValueError("MARSENSE_DATABASE_URL must be a complete PostgreSQL connection URI")
+        if (
+            self.environment == "production" and not self.auth_users_file
+            and not self.read_only and not postgres
+        ):
             raise ValueError("Production mutations require an external authentication users file")
+        if self.cloud_fresh_start and (
+            not postgres or self.environment != "production" or self.read_only
+            or self.auth_users_file
+        ):
+            raise ValueError("Fresh cloud bootstrap requires writable PostgreSQL production")
         if self.api_token and len(self.api_token) < 32:
             raise ValueError("Service read token must contain at least 32 characters")
         if "*" in self.cors_origins:

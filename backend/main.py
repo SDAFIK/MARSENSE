@@ -14,11 +14,14 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from PIL import Image, UnidentifiedImageError
-from sqlalchemy import delete
+from sqlalchemy import delete, text
+from sqlalchemy.orm import Session
 from starlette.requests import Request
 
 from ai.perception import Perception
 from backend.auth import Auth, AuthAudit, InviteRequest, Login, Registration, User, check_origin
+from backend.cloud_assets import enforce_cloud_quota, put_asset, read_asset
+from backend.cloud_bootstrap import initialize_fresh_cloud
 from backend.config import ROOT, Settings
 from backend.domain import (
     Evidence,
@@ -27,6 +30,7 @@ from backend.domain import (
     HumanDecision,
     InferenceAttempt,
     Interpretation,
+    Mission,
     ModelOutput,
     Observation,
     ObserveRequest,
@@ -56,10 +60,10 @@ Image.MAX_IMAGE_PIXELS = 16_000_000
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings()
-    if not settings.database_url.startswith("sqlite:///"):
-        raise ValueError(
-            "This deterministic deployment supports SQLite; PostGIS is a documented extension"
-        )
+    is_sqlite = settings.database_url.startswith("sqlite:///")
+    is_postgres = settings.database_url.startswith(("postgresql://", "postgresql+psycopg://"))
+    if not (is_sqlite or is_postgres):
+        raise ValueError("Unsupported database backend")
     database_path = settings.database_url.removeprefix("sqlite:///")
     store: Store
     service = MissionService(Perception(settings.model_path), load_slope(settings.slope_path))
@@ -70,20 +74,39 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         auth.cookie = "marsense_showcase_session"
     authentication_required = settings.auth_required or settings.environment != "demo"
     registration_enabled = (
-        settings.environment == "production" and bool(settings.auth_users_file)
+        settings.environment == "production" and (bool(settings.auth_users_file) or is_postgres)
         and not settings.read_only
     )
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
-        nonlocal store
-        if database_path != ":memory:":
+        nonlocal store, auth
+        if is_sqlite and database_path != ":memory:":
             Path(database_path).parent.mkdir(parents=True, exist_ok=True)
         store = Store(settings.database_url)
         application.state.store = store
         try:
             with store.session(write=True) as session:
-                seed(session, service.slope_grid)
+                if store.postgres and settings.environment == "production":
+                    if settings.cloud_fresh_start:
+                        accounts = Store(settings.database_url, "marsense_accounts")
+                        accounts.engine.dispose()
+                        initialize_fresh_cloud(session, settings, service.slope_grid)
+                    if not all_of(session, Mission):
+                        raise ValueError("Cloud production requires a verified mission migration")
+                    if not settings.auth_users_file and not settings.read_only:
+                        users = [
+                            User.model_validate(payload) for payload in session.scalars(
+                                text("SELECT payload FROM marsense.bootstrap_users ORDER BY id")
+                            )
+                        ]
+                        if not users:
+                            raise ValueError(
+                                "Cloud production requires migrated operator identities"
+                            )
+                        auth = Auth("", users=users)
+                else:
+                    seed(session, service.slope_grid)
             yield
         finally:
             workspace_manager.close()
@@ -373,7 +396,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return get(session, Observation, observation_id)
 
     @app.get("/api/observations/{observation_id}/original", dependencies=protected)
-    def original_asset(observation_id: str) -> FileResponse:
+    def original_asset(observation_id: str) -> Response:
         with mission_store().session() as session:
             observation = get(session, Observation, observation_id)
         name = observation.raw_asset_reference.rsplit("/", 1)[-1]
@@ -384,6 +407,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             and all(c in "0123456789abcdef" for c in name[7:-4])
         ):
             raise HTTPException(404, "Original upload is unavailable for this observation")
+        active = mission_store()
+        if active.postgres:
+            with active.session() as session:
+                content = read_asset(session, active.schema, name.replace(".jpg", ".bin"))
+            if content is None:
+                raise HTTPException(404, "Original upload unavailable; derivative evidence remains")
+            return Response(
+                content, media_type="application/octet-stream",
+                headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff",
+                         "Content-Disposition": f'attachment; filename="{name}.original"'},
+            )
         path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
         if not path.is_file():
             raise HTTPException(404, "Original upload unavailable; derivative evidence remains")
@@ -451,10 +485,38 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             clean = io.BytesIO()
             image.convert("RGB").save(clean, format="JPEG", quality=90)
         content = clean.getvalue()
-        if workspace_context.get() is not None:
+        active = mission_store()
+        if workspace_context.get() is not None and not active.postgres:
             enforce_asset_quota(mission_runtime(), len(content) + len(original_content))
         output = safe_infer(content)
         asset_id = identifier("upload") + ".jpg"
+
+        def record(session: Session) -> Evidence:
+            return service.observe(
+                session,
+                mission_id,
+                geometry,
+                output,
+                f"{mission_api_prefix()}/assets/{asset_id}",
+                hashlib.sha256(content).hexdigest(),
+                "ground",
+                "Astronaut-uploaded image",
+                "Footprint supplied manually in local meters; "
+                "image is not independently geolocated. Display/model input is a sanitized "
+                "JPEG derivative; original bytes/hash are retained separately."
+                + (f" Observer note (unverified): {details}" if details else ""),
+                original_digest=hashlib.sha256(original_content).hexdigest(),
+            )
+
+        if active.postgres:
+            with active.session(write=True) as session:
+                enforce_cloud_quota(session, active.schema, len(content) + len(original_content))
+                put_asset(session, active.schema, asset_id, content)
+                put_asset(
+                    session, active.schema, asset_id.replace(".jpg", ".bin"), original_content,
+                )
+                return record(session)
+
         upload_dir = mission_runtime() / "uploads"
         upload_dir.mkdir(parents=True, exist_ok=True)
         asset_path = upload_dir / asset_id
@@ -464,22 +526,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         original_path = original_dir / asset_id.replace(".jpg", ".bin")
         try:
             original_path.write_bytes(original_content)
-            with mission_store().session(write=True) as session:
-                return service.observe(
-                    session,
-                    mission_id,
-                    geometry,
-                    output,
-                    f"{mission_api_prefix()}/assets/{asset_id}",
-                    hashlib.sha256(content).hexdigest(),
-                    "ground",
-                    "Astronaut-uploaded image",
-                    "Footprint supplied manually in local meters; "
-                    "image is not independently geolocated. Display/model input is a sanitized "
-                    "JPEG derivative; original bytes/hash are retained separately."
-                    + (f" Observer note (unverified): {details}" if details else ""),
-                    original_digest=hashlib.sha256(original_content).hexdigest(),
-                )
+            with active.session(write=True) as session:
+                return record(session)
         except Exception:
             asset_path.unlink(missing_ok=True)
             original_path.unlink(missing_ok=True)
@@ -517,15 +565,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 and all(c in "0123456789abcdef" for c in name[7:-4])
             ):
                 raise HTTPException(404, "Saved ground image unavailable")
-            path = mission_runtime() / "uploads" / name
-            original_path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
-            if not path.is_file() or not original_path.is_file():
+            active = mission_store()
+            if active.postgres:
+                content = read_asset(session, active.schema, name)
+                original = read_asset(session, active.schema, name.replace(".jpg", ".bin"))
+            else:
+                path = mission_runtime() / "uploads" / name
+                original_path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
+                content = path.read_bytes() if path.is_file() else None
+                original = original_path.read_bytes() if original_path.is_file() else None
+            if content is None or original is None:
                 raise HTTPException(404, "Saved image or original unavailable; evidence retained")
-            content = path.read_bytes()
             if (
                 hashlib.sha256(content).hexdigest() != observation.model_input_sha256
-                or hashlib.sha256(original_path.read_bytes()).hexdigest()
-                != observation.asset_sha256
+                or hashlib.sha256(original).hexdigest() != observation.asset_sha256
             ):
                 raise HTTPException(409, "Saved image integrity check failed; evidence retained")
             return service.retry_inference(
@@ -535,7 +588,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/api/assets/{asset_id}")
     def asset(
         asset_id: str, request: Request, authorization: Annotated[str | None, Header()] = None
-    ) -> FileResponse:
+    ) -> Response:
         known = {"jezero-ctx.png", "ground-navcam.jpg", "jezero-hirise.png"}
         if asset_id in known:
             path = ROOT / "data/nasa" / asset_id
@@ -547,6 +600,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             authorize(request, authorization)
             if not all(c in "0123456789abcdef" for c in asset_id[7:-4]):
                 raise HTTPException(404, "Asset not found")
+            active = mission_store()
+            if active.postgres:
+                with active.session() as session:
+                    content = read_asset(session, active.schema, asset_id)
+                if content is None:
+                    raise HTTPException(
+                        404, "Cached asset unavailable; mission evidence remains usable"
+                    )
+                return Response(
+                    content, media_type="image/jpeg",
+                    headers={"Cache-Control": "private, no-store",
+                             "X-Content-Type-Options": "nosniff"},
+                )
             path = mission_runtime() / "uploads" / asset_id
         else:
             raise HTTPException(404, "Asset not found")

@@ -9,3 +9,4 @@ pillow>=11,<13
 opencv-python-headless>=4.10,<5
 rasterio>=1.4,<2
 geopandas>=1.0,<2
+psycopg[binary]==3.2.13

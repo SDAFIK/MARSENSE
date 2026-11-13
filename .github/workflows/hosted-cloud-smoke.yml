@@ -1,0 +1,60 @@
+name: MARSENSE hosted cloud smoke
+on:
+  push:
+    branches: [codex/marsense-cloud-migration]
+  pull_request:
+    branches: [codex/final-release-guard-2026-11-12]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify deployed health, origin enforcement and disposable guest mission
+        env:
+          API: https://marsense-cloud-api.onrender.com
+          ORIGIN: https://redscape-5d9fw6ccz-sadib-dewans-projects.vercel.app
+        run: |
+          python - <<'PY'
+          import json, os, time, urllib.request, urllib.error
+          api, origin = os.environ["API"], os.environ["ORIGIN"]
+          def request(path, method="GET", headers=None, body=None):
+              req = urllib.request.Request(api + path, data=body, method=method, headers=headers or {})
+              try:
+                  with urllib.request.urlopen(req, timeout=65) as response:
+                      return response.status, json.loads(response.read())
+              except urllib.error.HTTPError as error:
+                  try:
+                      return error.code, json.loads(error.read())
+                  except ValueError:
+                      return error.code, {}
+          status, health = 0, {}
+          for attempt in range(3):
+              try:
+                  status, health = request("/api/health")
+                  if status == 200 and health.get("status") == "ok":
+                      break
+              except (OSError, ValueError):
+                  pass
+              time.sleep(10)
+          assert status == 200 and health.get("environment") == "production", "Cloud health failed"
+          print("Production health verified")
+          status, _ = request("/api/public-demo/start", "POST", {"Origin": "https://unapproved.example"})
+          assert status == 403, f"Unknown origin must be rejected: {status}"
+          print("Unapproved origin rejected")
+          status, result = request("/api/public-demo/start", "POST", {"Origin": origin})
+          assert status == 201, f"Approved browser origin failed: HTTP {status}, {result.get('detail')}"
+          token = result["token"]
+          headers = {"Origin": origin, "X-Marsense-Demo": token}
+          try:
+              status, mission = request("/api/public-demo/missions/eva-01", headers=headers)
+              assert status == 200 and mission["mission"]["id"] == "eva-01", "Guest mission failed"
+              print("Guest mission verified")
+              status, _ = request("/api/public-demo/showcase/reset", "POST", headers)
+              assert status == 200, f"Guest reset failed: {status}"
+              print("Guest reset verified")
+          finally:
+              request("/api/public-demo/auth/logout", "POST", headers)
+          PY
