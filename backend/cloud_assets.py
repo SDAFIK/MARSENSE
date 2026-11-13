@@ -105,5 +105,5 @@ class CloudAssets:
                 size += length
             if kind == "originals":
                 count = len(items)
-        if count >= 16 or size + incoming > 64 * 1024 * 1024:
-            raise HTTPException(413, "Private workspace storage limit reached (16 images / 64 MB)")
+        if count >= 16 or size + incoming > 12 * 1024 * 1024:
+            raise HTTPException(413, "Private workspace storage limit reached (16 images / 12 MiB)")

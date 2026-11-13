@@ -15,6 +15,11 @@ export default function WorkspaceAuth({ signup = false }: { signup?: boolean }) 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   useEffect(() => {
+    // Email-confirmation redirects can include implicit session fragments. Never retain
+    // provider tokens in browser history; users sign in through the secure backend.
+    if (window.location.hash.includes("access_token=") || window.location.hash.includes("refresh_token=")) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
     let active = true;
     api<Session>("/workspaces/auth/session").then(value => {
       if (active) setSession(value);

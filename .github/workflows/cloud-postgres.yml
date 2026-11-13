@@ -27,6 +27,6 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r backend/requirements-dev.txt -r backend/requirements-cloud.txt
-      - run: python -m pytest -q tests/test_cloud_store.py
+      - run: python -m pytest -q tests/test_cloud_store.py tests/test_cloud_application.py
         env:
           MARSENSE_TEST_POSTGRES_URL: postgresql://marsense:isolated-ci-only@localhost:5432/marsense

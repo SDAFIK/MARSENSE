@@ -226,7 +226,7 @@ def create_cloud_workspace_router(manager: CloudWorkspaceManager) -> APIRouter:
         check_origin(request, manager.origins)
         try:
             token = request.cookies.get(ACCESS)
-            if not token and (refresh := request.cookies.get(REFRESH)):
+            if not identity.user(token) and (refresh := request.cookies.get(REFRESH)):
                 result = identity.refresh(refresh)
                 token = result.get("access_token") if result else None
             if isinstance(token, str):
