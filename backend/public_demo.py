@@ -208,6 +208,12 @@ def create_demo_router(service: MissionService, origins: list[str]) -> tuple[API
                 ),
             )
 
+    @router.post("/observations/upload")
+    def upload_disabled(request: Request) -> None:
+        # Guest sessions never accept untrusted image uploads.
+        with access(request):
+            raise HTTPException(404, "Image uploads are unavailable in the public demo")
+
     @router.get("/observations/{observation_id}", response_model=Observation)
     def observation_detail(observation_id: str, request: Request) -> Observation:
         with access(request) as session:
