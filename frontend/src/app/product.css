@@ -168,3 +168,12 @@ body {background:var(--bg);}
   .astronaut-console .upload-button { min-width: 0; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
   .astronaut-console select, .astronaut-console input, .astronaut-console textarea { min-width: 0; max-width: 100%; }
 }
+
+@media (max-width: 600px) {
+  .view-astronaut .workspace { width: 100%; max-width: 100%; min-width: 0; }
+  .view-astronaut .notice { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+  .astronaut-console .astronaut-context-buttons, .astronaut-console .ground-caption { grid-template-columns: minmax(0, 1fr); }
+  .astronaut-console .astronaut-context-buttons > *, .astronaut-console .ground-caption > * { min-width: 0; max-width: 100%; }
+  .astronaut-console .ground-actions > * { flex: 1 1 140px; }
+  .astronaut-console .panel-heading > * { min-width: 0; max-width: 100%; }
+}
