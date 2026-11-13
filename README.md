@@ -16,14 +16,19 @@ MARSENSE is an astronaut-focused Mars exploration **research prototype**. It pre
 
 ### Explore MARSENSE
 
-- [Hosted prototype — existing Docker/Tailscale host](https://desktop-sdfik.tailf13324.ts.net) — authenticated application; host must remain online. Last documented hosted baseline: `c926819`. Current availability and judge access must be checked before submission.
-- [Latest release candidate source](https://github.com/SDAFIK/MARSENSE/tree/codex/final-release-guard-2026-11-12) · [Release PR #1](https://github.com/SDAFIK/MARSENSE/pull/1)
-- [Vercel staging build](https://redscape-46lc9p44a-sadib-dewans-projects.vercel.app) — READY for commit `f186367`, protected preview, not a public competition demo.
-- [Release validation](https://github.com/SDAFIK/MARSENSE/actions/runs/43414766011) · [Docker smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43414765843) — both passed for the candidate (141 application tests).
+- [Live production website](https://desktop-sdfik.tailf13324.ts.net) — persistent, authenticated mission workspace; host must remain online.
+- [Live competition showcase](https://desktop-sdfik.tailf13324.ts.net:8443) — isolated, authenticated demonstration with curated replay and administrator-only reset. Request authorized showcase access from Team Redscape; never use production credentials for the showcase.
+- [Latest release candidate](https://github.com/SDAFIK/MARSENSE/tree/codex/final-release-guard-2026-11-12) · [Release PR #1](https://github.com/SDAFIK/MARSENSE/pull/1)
+- [Application CI](https://github.com/SDAFIK/MARSENSE/actions/runs/43467704429) · [Docker CI](https://github.com/SDAFIK/MARSENSE/actions/runs/43467704736) — both passed for `efa15d2`.
+- [Vercel staging](https://redscape-46lc9p44a-sadib-dewans-projects.vercel.app) — protected preview, READY and connected to upgraded production API; not the public judge link.
 
-**Judge walkthrough:** open Mission Control; inspect Jezero orbital imagery and Route Alpha; review the curated Area 14 ground observation; compare it with assumption A17; have an authorized reviewer confirm evidence; inspect the footprint update, Route Beta and EVA-02 inheritance. The hosted production application disables replay/reset; use the separately provisioned showcase or a local disposable demo for the complete replay. Do not publish administrator credentials.
+### Verified hosted demonstration — November 13, 2026
 
-**Release note:** this default branch contains the earlier source baseline. The latest candidate is tested but its hosted upgrade, restore rehearsal and authenticated showcase acceptance remain pending; see the [candidate release acceptance record](https://github.com/SDAFIK/MARSENSE/blob/codex/final-release-guard-2026-11-12/docs/RELEASE_ACCEPTANCE.md). The project is an experimental decision-support prototype, not certified EVA navigation.
+The Windows host operator verified healthy production and showcase containers, 28-record backup integrity, an isolated restore rehearsal, and successful hosted API acceptance. The acceptance test exercised authorized sign-in, Route Alpha, curated Area 14 observation, provisional evidence, identity-bound confirmation, Route Beta, EVA-02 inheritance, showcase-only reset, unchanged production mission snapshots, logout and unauthorized access rejection. Production replay remains disabled.
+
+**Judge walkthrough:** use the separate showcase to inspect Jezero orbital imagery, compare the curated observation against Assumption A17, confirm evidence as an authorized reviewer, inspect Route Beta and future-EVA memory. See the [showcase guide](https://github.com/SDAFIK/MARSENSE/blob/codex/final-release-guard-2026-11-12/docs/SHOWCASE.md).
+
+**Release boundary:** the latest application is running on the existing host; the default source branch is older until PR #1 is integrated. Final live browser walkthrough, post-upgrade record-level comparison and Vercel production promotion remain pending. This is an experimental decision-support prototype, not certified EVA navigation.
 
 Frontend setup: [frontend/README.md](frontend/README.md).
 
