@@ -209,6 +209,19 @@ def all_of[T: Entity](session: Session, cls: type[T]) -> list[T]:
                             "REVOKE ALL ON marsense.asset_blobs "
                             "FROM PUBLIC, anon, authenticated, service_role"
                         ))
+                        connection.execute(text("""
+                            CREATE TABLE IF NOT EXISTS marsense.bootstrap_users (
+                                id varchar(100) PRIMARY KEY,
+                                payload json NOT NULL
+                            )
+                        """))
+                        connection.execute(text(
+                            "ALTER TABLE marsense.bootstrap_users ENABLE ROW LEVEL SECURITY"
+                        ))
+                        connection.execute(text(
+                            "REVOKE ALL ON marsense.bootstrap_users "
+                            "FROM PUBLIC, anon, authenticated, service_role"
+                        ))
                 with Session(bind=connection) as session:
                     if version < 2:
                         from backend.migrations import migrate_legacy_segments
