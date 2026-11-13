@@ -540,7 +540,12 @@
 .memory-search label { font-size:12px; }
 @media (max-width:600px) { .aligned-maps { height:clamp(255px,70vw,350px); min-height:0; } }
 
-.map-metric { position:absolute; left:14px; bottom:72px; z-index:3; display:grid; gap:4px; padding:6px 8px; border:1px solid rgba(255,255,255,.18); border-radius:4px; background:rgba(10,18,20,.86); font-size:10px; color:#f4eee5; pointer-events:none; max-width:calc(100% - 75px); }
+.map-location .map-metric { display:grid; gap:3px; padding-top:5px; margin-top:5px; border-top:1px solid rgba(255,255,255,.18); font-size:10px; color:#f4eee5; }
 .map-metric > span { display:flex; align-items:center; gap:6px; }
 .map-metric i { display:inline-block; height:6px; border:solid currentColor; border-width:0 1px 1px; flex:none; }
-@media (max-width:600px) { .map-metric { bottom:100px; left:9px; font-size:9px; padding:4px 6px; } }
+@media (max-width:600px) {
+  .map-location .map-metric { font-size:9px; }
+  .memory-inheritance .inheritance-banner { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:start; gap:10px; }
+  .memory-inheritance .inheritance-banner > div { min-width:0; }
+  .memory-inheritance .inheritance-banner .button { grid-column:1/-1; margin-left:0; width:100%; justify-content:center; white-space:normal; }
+}

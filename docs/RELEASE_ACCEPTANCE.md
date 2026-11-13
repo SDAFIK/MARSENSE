@@ -25,7 +25,7 @@ Team Redscape. This is the engineering release record, not an operational EVA ce
 | F7 Evidence | Provenance, provisional and final decisions, authenticated reviewer, persistent history | New candidate exposes saved metadata and retry attempts; actual hosted UI |
 | F8 Living update | Footprint-bounded cost changes, immutable prior, confirmed evidence, reload persistence | Hosted full journey; no scientific claim of actual surface discovery |
 | F9 Route planning | Deterministic Mars metric A*, Alpha/Beta, no-route behavior | Scientific slope coverage/operational safety limits; no invented path |
-| F10 Memory | Persistent events, versions and future EVA inheritance | Hosted journey and history navigation; additional search/filter enhancements may be evaluated separately |
+| F10 Memory | Persistent events, versions and future EVA inheritance | Search/filter and history navigation verified in isolated browser; hosted journey remains |
 | F11 Release | CI, Docker, live upgraded baseline, connected staging, verified preservation | New exact-head CI, backup restore rehearsal, hosted isolated showcase and authentication, final merge/promotion |
 
 ## New candidate changes
@@ -33,6 +33,12 @@ Team Redscape. This is the engineering release record, not an operational EVA ce
 Invite-only registration uses existing private operator bootstrap accounts and transactionally stored registered accounts. Admin issues a random one-time 24-hour code; only its hash is stored. The role is fixed in the invitation, never ADMIN. Registration disabled in local demo, read-only and showcase. Registered accounts can be disabled without altering bootstrap identities. No production records changed by development or test runs.
 
 OpenCV retains measured edge fraction and contrast, reports no numerical confidence, and requires human identification. Unexpected inference exceptions record unavailable provisional evidence, original bytes and a sanitized derivative. Retry validates both saved hashes, uses an idempotency request ID, appends a processing-attempt entity and updates only pending evidence; original observations remain immutable. No automatic trusted-map update.
+
+## Expanded candidate evidence
+
+- `e83a2ed95ef460ea62a037233777aca3ed73e159`: [CI #38](https://github.com/SDAFIK/MARSENSE/actions/runs/43397821947) passed 141 tests (74 backend, 14 component, 49 browser, 1 authentication, 2 production-mode upload/registration, 1 showcase); [Docker smoke #32](https://github.com/SDAFIK/MARSENSE/actions/runs/43397821815) passed.
+- Browser artifacts cover seven viewport widths. Actual visual review found scale/layer crowding and narrow future-EVA banner; subsequent layout refinement requires exact-head validation.
+- Backend/UI changes do not alter the existing hosted baseline or production volume until an authorized upgrade.
 
 ## Release gates
 

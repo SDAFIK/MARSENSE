@@ -566,11 +566,11 @@ export default function LivingMap({
             ? "Before EVA · NASA prior"
             : "Cached NASA imagery · illustrative mission"}
         </span>
+        {!fallback && !locked && metric && <div className="map-metric" aria-label="Illustrative Mars local metric scale">
+          <span>Local center {metric.x}, {metric.y} m</span>
+          <span><i style={{ width: Math.min(metric.pixels, 140) }}/>{metric.meters} m · approx.</span>
+        </div>}
       </div>
-      {!fallback && !locked && metric && <div className="map-metric" aria-label="Illustrative Mars local metric scale">
-        <span>Local center {metric.x}, {metric.y} m</span>
-        <span><i style={{ width: Math.min(metric.pixels, 140) }}/>{metric.meters} m · approx.</span>
-      </div>}
       {!fallback && !locked && (
         <div className="map-controls">
           <button

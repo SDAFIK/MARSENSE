@@ -41,10 +41,10 @@ The left utility rail is global navigation. Mission Control workflow tabs change
 | `/mission` | Compact mission trace, dominant Mars map, five local workflow contexts and a spatial event strip |
 | `/astronaut` | Target, modeled route distance/state, return assumption, relevant alert, WHY, COMPARE and evidence/review actions |
 | `/evidence` | NASA prior → ground observation → model inference → human interpretation → human decision → mission consequence → provenance → history |
-| `/memory` | Chronological events linked to evidence locations, durable local knowledge and future-EVA inheritance |
+| `/memory` | Searchable chronological events linked to evidence locations, durable local knowledge and future-EVA inheritance |
 | `/comparison` | Same aligned Mars-map extent, before/after slider and accessible whole-state toggles |
 
-Map controls include CTX/HiRISE selection, route/evidence overlays, zoom, mission fit and expanded view with Escape. Alpha stays off-white; only its affected demonstration segment is dashed amber. Beta is solid mint and progressively revealed. Workflow transitions and subtle introduction motion respect reduced-motion preferences. Keyboard arrows/Home/End operate workflow tabs and the comparison slider.
+Map controls include CTX/HiRISE selection, route/evidence overlays, zoom, mission fit, north reset, local metric scale/center and expanded view with Escape. Alpha stays off-white; only its affected demonstration segment is dashed amber. Beta is solid mint and progressively revealed. Workflow transitions and subtle introduction motion respect reduced-motion preferences. Keyboard arrows/Home/End operate workflow tabs and the comparison slider.
 
 ## What is real, illustrative and still unresolved
 
