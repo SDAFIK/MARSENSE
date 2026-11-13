@@ -82,6 +82,7 @@ jobs:
             frontend/test-results/**/*-desktop.png
             frontend/test-results/**/*-tablet.png
             frontend/test-results/**/*-mobile.png
+            frontend/test-results/**/*-laptop.png
           if-no-files-found: ignore
           retention-days: 3
       - name: Authenticated browser acceptance
@@ -97,6 +98,7 @@ jobs:
           name: production-visual-review
           path: |
             frontend/test-results/production/**/login-*.png
+            frontend/test-results/production/**/registration-*.png
             frontend/test-results/production/**/production-confirmed.png
           if-no-files-found: ignore
           retention-days: 3

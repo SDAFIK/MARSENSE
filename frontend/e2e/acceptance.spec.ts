@@ -67,8 +67,12 @@ test("primary acceptance: prior → observation → verify → Beta → reload �
 });
 for (const [size, width, height] of [
   ["desktop", 1440, 1000],
+  ["wide-desktop", 1920, 1080],
+  ["laptop", 1280, 900],
   ["tablet", 834, 1112],
+  ["compact-tablet", 768, 1024],
   ["mobile", 390, 844],
+  ["small-mobile", 360, 800],
 ] as const) {
   for (const view of [
     "",

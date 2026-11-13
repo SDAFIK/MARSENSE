@@ -41,6 +41,11 @@ if __name__ == "__main__":
             user_file = Path(temporary) / "production-users.json"
             user_file.write_text(json.dumps([
                 {
+                    "id": "test-admin", "username": "operator",
+                    "name": "Test Administrator", "role": "ADMIN",
+                    "password_hash": password_hash("isolated-admin-test-password"),
+                },
+                {
                     "id": "test-astronaut", "username": "astronaut",
                     "name": "Test Astronaut", "role": "ASTRONAUT",
                     "password_hash": password_hash("isolated-astronaut-test-password"),

@@ -113,3 +113,15 @@ body {background:var(--bg);}
 .ground-actions .button{min-height:38px;padding:8px 10px}
 @media(min-width:1250px){.astronaut-console{grid-template-columns:185px minmax(0,1fr) minmax(290px,30%)}.structured-evidence,.spatial-memory{grid-template-columns:175px minmax(0,1fr) minmax(275px,28%)}}
 @media(max-width:600px){.access-gate{margin:12px 6px!important;padding:16px}.access-gate h1{font-size:22px}.ground-stage-image{min-height:200px}.astronaut-map-stage .map-panel:not(.map-expanded){height:390px;min-height:390px}.product-login .wordmark>svg{display:block}.product-login .brand-stack{font-size:18px}.product-home .brand-stack{letter-spacing:0}.app-header .brand-stack{font-size:14px}.app-header .brand-stack small{letter-spacing:.5px}.app-header .eva-select select{width:145px}.app-header .session-access>summary{padding:6px 5px;font-size:10px}}
+
+/* Invitation registration and account management share the mission design tokens. */
+.account-layout{display:grid;grid-template-columns:minmax(240px,.65fr) minmax(0,1.35fr);gap:24px;align-items:start;max-width:1200px;margin:48px auto}
+.account-layout .login-card h1{font-size:clamp(24px,3vw,38px);margin:12px 0}
+.account-manager{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:clamp(16px,3vw,30px);display:grid;gap:16px;min-width:0}
+.account-manager h2{font-size:24px;color:var(--orange)}.account-manager h3{font-size:16px;margin:8px 0 0}
+.account-manager .field-label{display:grid;gap:6px;max-width:320px}
+.account-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--border);padding-top:12px;overflow-wrap:anywhere}
+.account-row p{margin-top:4px}.invite-code{background:var(--raised);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.invite-code output{font-family:monospace;overflow-wrap:anywhere;flex:1 0 100%;user-select:all}
+.login-card .auth-panel label{min-width:0;overflow-wrap:anywhere}
+@media(max-width:768px){.account-layout{grid-template-columns:1fr;margin:28px auto;gap:16px}.account-manager{padding:16px}}

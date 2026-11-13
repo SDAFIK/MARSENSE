@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Annotated, Any
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Response, UploadFile
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from PIL import Image, UnidentifiedImageError
@@ -16,7 +18,7 @@ from sqlalchemy import delete
 from starlette.requests import Request
 
 from ai.perception import Perception
-from backend.auth import Auth, AuthAudit, Login, User, check_origin
+from backend.auth import Auth, AuthAudit, InviteRequest, Login, Registration, User, check_origin
 from backend.config import ROOT, Settings
 from backend.domain import (
     Evidence,
@@ -56,6 +58,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     if settings.environment == "showcase":
         auth.cookie = "marsense_showcase_session"
     authentication_required = settings.auth_required or settings.environment != "demo"
+    registration_enabled = (
+        settings.environment == "production" and bool(settings.auth_users_file)
+        and not settings.read_only
+    )
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
@@ -107,6 +113,57 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     protected = [Depends(authorize)]
 
+    def require_admin(user: User | None) -> User:
+        if not registration_enabled:
+            raise HTTPException(404, "Account registration is unavailable in this environment")
+        if not user or user.role != "ADMIN":
+            raise HTTPException(403, "Administrator access required")
+        return user
+
+    @app.post("/api/auth/register", status_code=201)
+    def register(body: Registration, request: Request, response: Response) -> dict[str, Any]:
+        if not registration_enabled:
+            raise HTTPException(404, "Account registration is unavailable in this environment")
+        check_origin(request, settings.cors_origins)
+        with store.session(write=True) as session:
+            user = auth.register(
+                session, body, request.client.host if request.client else "unknown"
+            )
+        response.headers["Cache-Control"] = "no-store"
+        return {"user": user.model_dump(exclude={"password_hash"})}
+
+    @app.get("/api/auth/admin", dependencies=protected)
+    def account_admin(
+        response: Response, user: User | None = Depends(authorize)
+    ) -> dict[str, Any]:
+        require_admin(user)
+        response.headers["Cache-Control"] = "no-store"
+        with store.session() as session:
+            return auth.admin_snapshot(session)
+
+    @app.post("/api/auth/invitations", dependencies=protected, status_code=201)
+    def create_invitation(
+        body: InviteRequest, response: Response, user: User | None = Depends(authorize)
+    ) -> dict[str, Any]:
+        admin = require_admin(user)
+        response.headers["Cache-Control"] = "no-store"
+        with store.session(write=True) as session:
+            return auth.issue_invite(session, admin, body)
+
+    @app.post("/api/auth/invitations/{invite_id}/revoke", dependencies=protected)
+    def revoke_invitation(invite_id: str, user: User | None = Depends(authorize)) -> dict[str, bool]:
+        admin = require_admin(user)
+        with store.session(write=True) as session:
+            auth.revoke_invite(session, admin, invite_id)
+        return {"ok": True}
+
+    @app.post("/api/auth/accounts/{account_id}/disable", dependencies=protected)
+    def disable_account(account_id: str, user: User | None = Depends(authorize)) -> dict[str, bool]:
+        admin = require_admin(user)
+        with store.session(write=True) as session:
+            auth.disable_account(session, admin, account_id)
+        return {"ok": True}
+
     @app.post("/api/auth/login")
     def login(body: Login, request: Request, response: Response) -> dict[str, Any]:
         check_origin(request, settings.cors_origins)
@@ -135,6 +192,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "user": user.model_dump(exclude={"password_hash"}) if user else None,
             "required": authentication_required,
             "read_only": settings.read_only,
+            "registration_enabled": registration_enabled,
             "environment": settings.environment,
             "replay_enabled": (
                 settings.environment in {"demo", "showcase"} and not settings.read_only
@@ -154,6 +212,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             samesite="strict",
         )
         return {"ok": True}
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error(request: Request, error: RequestValidationError) -> Response:
+        if request.url.path.startswith("/api/auth/"):
+            # FastAPI's default validation detail may include the original secret input.
+            return JSONResponse(status_code=422, content={"detail": "Invalid authentication input"})
+        return await request_validation_exception_handler(request, error)
 
     @app.exception_handler(KeyError)
     async def missing(_: Request, __: KeyError) -> JSONResponse:
@@ -204,7 +269,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(403, "Showcase administrator required")
         with store.session(write=True) as session:
             session.execute(
-                delete(EntityRow).where(EntityRow.kind.not_in(["AuthSession", "AuthAudit"]))
+                delete(EntityRow).where(EntityRow.kind.not_in([
+                    "AuthSession", "AuthAudit", "RegisteredAccount", "RegistrationInvite"
+                ]))
             )
             seed(session, service.slope_grid)
             put(session, AuthAudit(id=identifier("auth"), user_id=user.id, action="SHOWCASE_RESET"))
@@ -404,7 +471,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 or evidence.model_output is None
                 or evidence.model_output.engine != "unavailable"
             ):
-                raise ValueError("Only pending ground evidence with unavailable inference can retry")
+                raise ValueError(
+                    "Only pending ground evidence with unavailable inference can retry"
+                )
             observation = get(session, Observation, evidence.observation_id)
             name = observation.raw_asset_reference.rsplit("/", 1)[-1]
             if not (
@@ -419,7 +488,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             content = path.read_bytes()
             if (
                 hashlib.sha256(content).hexdigest() != observation.model_input_sha256
-                or hashlib.sha256(original_path.read_bytes()).hexdigest() != observation.asset_sha256
+                or hashlib.sha256(original_path.read_bytes()).hexdigest()
+                != observation.asset_sha256
             ):
                 raise HTTPException(409, "Saved image integrity check failed; evidence retained")
             return service.retry_inference(

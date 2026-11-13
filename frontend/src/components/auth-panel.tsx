@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { api, jsonRequest } from "@/lib/api";
 
 type Session = {
   user: { name: string; role: string } | null;
   required: boolean;
   read_only: boolean;
+  registration_enabled?: boolean;
   environment: "demo" | "production" | "showcase";
 };
 export default function AuthPanel({ compact = false, afterSignIn }: { compact?: boolean; afterSignIn?: "/mission" }) {
@@ -17,7 +19,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
   useEffect(() => {
     api<Session>("/auth/session")
       .then(setSession)
-      .catch(() => {});
+      .catch(() => setError("Mission authentication is unavailable. Reconnect and retry."));
   }, []);
   async function submit(logout = false) {
     setBusy(true);
@@ -49,7 +51,10 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
       setError(e instanceof Error ? e.message : "Showcase reset failed");
     } finally { setBusy(false); }
   }
-  if (!session) return null;
+  if (!session) return <span className="small muted" role={error ? "alert" : "status"}>
+    {error || "Checking mission access…"}
+    {error && <button className="text-button" onClick={() => window.location.reload()}>Retry</button>}
+  </span>;
   if (!session.required && !session.user && !session.read_only)
     return compact ? (
       <span className="demo-indicator">LOCAL DEMO SESSION</span>
@@ -67,6 +72,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
           {session.environment === "showcase" && session.user.role === "ADMIN" && (
             <button className="button secondary" disabled={busy} onClick={resetShowcase}>Reset showcase</button>
           )}
+          {session.registration_enabled && <Link className="button secondary" href="/account">Account settings</Link>}
           <button
             className="button secondary"
             disabled={busy}
@@ -106,6 +112,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
             <button className="button primary" disabled={busy}>
               {busy ? "Signing in…" : "Sign in"}
             </button>
+            {session.registration_enabled && <Link href="/register">Register with an invitation</Link>}
           </form>
         )
       )}
