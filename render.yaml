@@ -1,0 +1,19 @@
+# Optional staging deployment. Review plan and resource limits before provisioning.
+services:
+  - type: web
+    name: marsense-cloud-api
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: codex/marsense-cloud-migration
+    dockerfilePath: ./backend/Dockerfile.cloud
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: off
+    envVars:
+      - key: MARSENSE_ENVIRONMENT
+        value: production
+      - key: MARSENSE_DATABASE_URL
+        sync: false
+      - key: MARSENSE_CORS_ORIGINS
+        sync: false
