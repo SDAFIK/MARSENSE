@@ -11,6 +11,17 @@ foreach ($origin in @($prod,$show)) {
 }
 if ($prod -eq $show) { throw 'Production and showcase origins must differ.' }
 function Check($condition,$message) { if(-not $condition){throw $message}; Write-Host "PASS: $message" }
+function Read-TerminalCredential([string]$label, [string]$defaultUsername = '') {
+    Write-Host ""
+    Write-Host $label
+    $username = $defaultUsername
+    if (-not $username) { $username = Read-Host 'Username' }
+    else { Write-Host "Username: $username" }
+    if ([string]::IsNullOrWhiteSpace($username)) { throw 'Username is required' }
+    $password = Read-Host 'Password (hidden)' -AsSecureString
+    if ($password.Length -eq 0) { throw 'Password is required' }
+    return [System.Management.Automation.PSCredential]::new($username, $password)
+}
 function Login($url,$credential) {
     $session=New-Object Microsoft.PowerShell.Commands.WebRequestSession
     $body=@{username=$credential.UserName;password=$credential.GetNetworkCredential().Password}|ConvertTo-Json -Compress
@@ -30,13 +41,13 @@ $ph=Invoke-RestMethod "$prod/api/health"; $sh=Invoke-RestMethod "$show/api/healt
 Check ($ph.environment -eq 'production' -and $sh.environment -eq 'showcase') 'Distinct public environments'
 $ps=$null; $ss=$null
 try {
-    $pc=Get-Credential -Message 'Existing production account (mission read-only acceptance)'
+    $pc=Read-TerminalCredential 'Existing production account (mission read-only acceptance)'
     $ps=Login $prod $pc; $pc=$null
     $pstate=Invoke-RestMethod "$prod/api/auth/session" -WebSession $ps
     Check ($null -ne $pstate.user -and -not $pstate.replay_enabled) 'Production authenticated session'
     $before1=(Snapshot $prod $ps 'eva-01')|ConvertTo-Json -Depth 100 -Compress
     $before2=(Snapshot $prod $ps 'eva-02')|ConvertTo-Json -Depth 100 -Compress
-    $sc=Get-Credential -UserName 'showcase-admin' -Message 'Separate showcase administrator'
+    $sc=Read-TerminalCredential 'Separate showcase administrator' 'showcase-admin'
     $ss=Login $show $sc; $sc=$null
     $sstate=Invoke-RestMethod "$show/api/auth/session" -WebSession $ss
     Check ($sstate.environment -eq 'showcase' -and $sstate.replay_enabled -and $sstate.user.role -eq 'ADMIN') 'Showcase administrator and replay'
