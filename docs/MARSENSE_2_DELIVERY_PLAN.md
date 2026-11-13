@@ -1,0 +1,38 @@
+# MARSENSE 2.0 — reference-led product delivery plan
+
+This supplements PRODUCT_RECOVERY.md. The submitted repository remains https://github.com/SDAFIK/MARSENSE (master). Work stays on codex/marsense-product-recovery until the exact release is accepted.
+
+## Visual contract
+Source references supplied by the owner: comparison(1).png (approved left versus implemented right), Mars Mission Control Dashboard(3).png, Mars Astronaut View Mission Dashboard(4).png, Mars Evidence Analysis Dashboard(4).png, Mars Route Comparison Dashboard-3(1).png, A Living Mars Exploration Memory Dashboard-2(1).png, Marsense Mission Memory Dashboard-1(1).png, Marsense_ The Living Mars Map (1)(2).png. These references are the visual targets; do not copy a screenshot as the interactive application. The two Memory variants become overview and EVA detail/replay. The original UI comparison is historical, not evidence of current hosted fidelity.
+
+Dark aerospace surfaces (#07131f), orange mission CTA (#ff9f2f), teal verified (#00d9ad), red discrepancy (#f4514a), restrained cyan; premium cinematic illustrative artwork separately labeled, genuine NASA data for evidence and maps. Match map prominence, header, left navigation, contextual inspector, typography hierarchy, compact borders and timeline. Use responsive adaptation, not desktop shrink. Do not copy unsupported reference metrics (rock fractions, confidence, suit vitals, energy, time, elevation, safety claims). No invented live camera, astronaut position, completed EVA, 3D controls, or fake chart. Use data-driven values or explicitly unavailable/illustrative labels. Render genuine NASA map layers only when available and label source and display transform.
+
+## Product scope and acceptance
+- Landing: one guest launch CTA, no account wall; secondary mission story, science, workspace. No direct unauthenticated protected-page links; loading/connection/error/retry states.
+- Mission Control: map dominates, selected EVA, real layer toggles, map fit/zoom, route and footprint overlays, A17, context inspector, actionable timeline, six-step progress. All pages share active mission and evidence state.
+- Field mode: genuine replay image or authenticated upload, manual footprint, explicit simulation, usable touch controls; no fake suit health.
+- Evidence: prior/ground comparison, measured features versus inference, decision controls, provenance and history; confirmation requires appropriate human input.
+- Route comparison: same spatial extent, actual Alpha and Beta, computed distances, supported model limitations; no unsupported profile or energy values. Preserve Alpha as prior.
+- Memory: actual event-derived counts, knowledge map, EVA detail, before/after and inherited evidence; replay/reset only on isolated guest.
+- Science: NASA source IDs, data URLs and processing provenance; genuine versus illustrative, disabled weak classifier, no certified navigation claim.
+- Accounts: guest, personal workspace, operator separate; signup/login/logout, private upload, isolation, admin invites, persistent evidence and routes. No claim of email verification/password recovery/team workspace sharing unless implemented and tested.
+
+## Phases (exit gates required, not time estimates)
+0. Preserve release and source: branch baseline, original master and data backups untouched. Record source SHA, environment, existing failed origin smoke. No unrelated project changes or paid services.
+1. Requirements & domain: trace each P0/P1 in PRODUCT_RECOVERY.md to route/API, invariant, test and design reference. Produce source inventory and approved target; define simulated vs measured. Exit: traceability matrix reviewed and no contradictory claims.
+2. Visual audit/design: capture current desktop/mobile, compare to supplied references at same state; catalog real NASA versus decorative assets, responsive wireframes, shared tokens, navigation, focus states, animation and reduced motion. Exit: reviewed visual target and measured audit; no claim of completed design without rendered QA.
+3. Platform reliability: exact origin and stable public host, same-origin Vercel rewrite, Render health, database persistence, API error mapping, session preservation, cold-start recovery. Exit: approved-origin guest start and negative-origin rejection, two-guest isolation and complete hosted API story. Do not weaken CSRF or wildcard origins.
+4. Core domain validation: deterministic seeded EVA-01, observation provisional, A17 challenge, human confirmation/rejection/request evidence, bounded knowledge, Beta, EVA-02 inheritance, dynamic expiry, reset. Exit: regression tests on isolated database and explicit invariants, no production writes.
+5. Shared frontend foundation: design tokens, shell, responsive sidebar/rail, map/inspector layout, accessible controls, route-aware navigation, shared mission context, skeleton/retry/empty states, motion rules. Exit: desktop 1440/1536, tablet 768 and mobile 360/390 no overflow, keyboard, reduced motion.
+6. Vertical slice A: landing + guest entry + Mission Control; real API/map/data and actions, no account requirement. Exit: browser launch to map, real imagery, route Alpha and layer controls; compare against references.
+7. Vertical slice B: field observation + evidence inspector; replay/upload and actual human decisions. Exit: guest observation through confirm and alternative reject/request paths; evidence provenance visible and meaningful.
+8. Vertical slice C: route comparison + Living Map + EVA memory; computed Alpha/Beta and future-EVA inheritance, map comparison and actual event timeline. Exit: repeatable three-minute story, actual state changes and isolated reset; all controls work.
+9. Optional accounts/admin/science: signup, session, upload, private persistence, operator roles/invites and source transparency; no login in judge path. Exit: two-account isolation, reload/restart, permissions, negative access, scientific claims verified.
+10. Integration/visual QA: exact-commit backend, frontend component, TypeScript/lint/build, Docker, PostgreSQL, Playwright and hosted tests; desktop/mobile screenshot comparison for each page, console/network errors, keyboard/touch/reduced motion, cold start, guest expiry, error/retry, broken links. Exit: all P0 pass; P1 tested or clearly disabled, no fabricated results. Record actual screenshots and known issues.
+11. Release: stage on existing Vercel project, verify public judge URL from signed-out browser, confirm production config and cloud health, update README with verified URL/demo/source setup/limitations/team, merge reviewed recovery changes into existing master, promote tested release and retain rollback. No repo rename/delete; no production cutover before acceptance.
+
+## Engineering slices
+R1: preserve workspace on failed guest start and existing guest on transient service failure; clear expired guest only on 401; validate new token before switching modes; unit tests. R2: live hosted API acceptance with exact Origin and two independent guest tokens, real observation/verification/inheritance/reset. R3: design audit and shared shell, then vertical slices. R4: browser end-to-end and visual QA on exact deployed commit. Keep each commit small and report tests that actually ran.
+
+## Current status
+R1 source and tests committed, execution not yet verified when this plan was written. Current live 403 remains open; Render Blueprint sync/redeploy has not been confirmed. Prior database acceptance and API health do not prove a working website. Full Product Design rendering and visual QA require supported Work/Codex browser context; Chat cannot control user browser. No final redesign, merge or production promotion claimed.
