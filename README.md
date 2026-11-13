@@ -6,14 +6,26 @@ MARSENSE is an astronaut-focused Mars exploration **research prototype**. It pre
 
 [Repository](https://github.com/SDAFIK/MARSENSE) · [Source matrix](NASA_SOURCE_MATRIX.md) · [Scientific audit](SCIENTIFIC_AUDIT.md) · [API contract](API_CONTRACT.md) · [Visual fidelity report](docs/design/MISSION_CONTROL_FIDELITY.md)
 
-Rebuild checkpoint (2026-10-21): restored scientific provenance in Evidence Inspector
-and revalidated the existing mission workflow. See [current checks and limits](STATUS.md).
-These local changes have not been published.
+## Competition showcase — Team Redscape
 
-Frontend source and setup: [frontend/README.md](frontend/README.md).
-The GitHub repository is public; local rebuild changes await source publication. Backend hosting is deferred at the
-user's request; the Redscape Vercel import is prepared, but no live website
-deployment has been verified.
+**NASA International Space Apps Challenge 2026** · Interplanetary Survival Guide: Martian Map
+
+> What happens when Mars does not match the map?
+
+**Every Step Makes Mars More Known.**
+
+### Explore MARSENSE
+
+- [Hosted prototype — existing Docker/Tailscale host](https://desktop-sdfik.tailf13324.ts.net) — authenticated application; host must remain online. Last documented hosted baseline: `c926819`. Current availability and judge access must be checked before submission.
+- [Latest release candidate source](https://github.com/SDAFIK/MARSENSE/tree/codex/final-release-guard-2026-11-12) · [Release PR #1](https://github.com/SDAFIK/MARSENSE/pull/1)
+- [Vercel staging build](https://redscape-46lc9p44a-sadib-dewans-projects.vercel.app) — READY for commit `f186367`, protected preview, not a public competition demo.
+- [Release validation](https://github.com/SDAFIK/MARSENSE/actions/runs/43414766011) · [Docker smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43414765843) — both passed for the candidate (141 application tests).
+
+**Judge walkthrough:** open Mission Control; inspect Jezero orbital imagery and Route Alpha; review the curated Area 14 ground observation; compare it with assumption A17; have an authorized reviewer confirm evidence; inspect the footprint update, Route Beta and EVA-02 inheritance. The hosted production application disables replay/reset; use the separately provisioned showcase or a local disposable demo for the complete replay. Do not publish administrator credentials.
+
+**Release note:** this default branch contains the earlier source baseline. The latest candidate is tested but its hosted upgrade, restore rehearsal and authenticated showcase acceptance remain pending; see the [candidate release acceptance record](https://github.com/SDAFIK/MARSENSE/blob/codex/final-release-guard-2026-11-12/docs/RELEASE_ACCEPTANCE.md). The project is an experimental decision-support prototype, not certified EVA navigation.
+
+Frontend setup: [frontend/README.md](frontend/README.md).
 
 ![Mission Control](docs/screenshots/visual-recovery/mission-1440x900.png)
 
@@ -157,7 +169,7 @@ The helper prompts privately for a password. Restrict file access to the service
 
 ## Verification
 
-Measured for this redesign: **70 backend tests and 9 frontend tests pass**, with TypeScript, ESLint and the production Next.js build passing. Backend tests use temporary stores. Existing PyTorch/Starlette/raster deprecation warnings remain. Browser checks use isolated services and cover provisional evidence → human confirmation → Beta → reload → inheritance, local workflow keyboard navigation, spatial event selection, evidence history and the comparison slider.
+Historical default-branch redesign results: **70 backend tests and 9 frontend tests pass**, with TypeScript, ESLint and the production Next.js build passing. Backend tests use temporary stores. Existing PyTorch/Starlette/raster deprecation warnings remain. Browser checks use isolated services and cover provisional evidence → human confirmation → Beta → reload → inheritance, local workflow keyboard navigation, spatial event selection, evidence history and the comparison slider.
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q --basetemp=.tmp\verification
@@ -187,7 +199,7 @@ Use `codex/` prefixes for new agent branches. Inspect staged files before commit
 
 ## Deployment and scientific development
 
-`compose.yaml`, `compose.production.yaml`, Dockerfiles and `deploy/` contain the existing local/production configuration. TLS, identity provisioning, hosting, backup rehearsal and container runtime verification remain operator infrastructure work; no public site was deployed during this redesign. Follow [DEPLOYMENT.md](DEPLOYMENT.md), not an assumed production-readiness claim.
+`compose.yaml`, `compose.production.yaml`, Dockerfiles and `deploy/` contain the existing local/production configuration. The later hosted baseline and protected staging are documented above; final candidate hosting, restore rehearsal and authenticated showcase remain operator release gates. Follow [DEPLOYMENT.md](DEPLOYMENT.md), not an assumed production-readiness claim.
 
 The authoritative project concept is [MAIN_PROJECT_NOTES.md](docs/MAIN_PROJECT_NOTES.md); engineering constraints are frozen in [PROJECT_SPEC.md](PROJECT_SPEC.md). [NASA_SOURCE_MATRIX.md](NASA_SOURCE_MATRIX.md), [MODEL_CARD.md](MODEL_CARD.md), [SCIENTIFIC_AUDIT.md](SCIENTIFIC_AUDIT.md) and [FINAL_AUDIT.md](FINAL_AUDIT.md) separate measured prototype behavior from unresolved science. Preserve original NASA sources, actual model output, final human decisions, supported footprints and future-EVA memory when extending the system.
 
