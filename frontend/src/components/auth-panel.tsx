@@ -1,13 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { api, jsonRequest } from "@/lib/api";
+import { api, clearGuestDemo } from "@/lib/api";
+import { jsonRequest } from "@/lib/api";
 
 type Session = {
   user: { name: string; role: string } | null;
   required: boolean;
   read_only: boolean;
   registration_enabled?: boolean;
+  public_demo?: boolean;
   environment: "demo" | "production" | "showcase";
 };
 export default function AuthPanel({ compact = false, afterSignIn }: { compact?: boolean; afterSignIn?: "/mission" }) {
@@ -30,6 +32,12 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
         jsonRequest(logout ? {} : { username, password }),
       );
       setPassword("");
+      if (session?.public_demo && logout) {
+        clearGuestDemo();
+        window.location.assign("/");
+        return;
+      }
+      if (!logout) clearGuestDemo();
       if (!logout && afterSignIn) {
         window.location.href = new URL(afterSignIn, window.location.origin).href;
       } else window.location.reload();
@@ -40,7 +48,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
     }
   }
   async function resetShowcase() {
-    if (!window.confirm("Reset only the isolated showcase mission history?")) return;
+    if (!window.confirm(session?.public_demo ? "Reset only your guest demo?" : "Reset only the isolated showcase mission history?")) return;
     setBusy(true);
     setError("");
     try {
@@ -61,7 +69,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
     ) : null;
   const panel = (
     <section className="auth-panel panel" aria-label="Mission access">
-      {session.environment === "showcase" && <p><strong>ISOLATED SHOWCASE</strong> · Curated replay, simulated footprints. Separate mission history.</p>}
+      {session.public_demo ? <p><strong>PRIVATE GUEST DEMO</strong> · Curated replay, simulated footprints. Your session expires after one hour; no production records are touched.</p> : session.environment === "showcase" && <p><strong>ISOLATED SHOWCASE</strong> · Curated replay, simulated footprints. Separate mission history.</p>}
       {session.read_only && (
         <p>Read-only demonstration · mission changes are disabled.</p>
       )}
@@ -69,8 +77,8 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
         <div>
           <strong>{session.user.name}</strong> ·{" "}
           {session.user.role.replaceAll("_", " ")}
-          {session.environment === "showcase" && session.user.role === "ADMIN" && (
-            <button className="button secondary" disabled={busy} onClick={resetShowcase}>Reset showcase</button>
+          {(session.public_demo || (session.environment === "showcase" && session.user.role === "ADMIN")) && (
+            <button className="button secondary" disabled={busy} onClick={resetShowcase}>{session.public_demo ? "Reset my demo" : "Reset showcase"}</button>
           )}
           {session.registration_enabled && <Link className="button secondary" href="/account">Account settings</Link>}
           <button
@@ -78,7 +86,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
             disabled={busy}
             onClick={() => submit(true)}
           >
-            Sign out
+            {session.public_demo ? "Exit demo" : "Sign out"}
           </button>
         </div>
       ) : (
@@ -125,7 +133,7 @@ export default function AuthPanel({ compact = false, afterSignIn }: { compact?: 
       open={session.required && !session.user}
     >
       <summary>
-        {session.environment === "showcase" ? "SHOWCASE · " : ""}{session.user?.name ?? (session.required ? "SIGN IN" : "READ ONLY")}
+        {session.public_demo ? "GUEST DEMO · " : session.environment === "showcase" ? "SHOWCASE · " : ""}{session.user?.name ?? (session.required ? "SIGN IN" : "READ ONLY")}
       </summary>
       {panel}
     </details>

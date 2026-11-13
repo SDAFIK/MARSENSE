@@ -96,3 +96,37 @@ test("production-mode real image upload, role separation, human decision and fut
   const future = await (await page.request.get("/api/missions/eva-02")).json() as Snapshot;
   expect(future.mission.inherited_evidence).toContain(evidence.id);
 });
+
+test("guest launch needs no account and isolates the complete simulated mission", async ({ page, browser }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Launch Live Demo" }).click();
+  await expect(page).toHaveURL(/\/mission$/);
+  await expect(page.getByRole("tab", { name: "EXPECT", exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "OBSERVE", exact: true }).click();
+  await expect(page.getByLabel("Demonstration observation")).toBeVisible();
+  await page.getByRole("button", { name: "Analyze terrain", exact: true }).click();
+  await expect(page.getByRole("tab", { name: "COMPARE", exact: true })).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: "VERIFY", exact: true }).click();
+  await page.getByRole("region", { name: "Evidence review" }).getByRole("button", { name: "Confirm observation" }).click();
+  await expect(page.getByRole("heading", { name: "Route Beta", exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Beta");
+  await page.getByLabel("Active mission").selectOption("eva-02");
+  await expect(page.getByText("INHERITED FROM EVA-01", { exact: false })).toBeVisible();
+  const other = await browser.newContext({ baseURL: "http://localhost:3004" });
+  try {
+    const visitor = await other.newPage();
+    await visitor.goto("/");
+    await visitor.getByRole("button", { name: "Launch Live Demo" }).click();
+    await expect(visitor.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Alpha");
+    await expect(visitor.getByRole("complementary", { name: "Mission trace and evidence" })).not.toContainText("Route Beta");
+  } finally { await other.close(); }
+  await page.locator("summary").filter({ hasText: "GUEST DEMO" }).click();
+  page.once("dialog", dialog => dialog.accept());
+  await page.getByRole("button", { name: "Reset my demo" }).click();
+  await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Alpha");
+  await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).not.toContainText("Route Beta");
+  await page.locator("summary").filter({ hasText: "GUEST DEMO" }).click();
+  await page.getByRole("button", { name: "Exit demo" }).click();
+  await expect(page).toHaveURL(/\/$/);
+});

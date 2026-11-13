@@ -5,6 +5,7 @@ import { Database, RefreshCw } from "lucide-react";
 import type { Evidence, View } from "@/lib/types";
 import { useMission } from "@/lib/use-mission";
 import MissionShell from "./mission-shell";
+import PublicDemoButton from "./public-demo-button";
 import MissionControl from "./mission-control";
 import BeforeAfter from "./before-after";
 import AstronautWorkspace from "./astronaut-workspace";
@@ -64,10 +65,11 @@ export default function MissionWorkspace({ view }: { view: View }) {
   }
   return (
     <MissionShell view={view} missionId={missionId} setMissionId={switchEva}>
-      {error === "Authentication required" && !snapshot ? (
+      {(error === "Authentication required" || error?.startsWith("Demo expired")) && !snapshot ? (
         <section className="panel access-gate" role="status">
-          <p className="eyebrow">MISSION ACCESS</p><h1>Sign in to the living map</h1>
+          <p className="eyebrow">MISSION ACCESS</p><h1>{error?.startsWith("Demo expired") ? "Your guest demo has expired" : "Sign in to the living map"}</h1>
           <p>Mission records and observation controls require an authorized account. The public overview and NASA imagery remain available.</p>
+          <PublicDemoButton/>
           <Link href="/login" className="button primary">Open mission sign in</Link>
           <Link href="/" className="button secondary">Return to overview</Link>
         </section>
@@ -87,7 +89,7 @@ export default function MissionWorkspace({ view }: { view: View }) {
           </button>
         </div>
       )}
-      {!snapshot && error !== "Authentication required" && (
+      {!snapshot && error !== "Authentication required" && !error?.startsWith("Demo expired") && (
         <div className="loading-panel" role="status">
           <Database size={25} />
           <h2>

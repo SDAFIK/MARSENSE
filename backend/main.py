@@ -35,6 +35,7 @@ from backend.domain import (
     VerifyRequest,
 )
 from backend.knowledge import SourceDeclaration, declare_source, synthesis
+from backend.public_demo import create_demo_router
 from backend.routing import load_slope
 from backend.seed import seed
 from backend.service import MissionService, identifier
@@ -54,6 +55,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     database_path = settings.database_url.removeprefix("sqlite:///")
     store: Store
     service = MissionService(Perception(settings.model_path), load_slope(settings.slope_path))
+    demo_router, guest_pool = create_demo_router(service, settings.cors_origins)
     auth = Auth(settings.auth_users_file)
     if settings.environment == "showcase":
         auth.cookie = "marsense_showcase_session"
@@ -75,14 +77,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 seed(session, service.slope_grid)
             yield
         finally:
+            guest_pool.close()
             store.engine.dispose()
 
     app = FastAPI(title="MARSENSE", version="1.0.0", lifespan=lifespan)
+    app.include_router(demo_router)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         allow_methods=["GET", "POST"],
-        allow_headers=["Content-Type", "Authorization"],
+        allow_headers=["Content-Type", "Authorization", "X-Marsense-Demo"],
     )
 
     def authorize(

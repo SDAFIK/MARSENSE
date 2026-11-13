@@ -16,6 +16,8 @@ MARSENSE is an astronaut-focused Mars exploration **research prototype**. It pre
 
 ### Explore MARSENSE
 
+**Guest demo candidate:** the new Launch Live Demo entry opens a disposable, no-password mission session with the same evidence and routing engine, independent of the authenticated production database. The public guest feature is staged in source until its new tests and hosted deployment pass. Existing user accounts remain invitation-only; uploads belong to the authorized mission workspace.
+
 - [Live production website](https://desktop-sdfik.tailf13324.ts.net) — persistent, authenticated mission workspace; host must remain online.
 - [Live competition showcase](https://desktop-sdfik.tailf13324.ts.net:8443) — isolated, authenticated demonstration with curated replay and administrator-only reset. Request authorized showcase access from Team Redscape; never use production credentials for the showcase.
 - [Latest release candidate](https://github.com/SDAFIK/MARSENSE/tree/codex/final-release-guard-2026-11-12) · [Release PR #1](https://github.com/SDAFIK/MARSENSE/pull/1)
