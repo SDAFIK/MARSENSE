@@ -40,7 +40,8 @@ export default function StructuredEvidence({
 }) {
   const [section, setSection] =
     useState<(typeof sections)[number]>("GROUND OBSERVATION");
-  const [history, setHistory] = useState<History | null>(null);
+  const [historyRecord, setHistoryRecord] = useState<{ id: string; value: History } | null>(null);
+  const history = historyRecord?.id === selected?.id ? historyRecord?.value : null;
   const [error, setError] = useState("");
   const [observation, setObservation] = useState<{ id: string; metadata_note: string; original_asset_reference: string | null; asset_sha256: string } | null>(null);
   useEffect(() => {
@@ -58,7 +59,7 @@ export default function StructuredEvidence({
       api<History>(`/evidence/${selected.id}/history`)
         .then((h) => {
           if (active) {
-            setHistory(h);
+            setHistoryRecord({ id: selected.id, value: h });
             setError("");
           }
         })

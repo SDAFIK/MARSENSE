@@ -38,6 +38,7 @@ def test_showcase_replay_reset_and_production_isolation(tmp_path):
                 assert "secure" in response.headers["set-cookie"].lower()
             assert "marsense_showcase_session" in demo.cookies
             assert "marsense_session" not in demo.cookies
+            assert not demo.get("/api/auth/session").json()["registration_enabled"]
             assert demo.get("/api/auth/session").json()["replay_enabled"] is True
             assert prod.get("/api/auth/session").json()["replay_enabled"] is False
             assert demo.get("/api/auth/session").json()["environment"] == "showcase"

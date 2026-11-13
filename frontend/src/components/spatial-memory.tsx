@@ -15,7 +15,14 @@ export default function SpatialMemory({
     (a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp),
   );
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const event = events.find((e) => e.id === selectedId);
+  const [query, setQuery] = useState("");
+  const normalized = query.trim().toLowerCase();
+  const filtered = events.filter((e) => {
+    const record = snapshot.evidence.find((item) => item.id === e.evidence_id);
+    return [e.title, e.detail, e.timestamp, record?.observed_value, record?.verification_state]
+      .join(" ").toLowerCase().includes(normalized);
+  });
+  const event = filtered.find((e) => e.id === selectedId);
   const evidence = snapshot.evidence.find((e) => e.id === event?.evidence_id);
   return (
     <div className="spatial-memory"><section className="memory-hero"><p className="eyebrow">EXPLORATION MEMORY</p><h2>Knowledge that Lives On</h2><p>Every verified observation becomes part of the living map.</p><div className="memory-stats"><span>{snapshot.events.length} recorded events</span><span>{snapshot.evidence.filter(e=>e.source_type!=="orbital" && e.verification_state==="CONFIRMED").length} confirmed ground records</span><span>{snapshot.mission.inherited_evidence.length} inherited records</span></div></section>
@@ -23,8 +30,10 @@ export default function SpatialMemory({
         <div className="panel-heading">
           <h2>MISSION TIMELINE · {snapshot.mission.eva}</h2>
         </div>
+        <div className="memory-search"><label htmlFor="memory-search">Search mission history</label><input id="memory-search" type="search" value={query} onChange={(e) => { setQuery(e.target.value); setSelectedId(null); }} placeholder="Terrain, decision, event…"/><p role="status" className="small muted">{filtered.length} of {events.length} events</p></div>
         <div className="spatial-event-list">
-          {events.map((e) => (
+          {!filtered.length && <p className="small muted">No matching events. Try another search.</p>}
+          {filtered.map((e) => (
             <button
               key={e.id}
               aria-pressed={e.id === selectedId}

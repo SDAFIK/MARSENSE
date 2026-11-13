@@ -9,6 +9,7 @@ import {
 } from "@/lib/mission-map-data";
 import {
   Crosshair,
+  Compass,
   Layers,
   Maximize2,
   Minimize2,
@@ -194,14 +195,15 @@ export default function LivingMap({
       map.current?.resize();
       map.current?.fitBounds(missionExtent(snapshot, warmPresentation), {
         padding:
-          compact && !expanded
+          locked ? { top: 36, bottom: 18, left: 16, right: 16 }
+          : compact && !expanded
             ? 30
             : { top: 90, bottom: 100, left: 35, right: 45 },
         duration: 0,
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [expanded, ready, compact, snapshot, warmPresentation]);
+  }, [expanded, ready, compact, snapshot, warmPresentation, locked]);
   useEffect(() => {
     if (!expanded) return;
     const previous = document.body.style.overflow;
@@ -336,7 +338,7 @@ export default function LivingMap({
         instance.fitBounds(
           missionExtent(initial.current.snapshot, warmPresentation),
           {
-            padding: compact ? 30 : 45,
+            padding: locked ? { top: 36, bottom: 18, left: 16, right: 16 } : compact ? 30 : 45,
             duration: 0,
           },
         );
@@ -407,7 +409,7 @@ export default function LivingMap({
         instance.fitBounds(
           missionExtent(initial.current.snapshot, warmPresentation),
           {
-            padding: compact
+            padding: locked ? { top: 36, bottom: 18, left: 16, right: 16 } : compact
               ? 30
               : { top: 90, bottom: 100, left: 35, right: 45 },
             duration: 0,
@@ -459,6 +461,7 @@ export default function LivingMap({
   }, [snapshot, before, ready, clock, betaKey]);
   useEffect(() => {
     if (!ready || !focusLocation || !map.current) return;
+    map.current.easeTo({ center: toMars(focusLocation), duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 400 });
     const element = document.createElement("div");
     element.className = "map-marker event-location";
     element.setAttribute("aria-label", "Selected evidence location");
@@ -593,6 +596,7 @@ export default function LivingMap({
           >
             <Crosshair size={18} />
           </button>
+          <button aria-label="Reset map north" onClick={() => map.current?.resetNorth({ duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 300 })}><Compass size={18}/></button>
         </div>
       )}
       {!locked && (

@@ -16,6 +16,11 @@ export default function AccountManager() {
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [clock, setClock] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setClock(Date.now()), 30000);
+    return () => clearInterval(timer);
+  }, []);
   const refresh = useCallback(async () => {
     try {
       const current = await api<Session>("/auth/session");
@@ -56,7 +61,7 @@ export default function AccountManager() {
       {code && <div className="invite-code"><output data-invitation-code aria-label="Invitation code">{code}</output><button className="button secondary" onClick={async () => { try { await navigator.clipboard.writeText(code); setNotice("Invitation copied. Share it privately."); } catch { setNotice("Select and copy the code manually."); } }}>Copy code</button><button className="text-button" onClick={() => setCode(null)}>Hide code</button></div>}
       <h3>Invitation history</h3>
       {state.invitations.length === 0 && <p className="small muted">No invitations issued.</p>}
-      {state.invitations.map((invite) => <article className="account-row" key={invite.id}><div><strong>{invite.role.replaceAll("_", " ")}</strong><p className="small muted">{invite.used_by ? "Redeemed" : invite.revoked ? "Revoked" : invite.expires_at * 1000 <= Date.now() ? "Expired" : "Pending"} · expires {new Date(invite.expires_at * 1000).toLocaleString()}</p></div>{!invite.used_by && !invite.revoked && <button className="button secondary" disabled={busy} onClick={() => void action("/auth/invitations/" + invite.id + "/revoke", {}, "Invitation revoked.")}>Revoke</button>}</article>)}
+      {state.invitations.map((invite) => <article className="account-row" key={invite.id}><div><strong>{invite.role.replaceAll("_", " ")}</strong><p className="small muted">{invite.used_by ? "Redeemed" : invite.revoked ? "Revoked" : invite.expires_at * 1000 <= clock ? "Expired" : "Pending"} · expires {new Date(invite.expires_at * 1000).toLocaleString()}</p></div>{!invite.used_by && !invite.revoked && <button className="button secondary" disabled={busy} onClick={() => void action("/auth/invitations/" + invite.id + "/revoke", {}, "Invitation revoked.")}>Revoke</button>}</article>)}
       <h3>Invited accounts</h3>
       {state.accounts.length === 0 && <p className="small muted">No registered accounts yet. Bootstrap identities remain managed by the operator.</p>}
       {state.accounts.map((account) => <article className="account-row" key={account.id}><div><strong>{account.name}</strong><p className="small muted">{account.username} · {account.role.replaceAll("_", " ")} · {account.disabled ? "Disabled" : "Active"}</p></div>{!account.disabled && <button className="button secondary" disabled={busy} onClick={() => { if (window.confirm("Disable this invited account and its access?")) void action("/auth/accounts/" + account.id + "/disable", {}, "Account disabled."); }}>Disable account</button>}</article>)}

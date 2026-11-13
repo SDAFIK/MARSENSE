@@ -165,6 +165,7 @@ class Auth:
             if len(failures) >= 5 or len(self.registration_failures) > 4096:
                 raise HTTPException(429, "Too many registration attempts; retry later")
             invite_id = "invite-" + hashlib.sha256(request.token.encode()).hexdigest()
+            invite: RegistrationInvite | None
             try:
                 invite = get(session, RegistrationInvite, invite_id)
             except KeyError:

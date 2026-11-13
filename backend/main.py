@@ -151,7 +151,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return auth.issue_invite(session, admin, body)
 
     @app.post("/api/auth/invitations/{invite_id}/revoke", dependencies=protected)
-    def revoke_invitation(invite_id: str, user: User | None = Depends(authorize)) -> dict[str, bool]:
+    def revoke_invitation(
+        invite_id: str, user: User | None = Depends(authorize)
+    ) -> dict[str, bool]:
         admin = require_admin(user)
         with store.session(write=True) as session:
             auth.revoke_invite(session, admin, invite_id)

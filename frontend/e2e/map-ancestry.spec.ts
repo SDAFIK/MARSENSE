@@ -60,3 +60,13 @@ test("Evidence Inspector exposes source ancestry without changing final decision
     page.getByText("Prototype camera / episode single-burst", { exact: false }),
   ).toBeVisible();
 });
+
+ test("mission memory filters persisted events and clears an empty search", async ({ page }) => {
+  await page.goto("/memory");
+  const search = page.getByRole("searchbox", { name: "Search mission history" });
+  await expect(search).toBeVisible();
+  await search.fill("not-a-real-mission-event-xyz");
+  await expect(page.getByText("No matching events. Try another search.")).toBeVisible();
+  await search.clear();
+  await expect(page.locator(".spatial-event-list button").first()).toBeVisible();
+ });

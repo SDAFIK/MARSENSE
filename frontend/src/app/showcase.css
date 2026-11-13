@@ -534,3 +534,8 @@
     height: 390px;
   }
 }
+
+.memory-search { display:grid; gap:6px; padding:12px; border-bottom:1px solid var(--border); }
+.memory-search input { width:100%; min-width:0; padding:9px; background:#101719; color:inherit; border:1px solid var(--border); border-radius:6px; }
+.memory-search label { font-size:12px; }
+@media (max-width:600px) { .aligned-maps { height:clamp(255px,70vw,350px); min-height:0; } }

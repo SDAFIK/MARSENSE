@@ -36,7 +36,7 @@ def test_invitation_registration_single_use_roles_and_persistence(tmp_path):
         assert token not in admin.get("/api/auth/admin").text
         account = {"token": token, "username": "explorer", "name": "New Explorer",
                    "password": "private-explorer-test-password"}
-        with TestClient(app, base_url=origin) as explorer:
+        with TestClient(create_app(config), base_url=origin) as explorer:
             assert explorer.post("/api/auth/register", json=account).status_code == 403
             assert explorer.post("/api/auth/register", json={**account, "role": "ADMIN"},
                                  headers=headers).status_code == 422
@@ -55,7 +55,9 @@ def test_invitation_registration_single_use_roles_and_persistence(tmp_path):
             }, headers=headers).status_code == 200
             assert explorer.get("/api/missions/eva-01").status_code == 200
             assert explorer.get("/api/auth/admin").status_code == 403
-            assert explorer.post("/api/auth/invitations", json={}, headers=headers).status_code == 403
+            assert explorer.post(
+                "/api/auth/invitations", json={}, headers=headers
+            ).status_code == 403
             cookie = explorer.cookies.get("marsense_session")
             assert cookie
         snapshot = admin.get("/api/auth/admin").json()
@@ -86,7 +88,7 @@ def test_invitation_registration_single_use_roles_and_persistence(tmp_path):
     assert json.loads(users.read_text())[0]["id"] == "operator"
 
 
-def test_registration_disabled_in_showcase_and_local_demo(client):
+def test_registration_disabled_in_local_demo(client):
     assert not client.get("/api/auth/session").json()["registration_enabled"]
     response = client.post("/api/auth/register", json={
         "token": "a" * 43, "username": "test", "name": "Test User",
