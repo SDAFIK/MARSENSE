@@ -128,7 +128,9 @@ def sync_snapshot(
             }
             if any(ident not in item.rows or item.rows[ident] != row
                    for ident, row in existing.items()):
-                raise ValueError("Destination contains different mission records; refusing overwrite")
+                raise ValueError(
+                    "Destination contains different mission records; refusing overwrite"
+                )
             names = set(session.scalars(text(
                 "SELECT name FROM marsense.asset_blobs WHERE namespace=:namespace"
             ), {"namespace": item.schema}))
