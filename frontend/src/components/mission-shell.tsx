@@ -8,6 +8,7 @@ import {
   Map,
   Orbit,
   Radio,
+  Radar,
   ScanLine,
 } from "lucide-react";
 import type { View } from "@/lib/types";
@@ -18,6 +19,7 @@ const links = [
   { view: "evidence", label: "Evidence Inspector", icon: ScanLine },
   { view: "memory", label: "Exploration Memory", icon: History },
   { view: "comparison", label: "Route Comparison", icon: Columns2 },
+  { view: "intelligence", label: "Intelligence Center", icon: Radar },
 ] as const;
 export default function MissionShell({
   view,
@@ -106,7 +108,9 @@ export default function MissionShell({
                   ? "What one explorer discovers, the next explorer inherits."
                   : view === "comparison"
                     ? "See exactly how ground evidence changes the mission."
-                    : view === "evidence"
+                    : view === "intelligence"
+                      ? "Inspect real mission data, NASA sources and the evidence-to-route chain."
+                      : view === "evidence"
                       ? "Inspect the observation, interpretation, and decision separately."
                       : "Your observation. Your judgment. A better map for the next EVA."}
               </p>
