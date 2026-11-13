@@ -16,4 +16,4 @@ services:
       - key: MARSENSE_DATABASE_URL
         sync: false
       - key: MARSENSE_CORS_ORIGINS
-        sync: false
+        value: '["https://redscape-5d9fw6ccz-sadib-dewans-projects.vercel.app","https://redscape-git-codex-marsense-cloud-a18fd2-sadib-dewans-projects.vercel.app","https://redscape-sadib-dewans-projects.vercel.app","https://redscape-eight.vercel.app","https://desktop-sdfik.tailf13324.ts.net","https://redscape-nee4e0pk0-sadib-dewans-projects.vercel.app"]'
