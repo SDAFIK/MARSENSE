@@ -43,3 +43,7 @@ OpenCV retains measured edge fraction and contrast, reports no numerical confide
 5. Production Vercel: exact tested source and server-only BACKEND_URL; exact permitted origins; verified health/authentication/mission workflow before promotion. Merge draft PR only when gates pass.
 
 Scientific boundary: actual NASA pixels and computed prototype route geometry, manually placed observations and illustrative mission; experimental model held-out MSL mIoU 0.099405, Perseverance transfer mIoU 0.132736, classification disabled. No safety, NASA endorsement or scientific flight validation claim. Do not expose secrets, private observations or real tokens in artifacts.
+
+
+## Operator handoff (Windows)
+After the exact candidate passes CI, fetch and fast-forward to that commit. From the repository root, run `powershell -File scripts/hosted-showcase.ps1 -ExpectedCommit <full-tested-sha> -ProductionOrigin https://<existing-host>` and then `powershell -File scripts/hosted-acceptance.ps1 -ProductionOrigin https://<existing-host> -ShowcaseOrigin https://<existing-host>:8443`. These repository-tracked scripts provision separate showcase identity and storage, check both public environments, and verify a replay/confirmation/reset against an unchanged production snapshot. They do not upgrade production or erase production data. Credentials are entered privately on the host. Actual browser acceptance and restore rehearsal remain separate gates.
