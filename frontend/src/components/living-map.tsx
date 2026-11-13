@@ -1,13 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import maplibregl, { type GeoJSONSource } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
+import type { GeoJSONSource } from "maplibre-gl";
 import {
   toMars,
+  fromMars,
   missionFeatures as features,
   challengedAlpha,
 } from "@/lib/mission-map-data";
 import {
   Crosshair,
+  Compass,
   Layers,
   Maximize2,
   Minimize2,
@@ -178,6 +181,7 @@ export default function LivingMap({
   const [fallback, setFallback] = useState(false);
   const [layer, setLayer] = useState("hirise");
   const [ready, setReady] = useState(false);
+  const [metric, setMetric] = useState<{ x: number; y: number; meters: number; pixels: number } | null>(null);
   const [clock, setClock] = useState(() => Date.now());
   useEffect(() => {
     const timer = setInterval(() => setClock(Date.now()), 10000);
@@ -193,14 +197,15 @@ export default function LivingMap({
       map.current?.resize();
       map.current?.fitBounds(missionExtent(snapshot, warmPresentation), {
         padding:
-          compact && !expanded
+          locked ? { top: 36, bottom: 18, left: 16, right: 16 }
+          : compact && !expanded
             ? 30
             : { top: 90, bottom: 100, left: 35, right: 45 },
         duration: 0,
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [expanded, ready, compact, snapshot, warmPresentation]);
+  }, [expanded, ready, compact, snapshot, warmPresentation, locked]);
   useEffect(() => {
     if (!expanded) return;
     const previous = document.body.style.overflow;
@@ -244,6 +249,8 @@ export default function LivingMap({
         ?.render_corners as
         [Coordinate, Coordinate, Coordinate, Coordinate] | undefined;
       if (!corners) throw new Error("Cached imagery metadata is unavailable");
+      // MapLibre v6 requires an explicit worker URL when bundled by Next.js.
+      maplibregl.setWorkerUrl(new URL("maplibre-gl/dist/maplibre-gl-worker.mjs", import.meta.url).toString());
       instance = new maplibregl.Map({
         container: container.current,
         style: {
@@ -329,11 +336,25 @@ export default function LivingMap({
         interactive: !locked,
       });
       map.current = instance;
+      function updateMetric() {
+        const center = instance.getCenter();
+        const [x, y] = fromMars([center.lng, center.lat]);
+        const p = instance.project(center);
+        const q = instance.unproject([p.x + 100, p.y]);
+        const [qx, qy] = fromMars([q.lng, q.lat]);
+        const span = Math.hypot(qx - x, qy - y);
+        if (!Number.isFinite(span) || span <= 0) return;
+        const meters = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000]
+          .filter((n) => n <= span).at(-1) ?? 1;
+        setMetric({ x: Math.round(x), y: Math.round(y), meters, pixels: 100 * meters / span });
+      }
+      instance.on("moveend", updateMetric);
+      instance.on("resize", updateMetric);
       instance.on("load", () => {
         instance.fitBounds(
           missionExtent(initial.current.snapshot, warmPresentation),
           {
-            padding: compact ? 30 : 45,
+            padding: locked ? { top: 36, bottom: 18, left: 16, right: 16 } : compact ? 30 : 45,
             duration: 0,
           },
         );
@@ -346,6 +367,7 @@ export default function LivingMap({
                 ).updateImage({ url, coordinates: corners });
             })
             .catch(() => {});
+        updateMetric();
         setReady(true);
       });
       for (const [location, text, className] of [
@@ -404,7 +426,7 @@ export default function LivingMap({
         instance.fitBounds(
           missionExtent(initial.current.snapshot, warmPresentation),
           {
-            padding: compact
+            padding: locked ? { top: 36, bottom: 18, left: 16, right: 16 } : compact
               ? 30
               : { top: 90, bottom: 100, left: 35, right: 45 },
             duration: 0,
@@ -456,6 +478,7 @@ export default function LivingMap({
   }, [snapshot, before, ready, clock, betaKey]);
   useEffect(() => {
     if (!ready || !focusLocation || !map.current) return;
+    map.current.easeTo({ center: toMars(focusLocation), duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 400 });
     const element = document.createElement("div");
     element.className = "map-marker event-location";
     element.setAttribute("aria-label", "Selected evidence location");
@@ -500,6 +523,7 @@ export default function LivingMap({
     <section
       className={`map-panel ${compact ? "compact" : ""} ${expanded ? "map-expanded" : ""}`}
       aria-label="Living Mars map"
+      data-renderer={fallback ? "fallback" : ready ? "webgl" : "loading"}
     >
       <div className="map-toolbar">
         <span>
@@ -542,6 +566,10 @@ export default function LivingMap({
             ? "Before EVA · NASA prior"
             : "Cached NASA imagery · illustrative mission"}
         </span>
+        {!fallback && !locked && metric && <div className="map-metric" aria-label="Illustrative Mars local metric scale">
+          <span>Local center {metric.x}, {metric.y} m</span>
+          <span><i style={{ width: Math.min(metric.pixels, 140) }}/>{metric.meters} m · approx.</span>
+        </div>}
       </div>
       {!fallback && !locked && (
         <div className="map-controls">
@@ -589,6 +617,7 @@ export default function LivingMap({
           >
             <Crosshair size={18} />
           </button>
+          <button aria-label="Reset map north" onClick={() => map.current?.resetNorth({ duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 300 })}><Compass size={18}/></button>
         </div>
       )}
       {!locked && (

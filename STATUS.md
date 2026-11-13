@@ -1,3 +1,22 @@
+## Release engineering checkpoint — 2026-11-12
+
+The release branch `codex/final-release-guard-2026-11-12` has a successful
+full application CI run at b9e2dee: backend tests (except the uncommitted
+genuine checkpoint gate), lint/types, frontend component tests, production
+build, 24 browser cases and authenticated browser acceptance all PASS.
+[CI run](https://github.com/SDAFIK/MARSENSE/actions/runs/43235576240).
+Mission request races, portable browser configuration, numerical DTM
+regression and public NASA imagery access were repaired. The genuine
+checkpoint, independent visual/performance review and scientific limits
+remain separate. No changes have been merged into master or deployed.
+
+Zero-cost deployment is now the explicit constraint. A production Docker
+HTTPS/session-persistence smoke workflow and an isolated loopback
+Funnel-host configuration have been prepared. See
+[free hosting setup](docs/FREE_HOSTING.md). The production smoke check is
+still pending at this checkpoint; external tunnel, Vercel, backup/restore
+and hosted acceptance remain NOT RUN. No paid resources have been created.
+
 ## Rebuild and regression checkpoint — 2026-10-21
 
 Followed the scientific-completion sequence using existing gate artifacts; preserved

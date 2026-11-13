@@ -1,9 +1,11 @@
 "use client";
+import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
 import { Database, RefreshCw } from "lucide-react";
 import type { Evidence, View } from "@/lib/types";
 import { useMission } from "@/lib/use-mission";
 import MissionShell from "./mission-shell";
+import PublicDemoButton from "./public-demo-button";
 import MissionControl from "./mission-control";
 import BeforeAfter from "./before-after";
 import AstronautWorkspace from "./astronaut-workspace";
@@ -40,17 +42,19 @@ export default function MissionWorkspace({ view }: { view: View }) {
     ground[0];
   async function observed(e: Evidence) {
     setSelectedId(e.id);
-    await refresh();
+    const refreshed = await refresh();
     setNotice(
-      e.consequence.relevant
+      !refreshed ? "Observation recorded. Reconnect to inspect the saved mission state." : e.model_output?.engine === "unavailable"
+        ? "Image saved. Inference unavailable; retry in the evidence review or request human investigation."
+        : e.consequence.relevant
         ? "Analysis recorded. Human review required."
         : "Evidence stored; no active mission dependency challenged.",
     );
   }
   async function verified() {
-    await refresh();
+    const refreshed = await refresh();
     setNotice(
-      "Review recorded. Check the mission state for its effect on knowledge and routing.",
+      refreshed ? "Review recorded. Check the mission state for its effect on knowledge and routing." : "Review recorded. Reconnect to inspect the saved decision.",
     );
   }
   function switchEva(id: string) {
@@ -61,7 +65,16 @@ export default function MissionWorkspace({ view }: { view: View }) {
   }
   return (
     <MissionShell view={view} missionId={missionId} setMissionId={switchEva}>
-      {error && (
+      {(error === "Authentication required" || error?.startsWith("Demo expired")) && !snapshot ? (
+        <section className="panel access-gate" role="status">
+          <p className="eyebrow">MISSION ACCESS</p><h1>{error?.startsWith("Demo expired") ? "Your guest demo has expired" : "Sign in to the living map"}</h1>
+          <p>Mission records and observation controls require an authorized account. The public overview and NASA imagery remain available.</p>
+          <PublicDemoButton/>
+          <Link href="/workspace-login" className="button secondary">Open my personal workspace</Link>
+          <Link href="/login" className="button primary">Open mission sign in</Link>
+          <Link href="/" className="button secondary">Return to overview</Link>
+        </section>
+      ) : error && (
         <div role="alert" className="service-error">
           <div>
             <strong>
@@ -77,7 +90,7 @@ export default function MissionWorkspace({ view }: { view: View }) {
           </button>
         </div>
       )}
-      {!snapshot && (
+      {!snapshot && error !== "Authentication required" && !error?.startsWith("Demo expired") && (
         <div className="loading-panel" role="status">
           <Database size={25} />
           <h2>

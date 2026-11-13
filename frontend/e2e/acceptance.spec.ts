@@ -67,8 +67,12 @@ test("primary acceptance: prior → observation → verify → Beta → reload �
 });
 for (const [size, width, height] of [
   ["desktop", 1440, 1000],
+  ["wide-desktop", 1920, 1080],
+  ["laptop", 1280, 900],
   ["tablet", 834, 1112],
+  ["compact-tablet", 768, 1024],
   ["mobile", 390, 844],
+  ["small-mobile", 360, 800],
 ] as const) {
   for (const view of [
     "",
@@ -84,6 +88,7 @@ for (const [size, width, height] of [
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       await page.setViewportSize({ width, height });
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(`/${view}`);
       if (view === "mission") {
         await expect(
@@ -92,8 +97,31 @@ for (const [size, width, height] of [
       } else
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       if (view) await expect(page.getByLabel("Active mission")).toBeVisible();
-      if (["mission", "astronaut", "comparison"].includes(view))
+      // A shell heading can appear before the mission API finishes loading.
+      // Capture the actual data-backed view, not an empty loading state.
+      if (view === "evidence")
+        await expect(page.getByRole("navigation", { name: "Evidence hierarchy" })).toBeVisible();
+      if (view === "memory")
+        await expect(page.getByRole("heading", { name: "Knowledge that Lives On" })).toBeVisible();
+      if (["mission", "astronaut", "comparison", "memory"].includes(view)) {
         await expect(page.locator(".map-canvas canvas").first()).toBeVisible();
+        await expect.poll(() => page.locator(".map-panel").evaluateAll(
+          (maps) => maps.length > 0 && maps.every((map) => map.getAttribute("data-renderer") === "webgl"),
+        )).toBe(true);
+      }
+      if (view === "mission" && width <= 600) {
+        const map = page.locator(".recovery-map > .map-panel");
+        const status = page.locator(".recovery-map > .map-knowledge-label");
+        await expect(status).toBeVisible();
+        const mapBox = await map.boundingBox();
+        const statusBox = await status.boundingBox();
+        expect(mapBox && statusBox && statusBox.y >= mapBox.y + mapBox.height - 1).toBeTruthy();
+      }
+      // Trigger natural lazy-loading for images below the first viewport.
+      for (const image of await page.locator("img").all()) {
+        if (await image.isVisible()) await image.scrollIntoViewIfNeeded();
+      }
+      await page.evaluate(() => window.scrollTo(0, 0));
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - window.innerWidth,
       );

@@ -2,25 +2,19 @@
 
 MARSENSE is a research and mission-concept prototype for evidence-aware Mars
 exploration decision support built from NASA-derived data and validated prototype
-workflows. Public deployment was requested on 2026-10-10; it has not been performed. Source/model
+workflows. A hosted prototype is live on the existing Windows Docker/Tailscale host; final production promotion of the expanded release candidate remains gated. Source/model
 limits in NASA_SOURCE_MATRIX.md remain; this is not operational EVA software.
 
 ## Latest deployment request: Vercel and public GitHub
 
 The complete project is pushed to the public `SDAFIK/MARSENSE` repository.
 The user subsequently selected Vercel rather than GitHub Pages. See
-[Vercel setup](docs/VERCEL_DEPLOYMENT.md). Vercel sign-in and an externally
-reachable durable backend are still required; no live website URL is recorded
-until a deployment has been verified.
+[Vercel setup](docs/VERCEL_DEPLOYMENT.md). The existing backend is reachable at https://desktop-sdfik.tailf13324.ts.net and the verified Vercel staging frontend is https://redscape-nzyvxnmnx-sadib-dewans-projects.vercel.app. Both serve the hosted baseline c926819; the expanded candidate is not yet promoted.
 GitHub Pages is not enabled. Pages serves static files and cannot run this
 application's FastAPI backend, identity sessions, uploads or persistent SQLite
 mission store. Source delivery alone is not a running full-system deployment.
 
-The existing Docker Compose configuration is the full-system deployment path.
-Execution still requires an accessible host, HTTPS hostname/certificates and a
-private identity file. No host or production configuration was supplied for the
-latest request. A separate static showcase would be a different deliverable;
-it must not replace the working app or be described as the full system.
+The existing Windows Docker Compose project marsense-free is the active full-system deployment, with the named mission-data volume preserved and Tailscale Funnel providing HTTPS. See [release acceptance](docs/RELEASE_ACCEPTANCE.md) for the tested baseline and operator gates. A separate showcase must never replace the working app or use its production records.
 
 ## Local operation
 
@@ -30,7 +24,7 @@ history. Frontend development edits reload automatically; backend code requires
 a controlled process restart. Do not delete the database to repeat a demo.
 Use a separate MARSENSE_DATABASE_URL for a fresh demonstration instead.
 
-## Production preparation (operator steps, not executed)
+## Alternative direct TLS deployment (Linux operator steps)
 
 1. Provision a Linux host with Docker Compose, a hostname and a valid TLS
    certificate. No infrastructure or billing action is automated here.
@@ -98,8 +92,4 @@ secrets; container access logs require normal retention/privacy controls.
 
 ## Verification boundary
 
-Native backend, Next production build, authenticated browser flow and offline
-local acceptance are tested. Docker image builds, nginx TLS termination, DNS,
-certificate renewal and external backup/restore operations have not been executed
-in this workstation session. S10 delivers configuration and exact operator steps;
-there is no externally deployed service or production security certification.
+The hosted baseline c926819 passed CI #28 and Docker smoke #22, and its HTTPS health, session and NASA imagery were verified. The expanded candidate e83a2ed passed 141 application tests in CI #38 and Docker smoke #32; subsequent visual refinements require exact-head validation. Production record preservation was verified (24 original records, none missing or changed outside sessions). A full backup restore rehearsal, actual hosted authenticated browser acceptance and isolated hosted showcase remain release gates. No operational EVA or production security certification is claimed.

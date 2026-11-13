@@ -17,7 +17,11 @@ OBSTACLES = {Terrain.OBSTACLES, Terrain.LARGE_ROCKS, Terrain.ROUGH}
 
 
 def compare(expected: Terrain, output: ModelOutput, conflicting: bool = False) -> Discrepancy:
-    if output.confidence < 0.5 or output.terrain == Terrain.UNKNOWN:
+    if (
+        output.confidence is None
+        or output.confidence < 0.5
+        or output.terrain == Terrain.UNKNOWN
+    ):
         return Discrepancy.INSUFFICIENT_EVIDENCE
     if conflicting:
         return Discrepancy.CONFLICTING_EVIDENCE

@@ -1,8 +1,12 @@
 # Vercel deployment
 
 The user authorized public deployment and made the source repository public:
-https://github.com/SDAFIK/MARSENSE . No successful Vercel deployment or live
-website URL has been verified yet.
+https://github.com/SDAFIK/MARSENSE . Verified 2026-11-13: existing Docker/Tailscale
+backend https://desktop-sdfik.tailf13324.ts.net returns production health 200.
+Vercel project redscape has staging deployment
+https://redscape-nzyvxnmnx-sadib-dewans-projects.vercel.app (commit c926819),
+READY with homepage, health, session, login and NASA imagery checks passing.
+Authenticated hosted browser acceptance and final production promotion remain gated.
 
 ## Frontend import
 
@@ -34,12 +38,13 @@ identity, backup and recovery steps. Alternatively, a separately specified
 database/object-storage migration would be needed for an entirely serverless
 system; it has not been performed.
 
-Vercel sign-in is verified. The import form is prepared as `redscape`, using
-the `frontend` root and Next.js preset. The user deferred backend provisioning
-and requested frontend source/documentation delivery to GitHub. No paid server
-has been created. Deployment remains pending a usable public backend origin.
-GitHub is public; GitHub
-Pages was not enabled and no separate showcase repository was created.
+Vercel Hobby project redscape uses the frontend root, Next.js and Node 24.x.
+The staging environment's server-only BACKEND_URL points to the existing
+Tailscale origin. No paid server or database was created. Do not treat a staging
+deployment as production; prepare the production environment variables and
+exact CORS origin, stage the tested build, verify hosted authentication and
+mission workflow, then promote only after all release gates pass. The GitHub
+repository remains public; GitHub Pages is not the backend deployment path.
 
 References: https://vercel.com/docs/frameworks/backend/fastapi and
 https://vercel.com/kb/guide/is-sqlite-supported-in-vercel .

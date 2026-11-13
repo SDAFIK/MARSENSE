@@ -41,14 +41,8 @@ export default function MissionControl({
     (r) => r.id === snapshot.mission.active_route_id,
   );
   const alpha = snapshot.routes.find((r) => r.version === 1);
-  const beta = snapshot.routes.find((r) => r.version > 1);
-  const alphaChallenged = Boolean(
-    selected &&
-    alpha &&
-    selected.verification_state !== "REJECTED" &&
-    !selected.superseded_by?.length &&
-    selected.consequence.route_segment_ids.includes(`${alpha.id}-segment-3`),
-  );
+  const beta = active && active.version > 1 ? active : undefined;
+  const alphaChallenged = Boolean(alpha && snapshot.assumptions.some(a => a.id === "assumption-corridor" && ["PROVISIONALLY_CHALLENGED", "CHALLENGED"].includes(a.status)));
   const pending =
     selected &&
     ["PROVISIONAL", "NEEDS_MORE_EVIDENCE"].includes(
@@ -62,9 +56,9 @@ export default function MissionControl({
     await observed(e);
     setStep(e.consequence.relevant ? "COMPARE" : "OBSERVE");
   }
-  async function decide() {
+  async function decide(updated: Evidence) {
     await verified();
-    setStep("LEARN");
+    setStep(updated.verification_state === "CONFIRMED" ? "LEARN" : updated.verification_state === "NEEDS_MORE_EVIDENCE" ? "OBSERVE" : "VERIFY");
   }
   function selectEvent(id: string, evidenceId: string | null) {
     setEventId(id);
@@ -106,8 +100,9 @@ export default function MissionControl({
                 document.getElementById(`workflow-${steps[next]}`)?.focus();
               }
             }}
+            aria-label={s}
           >
-            {s}
+            <span className="workflow-number" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span><span className="workflow-caption">{s}</span>
           </button>
         ))}
         <span>HUMAN DECISION AUTHORITY</span>
@@ -285,6 +280,7 @@ export default function MissionControl({
             <section className="context-body">
               <span className="eyebrow">NASA PRIOR</span>
               <h3>Orbital-only expectation</h3>
+              <div className="mission-objective"><span className="eyebrow">MISSION OBJECTIVE</span><strong>{snapshot.target.name}</strong><p>{snapshot.target.objective}</p><span>{active?.status === "NO_ROUTE" ? "No modeled route available" : `${active?.distance_m.toFixed(0) ?? "—"} m modeled traverse`}</span></div>
               <div className="prior-preview">
                 <Image
                   unoptimized

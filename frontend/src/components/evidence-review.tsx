@@ -12,11 +12,13 @@ export default function EvidenceReview({
 }: {
   evidence: Evidence;
   reviewer: string;
-  onVerified: () => Promise<void>;
+  onVerified: (updated: Evidence) => Promise<void>;
   detailed?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [retryNotice, setRetryNotice] = useState("");
+  const [retryId, setRetryId] = useState<string | null>(null);
   const [note, setNote] = useState(
     evidence.persistence_type === "dynamic"
       ? "Visual inspection confirms the temporary visibility condition."
@@ -36,7 +38,7 @@ export default function EvidenceReview({
     setBusy(true);
     setError(null);
     try {
-      await api(
+      const updated = await api<Evidence>(
         `/evidence/${evidence.id}/verify`,
         jsonRequest({
           decision,
@@ -48,13 +50,34 @@ export default function EvidenceReview({
             : {}),
         }),
       );
-      await onVerified();
+      await onVerified(updated);
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
           : "Verification failed. Evidence remains provisional.",
       );
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function retryInference() {
+    setBusy(true);
+    setError(null);
+    setRetryNotice("");
+    // Reuse a request ID on transport failures to prevent duplicate attempts.
+    const requestId = retryId ?? crypto.randomUUID().replaceAll("-", "");
+    setRetryId(requestId);
+    try {
+      const updated = await api<Evidence>(`/evidence/${evidence.id}/retry`,
+        jsonRequest({ request_id: requestId }));
+      setRetryId(null);
+      setRetryNotice(updated.model_output?.engine === "unavailable"
+        ? "Another attempt was recorded. Inference remains unavailable; the original is saved."
+        : "Retry recorded. The latest inference is provisional; human review is still required.");
+      await onVerified(updated);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Retry failed. Original evidence is retained.");
     } finally {
       setBusy(false);
     }
@@ -119,6 +142,15 @@ export default function EvidenceReview({
               : "Terrain · supported footprint only"}
           </strong>
         </div>
+        {pending && evidence.source_type === "ground" && evidence.model_output?.engine === "unavailable" && (
+          <div className="panel-body">
+            <p>Analysis was unavailable. The original image is saved for review.</p>
+            <button className="button secondary full" disabled={busy} onClick={retryInference}>
+              {busy ? "Retrying…" : "Retry saved image analysis"}
+            </button>
+          </div>
+        )}
+        {retryNotice && <p role="status" className="small muted">{retryNotice}</p>}
         {pending && (
           <>
             <label className="field-label" htmlFor={`note-${evidence.id}`}>
@@ -208,7 +240,7 @@ export default function EvidenceReview({
           <input value={supersedes} onChange={e => setSupersedes(e.target.value)} />
           <span className="small muted">Replacement must cover each entire footprint. Original decisions remain in history. Explain your reassessment in the review note above.</span>
         </label>}
-        {detailed && <EvidenceAncestry evidence={evidence} reviewer={reviewer} onVerified={onVerified} />}
+        {detailed && <EvidenceAncestry evidence={evidence} reviewer={reviewer} onVerified={async () => { await onVerified(evidence); }} />}
         {error && (
           <p role="alert" className="error-message">
             {error}

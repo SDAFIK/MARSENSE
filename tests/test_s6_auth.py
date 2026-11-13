@@ -139,3 +139,20 @@ def test_production_cookie_and_login_throttling(tmp_path):
             ).status_code
             == 429
         )
+
+
+def test_public_nasa_assets_do_not_expose_private_mission_data(tmp_path):
+    settings = Settings(
+        environment="production",
+        read_only=True,
+        database_url=f"sqlite:///{tmp_path / 'public-assets.db'}",
+    )
+    with TestClient(create_app(settings)) as client:
+        for asset in ("jezero-ctx.png", "jezero-hirise.png", "ground-navcam.jpg"):
+            response = client.get(f"/api/assets/{asset}")
+            assert response.status_code == 200
+            assert response.headers["cache-control"] == "public, max-age=3600"
+        assert client.get("/api/missions/eva-01").status_code == 401
+        assert client.get("/api/assets/upload-" + "a" * 32 + ".jpg").status_code == 401
+        assert client.get("/api/assets/unknown.png").status_code == 404
+        assert client.post("/api/observations/demo", json={}).status_code == 403

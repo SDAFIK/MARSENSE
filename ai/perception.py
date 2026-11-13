@@ -37,13 +37,14 @@ class Perception:
         contrast = float(gray.std() / 255)
         return ModelOutput(
             terrain=Terrain.ROUGH if edge_fraction > 0.12 else Terrain.UNKNOWN,
-            confidence=0.3,
-            confidence_label="low",
+            confidence=None,
+            confidence_label="not estimated",
             engine="opencv-texture-candidate",
-            version="1.0",
+            version="1.1",
             features={"edge_fraction": round(edge_fraction, 4), "contrast": round(contrast, 4)},
             limitations=[
                 "Texture heuristic is not a trained Mars terrain classifier.",
+                "No calibrated confidence estimate is available.",
                 "Lighting and perspective can mimic roughness. "
                 "Human terrain identification is required.",
                 "No physical soil strength, mineral, or hazard measurement is inferred.",
@@ -124,7 +125,7 @@ class Perception:
     def unavailable(message: str) -> ModelOutput:
         return ModelOutput(
             terrain=Terrain.UNKNOWN,
-            confidence=0,
+            confidence=None,
             confidence_label="unavailable",
             engine="unavailable",
             version="1.0",

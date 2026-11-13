@@ -97,7 +97,9 @@ def put(session: Session, entity: Entity) -> None:
             raise ValueError("Entity identity collision")
         if (
             isinstance(entity, (Observation, HumanDecision, Interpretation))
-            or type(entity).__name__ in {"SourceDeclaration", "Supersession", "AuthAudit"}
+            or type(entity).__name__ in {
+                "SourceDeclaration", "Supersession", "AuthAudit", "InferenceAttempt"
+            }
         ) and (row.payload != entity.model_dump(mode="json")):
             raise ValueError("Original observation, interpretation and decision are immutable")
         if (

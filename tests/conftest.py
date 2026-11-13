@@ -10,7 +10,9 @@ from backend.main import create_app
 
 @pytest.fixture
 def settings(tmp_path: Path) -> Settings:
-    return Settings(database_url=f"sqlite:///{tmp_path / 'test.db'}")
+    return Settings(
+        database_url=f"sqlite:///{tmp_path / 'test.db'}", runtime_dir=tmp_path / "runtime"
+    )
 
 
 @pytest.fixture

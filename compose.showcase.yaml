@@ -1,0 +1,38 @@
+# Isolated authenticated showcase. Use project name marsense-showcase.
+# This is separate from compose.production.yaml: TLS is terminated by Funnel.
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - showcase-data:/app/data/runtime
+      - ${MARSENSE_SHOWCASE_USERS_FILE:?Set private absolute users file}:/run/secrets/marsense-users.json:ro
+    environment:
+      MARSENSE_ENVIRONMENT: showcase
+      MARSENSE_AUTH_USERS_FILE: /run/secrets/marsense-users.json
+      MARSENSE_CORS_ORIGINS: '${MARSENSE_SHOWCASE_ORIGINS:?Set exact HTTPS origins as JSON}'
+      MARSENSE_DATABASE_URL: sqlite:////app/data/runtime/showcase.db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+  gateway:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports: ["127.0.0.1:8081:8080"]
+    volumes:
+      - ./deploy/nginx-funnel.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [web]
+volumes:
+  showcase-data:
