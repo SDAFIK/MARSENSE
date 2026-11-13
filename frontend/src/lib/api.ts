@@ -25,16 +25,25 @@ export function enterWorkspace() {
 }
 
 export async function launchGuestDemo() {
-  clearWorkspaceMode();
   const previous = guestToken();
   if (previous) {
     const response = await fetch("/api/public-demo/auth/session", {
       headers: { "X-Marsense-Demo": previous }, cache: "no-store",
     });
-    if (response.ok) return;
+    if (response.ok) {
+      clearWorkspaceMode();
+      return;
+    }
+    if (response.status !== 401) {
+      throw new Error("Your mission is temporarily unavailable. Retry to resume it.");
+    }
     clearGuestDemo();
   }
   const result = await api<{ token: string }>("/public-demo/start", jsonRequest({}));
+  if (typeof result.token !== "string" || result.token.length !== 43) {
+    throw new Error("The mission service returned an invalid session. Please retry.");
+  }
+  clearWorkspaceMode();
   sessionStorage.setItem(DEMO_KEY, result.token);
   sessionStorage.setItem("marsense-mission", "eva-01");
 }
