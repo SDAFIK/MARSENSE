@@ -89,6 +89,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             with store.session(write=True) as session:
                 if store.postgres and settings.environment == "production":
                     if settings.cloud_fresh_start:
+                        accounts = Store(settings.database_url, "marsense_accounts")
+                        accounts.engine.dispose()
                         initialize_fresh_cloud(session, settings, service.slope_grid)
                     if not all_of(session, Mission):
                         raise ValueError("Cloud production requires a verified mission migration")
