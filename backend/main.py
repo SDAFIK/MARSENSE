@@ -20,6 +20,7 @@ from starlette.requests import Request
 
 from ai.perception import Perception
 from backend.auth import Auth, AuthAudit, InviteRequest, Login, Registration, User, check_origin
+from backend.cloud_bootstrap import initialize_fresh_cloud
 from backend.cloud_assets import enforce_cloud_quota, put_asset, read_asset
 from backend.config import ROOT, Settings
 from backend.domain import (
@@ -87,6 +88,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             with store.session(write=True) as session:
                 if store.postgres and settings.environment == "production":
+                    if settings.cloud_fresh_start:
+                        initialize_fresh_cloud(session, settings, service.slope_grid)
                     if not all_of(session, Mission):
                         raise ValueError("Cloud production requires a verified mission migration")
                     if not settings.auth_users_file and not settings.read_only:
