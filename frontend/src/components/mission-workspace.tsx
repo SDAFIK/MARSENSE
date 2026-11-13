@@ -11,6 +11,7 @@ import BeforeAfter from "./before-after";
 import AstronautWorkspace from "./astronaut-workspace";
 import StructuredEvidence from "./structured-evidence";
 import SpatialMemory from "./spatial-memory";
+import IntelligenceCenter from "./intelligence-center";
 function subscribeMission(callback: () => void) {
   window.addEventListener("storage", callback);
   window.addEventListener("marsense-mission-change", callback);
@@ -150,6 +151,7 @@ export default function MissionWorkspace({ view }: { view: View }) {
             />
           )}
           {view === "comparison" && <BeforeAfter snapshot={snapshot} />}
+          {view === "intelligence" && <IntelligenceCenter key={missionId} snapshot={snapshot} refresh={refresh} loading={loading} error={error} />}
         </>
       )}
     </MissionShell>
