@@ -84,6 +84,8 @@ class WorkspaceManager:
         self.origins = settings.cors_origins
         self.root = settings.runtime_dir / "personal_workspaces"
         self.service = service
+        self.database_url = settings.database_url
+        self.postgres = self.database_url.startswith(("postgresql://", "postgresql+psycopg://"))
         self.lock = Lock()
         self.signup_lock = Lock()
         self.accounts: Store | None = None
@@ -103,7 +105,10 @@ class WorkspaceManager:
                 auth = Auth("")
                 # Nonexistent users run the same password verification as real accounts.
                 auth.dummy_hash = password_hash(token_urlsafe(32))
-                self.accounts = Store(f"sqlite:///{self.root / 'accounts.db'}")
+                self.accounts = (
+                    Store(self.database_url, "marsense_accounts") if self.postgres
+                    else Store(f"sqlite:///{self.root / 'accounts.db'}")
+                )
                 self.auth = auth
             return self.accounts, self.auth
 
@@ -175,7 +180,10 @@ class WorkspaceManager:
             if workspace is None:
                 directory = self.root / user.id
                 directory.mkdir(parents=True, exist_ok=True)
-                store = Store(f"sqlite:///{directory / 'mission.db'}")
+                store = (
+                    Store(self.database_url, "marsense_ws_" + user.id.removeprefix("account-"))
+                    if self.postgres else Store(f"sqlite:///{directory / 'mission.db'}")
+                )
                 try:
                     with store.session(write=True) as session:
                         seed(session, self.service.slope_grid)
