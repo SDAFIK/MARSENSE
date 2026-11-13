@@ -139,3 +139,10 @@ body {background:var(--bg);}
 .observation-progress { height:4px; background:var(--border); border-radius:4px; overflow:hidden; margin:10px 0; }
 .observation-progress i { display:block; width:35%; height:100%; background:var(--orange); border-radius:4px; }
 @media (prefers-reduced-motion:reduce) { .observation-progress i { animation:none; width:100%; } }
+
+/* Public demo entry keeps action buttons aligned on narrow screens. */
+.hero-actions { align-items:flex-start; }
+.guest-launch { display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
+.guest-launch .small { margin:0; max-width:300px; }
+.login-card .guest-launch { margin:14px 0; }
+@media(max-width:600px) { .hero-actions .guest-launch { width:100%; } .hero-actions .guest-launch .button { width:100%; justify-content:center; } }

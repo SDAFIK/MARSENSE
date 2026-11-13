@@ -172,6 +172,11 @@ def create_demo_router(service: MissionService, origins: list[str]) -> tuple[API
         with access(request, write=True) as session:
             return service.demo(session, body)
 
+    @router.post("/observations/upload")
+    def no_upload(request: Request) -> None:
+        with access(request):
+            raise HTTPException(403, "Guest demos use curated observations. Sign in to upload.")
+
     @router.get("/evidence/{evidence_id}", response_model=Evidence)
     def evidence_detail(evidence_id: str, request: Request) -> Evidence:
         with access(request) as session:

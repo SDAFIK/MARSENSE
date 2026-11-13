@@ -68,7 +68,7 @@ def test_public_demo_isolated_from_other_guests_and_production(tmp_path):
         assert client.get(f"{detail}/ancestry", headers=a).status_code == 200
         assert client.get(f"{prefix}/observations/{evidence['observation_id']}",
                           headers=a).status_code == 200
-        assert client.post(f"{prefix}/observations/upload", headers=a).status_code == 404
+        assert client.post(f"{prefix}/observations/upload", headers=a).status_code == 403
         assert client.post(f"{prefix}/showcase/reset", headers=a).status_code == 200
         assert client.get(detail, headers=a).status_code == 404
         assert client.post(f"{prefix}/auth/logout", headers=a).status_code == 200
