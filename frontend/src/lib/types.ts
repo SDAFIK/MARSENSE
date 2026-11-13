@@ -151,4 +151,4 @@ export type Snapshot = {
   };
 };
 export type View =
-  "mission" | "astronaut" | "evidence" | "memory" | "comparison";
+  "mission" | "astronaut" | "evidence" | "memory" | "comparison" | "intelligence";
