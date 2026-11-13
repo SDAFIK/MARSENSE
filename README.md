@@ -16,7 +16,15 @@ MARSENSE is an astronaut-focused Mars exploration **research prototype**. It pre
 
 ### Explore MARSENSE
 
-**Guest demo candidate:** the new Launch Live Demo entry opens a disposable, no-password mission session with the same evidence and routing engine, independent of the authenticated production database. The public guest feature is staged in source until its new tests and hosted deployment pass. Existing user accounts remain invitation-only; uploads belong to the authorized mission workspace.
+### Three ways to explore
+
+| Mode | Access | Data and capabilities |
+|---|---|---|
+| **Launch Live Demo** | No account or password | A fresh private, one-hour guest mission; curated observation, human decision simulation, Alpha/Beta, future EVA and guest-only reset |
+| **Create your workspace** | Self-service username/password | A persistent private Jezero mission, real image upload and analysis, evidence review, route history and later login |
+| **Invited mission access** | Existing operator-issued account | Shared managed mission, assigned reviewer roles, invitation registration and operator administration |
+
+Guest and personal-workspace additions are release candidates until their exact-source CI and hosted checks pass. Guests are limited to 32 simultaneous one-hour sessions and 60 mutations per session; accounts are limited to 64 personal workspaces and 16 images/64 MB of image storage per workspace on this single-host prototype. Passwords are hashed; personal sessions use separate HTTP-only cookies. No email verification, password recovery, shared-team personal workspace invitations or multi-host scaling is claimed. Guest and personal data never use the operator's mission database. Personal data is persisted under the existing runtime volume and must be included in host backups.
 
 - [Live production website](https://desktop-sdfik.tailf13324.ts.net) — persistent, authenticated mission workspace; host must remain online.
 - [Live competition showcase](https://desktop-sdfik.tailf13324.ts.net:8443) — isolated, authenticated demonstration with curated replay and administrator-only reset. Request authorized showcase access from Team Redscape; never use production credentials for the showcase.
@@ -30,7 +38,7 @@ The Windows host operator verified healthy production and showcase containers, 2
 
 **Judge walkthrough:** use the separate showcase to inspect Jezero orbital imagery, compare the curated observation against Assumption A17, confirm evidence as an authorized reviewer, inspect Route Beta and future-EVA memory. See the [showcase guide](https://github.com/SDAFIK/MARSENSE/blob/codex/final-release-guard-2026-11-12/docs/SHOWCASE.md).
 
-**Release boundary:** the latest application is running on the existing host; the default source branch is older until PR #1 is integrated. Final live browser walkthrough, post-upgrade record-level comparison and Vercel production promotion remain pending. This is an experimental decision-support prototype, not certified EVA navigation.
+**Release boundary:** the previously accepted application is running on the existing host; the guest and personal-workspace additions have not yet been deployed. The default source branch is older until PR #1 is integrated. Final live browser walkthrough, post-upgrade record-level comparison and Vercel production promotion remain pending. This is an experimental decision-support prototype, not certified EVA navigation.
 
 Frontend setup: [frontend/README.md](frontend/README.md).
 
@@ -52,7 +60,8 @@ The left utility rail is global navigation. Mission Control workflow tabs change
 | Screen | Purpose |
 |---|---|
 | `/` | NASA-image introduction with the EXPECT → OBSERVE → COMPARE → LEARN story and one entry action |
-| `/login`, `/register`, `/account` | Mission access, invitation-only production registration, and administrator invitation/account management (new candidate) |
+| `/signup`, `/workspace-login` | Self-service personal mission registration and sign-in (new candidate) |
+| `/login`, `/register`, `/account` | Existing invited operator mission access and administrator invitation/account management |
 | `/mission` | Compact mission trace, dominant Mars map, five local workflow contexts and a spatial event strip |
 | `/astronaut` | Target, modeled route distance/state, return assumption, relevant alert, WHY, COMPARE and evidence/review actions |
 | `/evidence` | NASA prior → ground observation → model inference → human interpretation → human decision → mission consequence → provenance → history |

@@ -127,7 +127,10 @@ class MissionService:
             ),
         )
         if original_digest:
-            observation.original_asset_reference = f"/api/observations/{observation.id}/original"
+            prefix = asset.rsplit("/assets/", 1)[0]
+            observation.original_asset_reference = (
+                f"{prefix}/observations/{observation.id}/original"
+            )
         put(session, observation)
         dynamic = observation_type == "visibility"
         evidence = Evidence(

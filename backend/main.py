@@ -40,6 +40,14 @@ from backend.routing import load_slope
 from backend.seed import seed
 from backend.service import MissionService, identifier
 from backend.store import EntityRow, Store, all_of, get, put
+from backend.workspaces import (
+    DATA_PREFIX,
+    WorkspaceDataMiddleware,
+    WorkspaceManager,
+    create_workspace_router,
+    enforce_asset_quota,
+    workspace_context,
+)
 
 logging.basicConfig(level=logging.INFO, format='{"level":"%(levelname)s","event":"%(message)s"}')
 logger = logging.getLogger(__name__)
@@ -56,6 +64,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     store: Store
     service = MissionService(Perception(settings.model_path), load_slope(settings.slope_path))
     demo_router, guest_pool = create_demo_router(service, settings.cors_origins)
+    workspace_manager = WorkspaceManager(settings, service)
     auth = Auth(settings.auth_users_file)
     if settings.environment == "showcase":
         auth.cookie = "marsense_showcase_session"
@@ -77,11 +86,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 seed(session, service.slope_grid)
             yield
         finally:
+            workspace_manager.close()
             guest_pool.close()
             store.engine.dispose()
 
     app = FastAPI(title="MARSENSE", version="1.0.0", lifespan=lifespan)
     app.include_router(demo_router)
+    app.include_router(create_workspace_router(workspace_manager))
+    app.add_middleware(WorkspaceDataMiddleware, manager=workspace_manager)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -89,12 +101,28 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["Content-Type", "Authorization", "X-Marsense-Demo"],
     )
 
+    def mission_store() -> Store:
+        context = workspace_context.get()
+        return context.workspace.store if context is not None else store
+
+    def mission_runtime() -> Path:
+        context = workspace_context.get()
+        return context.workspace.directory if context is not None else settings.runtime_dir
+
+    def mission_api_prefix() -> str:
+        return DATA_PREFIX if workspace_context.get() is not None else "/api"
+
     def authorize(
         request: Request, authorization: Annotated[str | None, Header()] = None
     ) -> User | None:
         mutation = request.method not in {"GET", "HEAD", "OPTIONS"}
         if mutation and settings.read_only:
             raise HTTPException(403, "Read-only demonstration")
+        context = workspace_context.get()
+        if context is not None:
+            if mutation:
+                check_origin(request, settings.cors_origins)
+            return context.user
         with store.session(write=True) as session:
             user = auth.resolve(session, request.cookies.get(auth.cookie))
         if user and mutation:
@@ -221,7 +249,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request: Request, error: RequestValidationError) -> Response:
-        if request.url.path.startswith("/api/auth/"):
+        if request.url.path.startswith(("/api/auth/", "/api/workspaces/auth/")):
             # FastAPI's default validation detail may include the original secret input.
             return JSONResponse(status_code=422, content={"detail": "Invalid authentication input"})
         return await request_validation_exception_handler(request, error)
@@ -257,14 +285,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/missions/{mission_id}", response_model=Snapshot, dependencies=protected)
     def snapshot(mission_id: str) -> Snapshot:
-        with store.session() as session:
+        with mission_store().session() as session:
             return service.snapshot(session, mission_id)
 
     @app.post("/api/observations/demo", response_model=Evidence, dependencies=protected)
     def demo(request: ObserveRequest) -> Evidence:
         if settings.environment not in {"demo", "showcase"}:
             raise HTTPException(404, "Demo replay is disabled")
-        with store.session(write=True) as session:
+        with mission_store().session(write=True) as session:
             return service.demo(session, request)
 
     @app.post("/api/showcase/reset", dependencies=protected)
@@ -273,7 +301,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(404, "Showcase reset unavailable")
         if not user or user.role != "ADMIN":
             raise HTTPException(403, "Showcase administrator required")
-        with store.session(write=True) as session:
+        with mission_store().session(write=True) as session:
             session.execute(
                 delete(EntityRow).where(EntityRow.kind.not_in([
                     "AuthSession", "AuthAudit", "RegisteredAccount", "RegistrationInvite"
@@ -285,12 +313,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/evidence/{evidence_id}", response_model=Evidence, dependencies=protected)
     def evidence_detail(evidence_id: str) -> Evidence:
-        with store.session() as session:
+        with mission_store().session() as session:
             return get(session, Evidence, evidence_id)
 
     @app.get("/api/evidence/{evidence_id}/ancestry", dependencies=protected)
     def ancestry(evidence_id: str) -> dict[str, Any]:
-        with store.session() as session:
+        with mission_store().session() as session:
             return synthesis(session, evidence_id)
 
     @app.post("/api/evidence/{evidence_id}/source", dependencies=protected)
@@ -299,7 +327,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ) -> SourceDeclaration:
         from backend.domain import now
 
-        with store.session(write=True) as session:
+        with mission_store().session(write=True) as session:
             return declare_source(
                 session,
                 request.model_copy(
@@ -318,7 +346,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         dependencies=protected,
     )
     def evidence_history(evidence_id: str) -> EvidenceHistory:
-        with store.session() as session:
+        with mission_store().session() as session:
             evidence = get(session, Evidence, evidence_id)
             decisions = sorted(
                 [d for d in all_of(session, HumanDecision) if d.evidence_id == evidence_id],
@@ -341,12 +369,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         "/api/observations/{observation_id}", response_model=Observation, dependencies=protected
     )
     def observation_detail(observation_id: str) -> Observation:
-        with store.session() as session:
+        with mission_store().session() as session:
             return get(session, Observation, observation_id)
 
     @app.get("/api/observations/{observation_id}/original", dependencies=protected)
     def original_asset(observation_id: str) -> FileResponse:
-        with store.session() as session:
+        with mission_store().session() as session:
             observation = get(session, Observation, observation_id)
         name = observation.raw_asset_reference.rsplit("/", 1)[-1]
         if not observation.original_asset_reference or not (
@@ -356,7 +384,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             and all(c in "0123456789abcdef" for c in name[7:-4])
         ):
             raise HTTPException(404, "Original upload is unavailable for this observation")
-        path = settings.runtime_dir / "originals" / name.replace(".jpg", ".bin")
+        path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
         if not path.is_file():
             raise HTTPException(404, "Original upload unavailable; derivative evidence remains")
         return FileResponse(
@@ -370,7 +398,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def verify(
         evidence_id: str, request: VerifyRequest, user: User | None = Depends(authorize)
     ) -> Evidence:
-        with store.session(write=True) as session:
+        with mission_store().session(write=True) as session:
             if user:
                 request = request.model_copy(update={"reviewer": user.name})
             return service.verify(session, evidence_id, request, user_id=user.id if user else None)
@@ -423,24 +451,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             clean = io.BytesIO()
             image.convert("RGB").save(clean, format="JPEG", quality=90)
         content = clean.getvalue()
+        if workspace_context.get() is not None:
+            enforce_asset_quota(mission_runtime(), len(content) + len(original_content))
         output = safe_infer(content)
         asset_id = identifier("upload") + ".jpg"
-        upload_dir = settings.runtime_dir / "uploads"
+        upload_dir = mission_runtime() / "uploads"
         upload_dir.mkdir(parents=True, exist_ok=True)
         asset_path = upload_dir / asset_id
         asset_path.write_bytes(content)
-        original_dir = settings.runtime_dir / "originals"
+        original_dir = mission_runtime() / "originals"
         original_dir.mkdir(parents=True, exist_ok=True)
         original_path = original_dir / asset_id.replace(".jpg", ".bin")
         try:
             original_path.write_bytes(original_content)
-            with store.session(write=True) as session:
+            with mission_store().session(write=True) as session:
                 return service.observe(
                     session,
                     mission_id,
                     geometry,
                     output,
-                    f"/api/assets/{asset_id}",
+                    f"{mission_api_prefix()}/assets/{asset_id}",
                     hashlib.sha256(content).hexdigest(),
                     "ground",
                     "Astronaut-uploaded image",
@@ -462,7 +492,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if settings.environment == "showcase":
             raise HTTPException(403, "Showcase uses curated replay")
         attempt_id = f"inference-{evidence_id}-{body.request_id}"
-        with store.session(write=True) as session:
+        with mission_store().session(write=True) as session:
             evidence = get(session, Evidence, evidence_id)
             try:
                 get(session, InferenceAttempt, attempt_id)
@@ -487,8 +517,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 and all(c in "0123456789abcdef" for c in name[7:-4])
             ):
                 raise HTTPException(404, "Saved ground image unavailable")
-            path = settings.runtime_dir / "uploads" / name
-            original_path = settings.runtime_dir / "originals" / name.replace(".jpg", ".bin")
+            path = mission_runtime() / "uploads" / name
+            original_path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
             if not path.is_file() or not original_path.is_file():
                 raise HTTPException(404, "Saved image or original unavailable; evidence retained")
             content = path.read_bytes()
@@ -517,7 +547,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             authorize(request, authorization)
             if not all(c in "0123456789abcdef" for c in asset_id[7:-4]):
                 raise HTTPException(404, "Asset not found")
-            path = settings.runtime_dir / "uploads" / asset_id
+            path = mission_runtime() / "uploads" / asset_id
         else:
             raise HTTPException(404, "Asset not found")
         if not path.is_file():

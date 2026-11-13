@@ -70,6 +70,7 @@ export default function MissionWorkspace({ view }: { view: View }) {
           <p className="eyebrow">MISSION ACCESS</p><h1>{error?.startsWith("Demo expired") ? "Your guest demo has expired" : "Sign in to the living map"}</h1>
           <p>Mission records and observation controls require an authorized account. The public overview and NASA imagery remain available.</p>
           <PublicDemoButton/>
+          <Link href="/workspace-login" className="button secondary">Open my personal workspace</Link>
           <Link href="/login" className="button primary">Open mission sign in</Link>
           <Link href="/" className="button secondary">Return to overview</Link>
         </section>
