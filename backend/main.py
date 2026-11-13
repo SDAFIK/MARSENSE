@@ -24,12 +24,12 @@ from backend.cloud_assets import enforce_cloud_quota, put_asset, read_asset
 from backend.config import ROOT, Settings
 from backend.domain import (
     Evidence,
-    Mission,
     EvidenceHistory,
     Footprint,
     HumanDecision,
     InferenceAttempt,
     Interpretation,
+    Mission,
     ModelOutput,
     Observation,
     ObserveRequest,
@@ -96,7 +96,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                             )
                         ]
                         if not users:
-                            raise ValueError("Cloud production requires migrated operator identities")
+                            raise ValueError(
+                                "Cloud production requires migrated operator identities"
+                            )
                         auth = Auth("", users=users)
                 else:
                     seed(session, service.slope_grid)
@@ -505,7 +507,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             with active.session(write=True) as session:
                 enforce_cloud_quota(session, active.schema, len(content) + len(original_content))
                 put_asset(session, active.schema, asset_id, content)
-                put_asset(session, active.schema, asset_id.replace(".jpg", ".bin"), original_content)
+                put_asset(
+                    session, active.schema, asset_id.replace(".jpg", ".bin"), original_content,
+                )
                 return record(session)
 
         upload_dir = mission_runtime() / "uploads"
@@ -596,7 +600,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 with active.session() as session:
                     content = read_asset(session, active.schema, asset_id)
                 if content is None:
-                    raise HTTPException(404, "Cached asset unavailable; mission evidence remains usable")
+                    raise HTTPException(
+                        404, "Cached asset unavailable; mission evidence remains usable"
+                    )
                 return Response(
                     content, media_type="image/jpeg",
                     headers={"Cache-Control": "private, no-store",
