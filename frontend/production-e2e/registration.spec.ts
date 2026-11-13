@@ -14,6 +14,7 @@ test("invite-only registration, role assignment and authenticated browser access
   expect(code).toHaveLength(43);
   await page.getByRole("button", { name: "Hide code" }).click();
   await page.getByRole("button", { name: "Sign out" }).click();
+  await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
   await page.goto("/register");
   for (const [label, width, height] of [
     ["desktop", 1440, 1000], ["mobile", 390, 844], ["small-mobile", 360, 800],

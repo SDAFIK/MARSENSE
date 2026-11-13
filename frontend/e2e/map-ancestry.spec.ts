@@ -8,6 +8,8 @@ test("full map preserves mission framing and closes with Escape", async ({
     .getByRole("button", { name: "Open full map", exact: true })
     .click();
   await expect(page.locator(".map-expanded")).toBeVisible();
+  await expect(page.getByLabel("Illustrative Mars local metric scale")).toBeVisible();
+  await page.getByRole("button", { name: "Reset map north" }).click();
   await page.getByRole("checkbox", { name: "Routes", exact: true }).uncheck();
   await expect(
     page.getByRole("checkbox", { name: "Routes", exact: true }),

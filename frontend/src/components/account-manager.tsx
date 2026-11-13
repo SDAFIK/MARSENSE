@@ -33,7 +33,21 @@ export default function AccountManager() {
       setError(err instanceof Error ? err.message : "Account service unavailable.");
     }
   }, []);
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => {
+    let active = true;
+    api<Session>("/auth/session").then(async (current) => {
+      const records = current.user?.role === "ADMIN" && current.registration_enabled
+        ? await api<AdminState>("/auth/admin") : null;
+      if (active) {
+        setSession(current);
+        setState(records);
+        setError("");
+      }
+    }).catch((err) => {
+      if (active) setError(err instanceof Error ? err.message : "Account service unavailable.");
+    });
+    return () => { active = false; };
+  }, []);
   async function action(path: string, body: unknown, message: string) {
     setBusy(true);
     setError("");

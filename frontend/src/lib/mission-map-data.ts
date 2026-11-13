@@ -8,6 +8,13 @@ export function toMars([x, y]: Coordinate): Coordinate {
     18.44 + ((y / 3396190) * 180) / Math.PI,
   ];
 }
+// Inverse of the explicitly illustrative, Mars-radius local display transform.
+export function fromMars([longitude, latitude]: Coordinate): Coordinate {
+  return [
+    (longitude - 77.45) * Math.PI / 180 * 3396190 * Math.cos(18.44 * Math.PI / 180),
+    (latitude - 18.44) * Math.PI / 180 * 3396190,
+  ];
+}
 // Frozen demonstration segment 3 bounds, from backend/seed.py. Presentation only;
 // consequences and route calculation remain authoritative on the backend.
 export function challengedAlpha(

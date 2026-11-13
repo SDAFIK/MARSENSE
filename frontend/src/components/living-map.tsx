@@ -4,6 +4,7 @@ import * as maplibregl from "maplibre-gl";
 import type { GeoJSONSource } from "maplibre-gl";
 import {
   toMars,
+  fromMars,
   missionFeatures as features,
   challengedAlpha,
 } from "@/lib/mission-map-data";
@@ -180,6 +181,7 @@ export default function LivingMap({
   const [fallback, setFallback] = useState(false);
   const [layer, setLayer] = useState("hirise");
   const [ready, setReady] = useState(false);
+  const [metric, setMetric] = useState<{ x: number; y: number; meters: number; pixels: number } | null>(null);
   const [clock, setClock] = useState(() => Date.now());
   useEffect(() => {
     const timer = setInterval(() => setClock(Date.now()), 10000);
@@ -334,6 +336,20 @@ export default function LivingMap({
         interactive: !locked,
       });
       map.current = instance;
+      function updateMetric() {
+        const center = instance.getCenter();
+        const [x, y] = fromMars([center.lng, center.lat]);
+        const p = instance.project(center);
+        const q = instance.unproject([p.x + 100, p.y]);
+        const [qx, qy] = fromMars([q.lng, q.lat]);
+        const span = Math.hypot(qx - x, qy - y);
+        if (!Number.isFinite(span) || span <= 0) return;
+        const meters = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000]
+          .filter((n) => n <= span).at(-1) ?? 1;
+        setMetric({ x: Math.round(x), y: Math.round(y), meters, pixels: 100 * meters / span });
+      }
+      instance.on("moveend", updateMetric);
+      instance.on("resize", updateMetric);
       instance.on("load", () => {
         instance.fitBounds(
           missionExtent(initial.current.snapshot, warmPresentation),
@@ -351,6 +367,7 @@ export default function LivingMap({
                 ).updateImage({ url, coordinates: corners });
             })
             .catch(() => {});
+        updateMetric();
         setReady(true);
       });
       for (const [location, text, className] of [
@@ -550,6 +567,10 @@ export default function LivingMap({
             : "Cached NASA imagery · illustrative mission"}
         </span>
       </div>
+      {!fallback && !locked && metric && <div className="map-metric" aria-label="Illustrative Mars local metric scale">
+        <span>Local center {metric.x}, {metric.y} m</span>
+        <span><i style={{ width: Math.min(metric.pixels, 140) }}/>{metric.meters} m · approx.</span>
+      </div>}
       {!fallback && !locked && (
         <div className="map-controls">
           <button
