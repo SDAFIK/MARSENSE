@@ -6,16 +6,29 @@ MARSENSE is an astronaut-focused Mars exploration **research prototype**. It pre
 
 [Repository](https://github.com/SDAFIK/MARSENSE) · [Source matrix](NASA_SOURCE_MATRIX.md) · [Scientific audit](SCIENTIFIC_AUDIT.md) · [API contract](API_CONTRACT.md) · [Visual fidelity report](docs/design/MISSION_CONTROL_FIDELITY.md)
 
-## Verified deployment and release status (2026-11-13)
+## Competition showcase — Team Redscape
 
-Team **Redscape** · [GitHub release PR #1](https://github.com/SDAFIK/MARSENSE/pull/1).
+**NASA International Space Apps Challenge 2026** · Interplanetary Survival Guide: Martian Map
 
-- [Existing Docker/Tailscale host](https://desktop-sdfik.tailf13324.ts.net) — public HTTPS health verified; operator-provisioned, authenticated prototype.
-- [Vercel staging frontend](https://redscape-nzyvxnmnx-sadib-dewans-projects.vercel.app) — verified READY and connected to the upgraded backend; protected staging, not the final Vercel production release.
-- Last verified hosted source baseline: `c9268192d00504f04cad539ae71026ee22d66bd9`. [Application CI #28](https://github.com/SDAFIK/MARSENSE/actions/runs/43332517324) and [Docker smoke #22](https://github.com/SDAFIK/MARSENSE/actions/runs/43332517315) passed.
-- Operator backup and live SQLite integrity checks returned `ok`; all 24 original records survived the upgrade; 0 missing and 0 changed non-session records.
+> What happens when Mars does not match the map?
 
-The draft release branch now includes further scientific, upload, and invited-account improvements. Those changes require their own exact-head CI and hosted acceptance before promotion. The host must stay online. [Release status and acceptance matrix](docs/RELEASE_ACCEPTANCE.md).
+**Every Step Makes Mars More Known.**
+
+### Explore MARSENSE
+
+- [Live production website](https://desktop-sdfik.tailf13324.ts.net) — persistent, authenticated mission workspace; host must remain online.
+- [Live competition showcase](https://desktop-sdfik.tailf13324.ts.net:8443) — isolated, authenticated demonstration with curated replay and administrator-only reset. Request authorized showcase access from Team Redscape; never use production credentials for the showcase.
+- [Latest release candidate](https://github.com/SDAFIK/MARSENSE/tree/codex/final-release-guard-2026-11-12) · [Release PR #1](https://github.com/SDAFIK/MARSENSE/pull/1)
+- [Application CI](https://github.com/SDAFIK/MARSENSE/actions/runs/43467704429) · [Docker CI](https://github.com/SDAFIK/MARSENSE/actions/runs/43467704736) — both passed for `efa15d2`.
+- [Vercel staging](https://redscape-46lc9p44a-sadib-dewans-projects.vercel.app) — protected preview, READY and connected to upgraded production API; not the public judge link.
+
+### Verified hosted demonstration — November 13, 2026
+
+The Windows host operator verified healthy production and showcase containers, 28-record backup integrity, an isolated restore rehearsal, and successful hosted API acceptance. The acceptance test exercised authorized sign-in, Route Alpha, curated Area 14 observation, provisional evidence, identity-bound confirmation, Route Beta, EVA-02 inheritance, showcase-only reset, unchanged production mission snapshots, logout and unauthorized access rejection. Production replay remains disabled.
+
+**Judge walkthrough:** use the separate showcase to inspect Jezero orbital imagery, compare the curated observation against Assumption A17, confirm evidence as an authorized reviewer, inspect Route Beta and future-EVA memory. See the [showcase guide](https://github.com/SDAFIK/MARSENSE/blob/codex/final-release-guard-2026-11-12/docs/SHOWCASE.md).
+
+**Release boundary:** the latest application is running on the existing host; the default source branch is older until PR #1 is integrated. Final live browser walkthrough, post-upgrade record-level comparison and Vercel production promotion remain pending. This is an experimental decision-support prototype, not certified EVA navigation.
 
 Frontend setup: [frontend/README.md](frontend/README.md).
 
@@ -162,7 +175,7 @@ The helper prompts privately for a password. Restrict file access to the service
 
 ## Verification
 
-Verified baseline `c926819`: **110 test cases** (71 backend, 12 frontend component, 24 browser, 1 authenticated browser, 1 production-mode upload browser, 1 isolated showcase browser). TypeScript, lint, Next production build and separate container smoke passed. New candidate tests include invitation registration, inference retry, uploaded-image preview and all requested viewport widths; exact-head results must be recorded before release. Backend and browser tests use disposable stores. The private genuine-checkpoint gate is not run by GitHub CI.
+Verified baseline `c926819`: **110 test cases** (71 backend, 12 frontend component, 24 browser, 1 authenticated browser, 1 production-mode upload browser, 1 isolated showcase browser). TypeScript, lint, Next production build and separate container smoke passed. The later candidate passed 141 tests, including invitation registration, inference retry, uploaded-image preview and seven viewport widths; latest CI links are above. Backend and browser tests use disposable stores. The private genuine-checkpoint gate is not run by GitHub CI.
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q --basetemp=.tmp\verification
@@ -192,7 +205,7 @@ Use `codex/` prefixes for new agent branches. Inspect staged files before commit
 
 ## Deployment and scientific development
 
-`compose.yaml`, `compose.production.yaml`, Dockerfiles and `deploy/` contain the existing local/production configuration. The existing host is running the verified baseline through Docker and Tailscale HTTPS. Follow [DEPLOYMENT.md](DEPLOYMENT.md), [free hosting](docs/FREE_HOSTING.md), [showcase isolation](docs/SHOWCASE.md) and [Vercel setup](docs/VERCEL_DEPLOYMENT.md). A full hosted authenticated acceptance, isolated showcase and restore rehearsal remain release gates; staging READY is not full-system acceptance.
+`compose.yaml`, `compose.production.yaml`, Dockerfiles and `deploy/` contain the existing local/production configuration. The existing host is running the verified baseline through Docker and Tailscale HTTPS. Follow [DEPLOYMENT.md](DEPLOYMENT.md), [free hosting](docs/FREE_HOSTING.md), [showcase isolation](docs/SHOWCASE.md) and [Vercel setup](docs/VERCEL_DEPLOYMENT.md). Hosted API acceptance, isolated showcase and restore rehearsal passed; browser walkthrough, final record comparison and Vercel production promotion remain release gates.
 
 The authoritative project concept is [MAIN_PROJECT_NOTES.md](docs/MAIN_PROJECT_NOTES.md); engineering constraints are frozen in [PROJECT_SPEC.md](PROJECT_SPEC.md). [NASA_SOURCE_MATRIX.md](NASA_SOURCE_MATRIX.md), [MODEL_CARD.md](MODEL_CARD.md), [SCIENTIFIC_AUDIT.md](SCIENTIFIC_AUDIT.md) and [FINAL_AUDIT.md](FINAL_AUDIT.md) separate measured prototype behavior from unresolved science. Preserve original NASA sources, actual model output, final human decisions, supported footprints and future-EVA memory when extending the system.
 
