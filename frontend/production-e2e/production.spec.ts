@@ -170,13 +170,24 @@ test("guest mobile navigation connects astronaut evidence routes and future memo
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   const inspect = async (screen: string) => {
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
     await page.screenshot({ path: testInfo.outputPath(`guest-${screen}-mobile.png`), fullPage: true });
+    const layout = await page.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - innerWidth,
+      viewport: innerWidth,
+      offenders: Array.from(document.querySelectorAll("body *")).flatMap((node) => {
+        const rect = node.getBoundingClientRect();
+        return rect.right > innerWidth + 1 && rect.width > 0
+          ? [{ tag: node.tagName, className: node.getAttribute("class"), right: Math.round(rect.right) }]
+          : [];
+      }).slice(0, 24),
+    }));
+    expect(layout.overflow, JSON.stringify({ screen, ...layout })).toBeLessThanOrEqual(1);
   };
   await page.goto("/");
   await page.getByRole("button", { name: "Launch Live Demo", exact: true }).click();
   await expect(page.getByRole("tab", { name: "EXPECT", exact: true })).toBeVisible();
   await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Alpha");
+  await inspect("mission");
   await page.getByRole("link", { name: "Astronaut View", exact: true }).click();
   await expect(page.getByRole("region", { name: "Ground observation view" })).toBeVisible();
   await expect(page.getByLabel("Demonstration observation")).toBeVisible();
