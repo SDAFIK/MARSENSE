@@ -109,6 +109,14 @@ for (const [size, width, height] of [
           (maps) => maps.length > 0 && maps.every((map) => map.getAttribute("data-renderer") === "webgl"),
         )).toBe(true);
       }
+      if (view === "mission" && width <= 600) {
+        const map = page.locator(".recovery-map > .map-panel");
+        const status = page.locator(".recovery-map > .map-knowledge-label");
+        await expect(status).toBeVisible();
+        const mapBox = await map.boundingBox();
+        const statusBox = await status.boundingBox();
+        expect(mapBox && statusBox && statusBox.y >= mapBox.y + mapBox.height - 1).toBeTruthy();
+      }
       // Trigger natural lazy-loading for images below the first viewport.
       for (const image of await page.locator("img").all()) {
         if (await image.isVisible()) await image.scrollIntoViewIfNeeded();

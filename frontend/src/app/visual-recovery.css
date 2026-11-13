@@ -787,3 +787,13 @@
     animation: none;
   }
 }
+
+/* Compact mission map: status has its own space, never obscures terrain labels. */
+@media (max-width: 600px) {
+  .recovery-map { display:flex; flex-direction:column; height:auto; min-height:510px; }
+  .recovery-map > .map-panel:not(.map-expanded) { flex:1 1 460px; height:460px; min-height:460px; }
+  .recovery-map > .map-knowledge-label { position:static; max-width:none; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; padding:10px; border:0; border-top:1px solid var(--border); background:#11191e; pointer-events:auto; }
+  .recovery-map > .map-knowledge-label .challenged-text { flex-basis:100%; }
+  .recovery-map .map-panel:not(.map-expanded) .map-marker.area > span:last-child { display:none; }
+  .recovery-map .map-panel:not(.map-expanded) .map-location { max-width:calc(100% - 65px); }
+}

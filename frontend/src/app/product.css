@@ -125,3 +125,17 @@ body {background:var(--bg);}
 .invite-code output{font-family:monospace;overflow-wrap:anywhere;flex:1 0 100%;user-select:all}
 .login-card .auth-panel label{min-width:0;overflow-wrap:anywhere}
 @media(max-width:768px){.account-layout{grid-template-columns:1fr;margin:28px auto;gap:16px}.account-manager{padding:16px}}
+
+/* Restrained, accessible product motion: no artificial processing percentages. */
+@media (prefers-reduced-motion:no-preference) {
+  .product-home .product-hero > :not(img), .login-content > section { animation:product-arrive 420ms cubic-bezier(.2,.7,.2,1) both; }
+  .login-content > section:nth-child(2) { animation-delay:80ms; }
+  .product-home .feature-grid article, .product-home .button, .login-card .button, .account-manager .button { transition:background-color 180ms ease,border-color 180ms ease,transform 180ms ease; }
+  .product-home .button:hover, .login-card .button:not(:disabled):hover { transform:translateY(-2px); }
+  .observation-progress i { animation:observation-scan 1.4s ease-in-out infinite; }
+}
+@keyframes product-arrive { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+@keyframes observation-scan { from { transform:translateX(-100%); } to { transform:translateX(300%); } }
+.observation-progress { height:4px; background:var(--border); border-radius:4px; overflow:hidden; margin:10px 0; }
+.observation-progress i { display:block; width:35%; height:100%; background:var(--orange); border-radius:4px; }
+@media (prefers-reduced-motion:reduce) { .observation-progress i { animation:none; width:100%; } }

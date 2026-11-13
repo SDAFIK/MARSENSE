@@ -219,7 +219,7 @@ export default function ObservationPanel({
           {busy ? "Analyzing observation…" : "Analyze terrain"}
           <ArrowRight size={16} />
         </button>
-        {busy && <p role="status" className="small muted">Submitting image or replay and recording analysis. Keep this page open.</p>}
+        {busy && <div role="status" aria-live="polite"><div className="observation-progress" aria-hidden="true"><i/></div><p className="small muted">Submitting image or replay and recording analysis. Keep this page open.</p></div>}
         <p className="annotation-note">
           {file
             ? "Local image analysis · human review required"
