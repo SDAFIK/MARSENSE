@@ -39,6 +39,19 @@ export async function launchGuestDemo() {
   sessionStorage.setItem("marsense-mission", "eva-01");
 }
 
+let workspaceRefresh: Promise<boolean> | null = null;
+function refreshWorkspace(): Promise<boolean> {
+  if (!workspaceRefresh) {
+    workspaceRefresh = fetch("/api/workspaces/auth/session", { cache: "no-store" })
+      .then(async response => {
+        if (!response.ok) return false;
+        const state = await response.json();
+        return Boolean(state.cloud_auth && state.user);
+      }).catch(() => false).finally(() => { workspaceRefresh = null; });
+  }
+  return workspaceRefresh;
+}
+
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const token = guestToken();
   const useGuest = token && typeof window !== "undefined" &&
@@ -55,11 +68,15 @@ export async function api<T>(path: string, options?: RequestInit): Promise<T> {
     (path.startsWith("/auth/") ? "/workspaces" : "/workspaces/data") : "";
   const headers = useGuest ? new Headers(options?.headers) : undefined;
   if (headers && token) headers.set("X-Marsense-Demo", token);
-  const response = await fetch(`/api${prefix}${path}`, {
+  const request = () => fetch(`/api${prefix}${path}`, {
     ...options,
     ...(headers ? { headers } : {}),
     cache: "no-store",
   });
+  let response = await request();
+  if (response.status === 401 && useWorkspace && prefix === "/workspaces/data" && await refreshWorkspace()) {
+    response = await request();
+  }
   if (!response.ok) {
     const content = (await response.json().catch(() => null)) as {
       detail?: unknown;

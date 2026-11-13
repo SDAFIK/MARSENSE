@@ -8,7 +8,7 @@ from pathlib import Path
 from secrets import token_urlsafe
 from threading import Lock
 from time import monotonic, time
-from typing import Any
+from typing import Any, Protocol
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -27,6 +27,7 @@ from backend.auth import (
     check_origin,
     password_hash,
 )
+from backend.cloud_store import CloudStore
 from backend.config import Settings
 from backend.seed import seed
 from backend.service import MissionService, identifier
@@ -62,7 +63,7 @@ class WorkspaceRegistration(BaseModel):
 
 @dataclass
 class Workspace:
-    store: Store
+    store: Store | CloudStore
     directory: Path
 
 
@@ -197,10 +198,16 @@ class WorkspaceManager:
             self.auth = None
 
 
+class WorkspaceResolver(Protocol):
+    origins: list[str]
+
+    def context(self, request: Request) -> WorkspaceContext: ...
+
+
 class WorkspaceDataMiddleware:
     """Dispatch only an allowlisted set of mission endpoints to the owner's store."""
 
-    def __init__(self, app: ASGIApp, manager: WorkspaceManager):
+    def __init__(self, app: ASGIApp, manager: WorkspaceResolver):
         self.app = app
         self.manager = manager
 

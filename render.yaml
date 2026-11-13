@@ -1,0 +1,29 @@
+# Free single-instance competition candidate; configure secrets in Render, never Git.
+services:
+  - type: web
+    name: marsense-science-api
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: codex/cloud-migration-v1
+    dockerfilePath: ./backend/Dockerfile.cloud
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: off
+    envVars:
+      - key: MARSENSE_ENVIRONMENT
+        value: production
+      - key: MARSENSE_CLOUD_DATABASE_URL
+        sync: false
+      - key: MARSENSE_CLOUD_SUPABASE_URL
+        sync: false
+      - key: MARSENSE_CLOUD_PUBLISHABLE_KEY
+        sync: false
+      - key: MARSENSE_CLOUD_STORAGE_KEY
+        sync: false
+      - key: MARSENSE_CLOUD_PUBLIC_ORIGIN
+        sync: false
+      - key: MARSENSE_CORS_ORIGINS
+        sync: false
+      - key: MARSENSE_CLOUD_STORAGE_BUCKET
+        value: marsense-private

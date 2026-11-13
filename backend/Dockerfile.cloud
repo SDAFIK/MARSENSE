@@ -1,0 +1,17 @@
+# Lean cloud runtime: preserve scientific CPU processing, omit training and Torch.
+FROM python:3.12-slim
+WORKDIR /app
+ENV PYTHONUNBUFFERED=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+RUN apt-get update && apt-get install -y --no-install-recommends libexpat1 \
+    && rm -rf /var/lib/apt/lists/*
+COPY backend/requirements.txt backend/requirements-cloud.txt backend/
+RUN pip install --no-cache-dir -r backend/requirements.txt -r backend/requirements-cloud.txt
+COPY backend backend
+COPY ai ai
+COPY data/nasa data/nasa
+COPY data/processed data/processed
+COPY data/demo data/demo
+RUN useradd --create-home marsense && mkdir -p data/runtime && chown -R marsense:marsense /app
+USER marsense
+EXPOSE 8000
+CMD ["sh", "-c", "exec python -m uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"]

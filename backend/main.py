@@ -15,10 +15,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from PIL import Image, UnidentifiedImageError
 from sqlalchemy import delete
+from sqlalchemy.orm import Session
 from starlette.requests import Request
+from starlette.concurrency import run_in_threadpool
 
 from ai.perception import Perception
 from backend.auth import Auth, AuthAudit, InviteRequest, Login, Registration, User, check_origin
+from backend.cloud_assets import CloudAssets
+from backend.cloud_store import CloudStore
+from backend.cloud_workspace import CloudWorkspaceManager, create_cloud_workspace_router
 from backend.config import ROOT, Settings
 from backend.domain import (
     Evidence,
@@ -61,10 +66,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "This deterministic deployment supports SQLite; PostGIS is a documented extension"
         )
     database_path = settings.database_url.removeprefix("sqlite:///")
-    store: Store
+    store: Store | CloudStore
     service = MissionService(Perception(settings.model_path), load_slope(settings.slope_path))
     demo_router, guest_pool = create_demo_router(service, settings.cors_origins)
-    workspace_manager = WorkspaceManager(settings, service)
+    cloud_manager = CloudWorkspaceManager(settings, service) if settings.cloud_enabled else None
+    local_manager = None if cloud_manager else WorkspaceManager(settings, service)
+    cloud_assets = CloudAssets(settings) if settings.cloud_enabled else None
     auth = Auth(settings.auth_users_file)
     if settings.environment == "showcase":
         auth.cookie = "marsense_showcase_session"
@@ -77,23 +84,43 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         nonlocal store
-        if database_path != ":memory:":
-            Path(database_path).parent.mkdir(parents=True, exist_ok=True)
-        store = Store(settings.database_url)
+        if cloud_manager and cloud_assets:
+            store = CloudStore(
+                settings.cloud_database_url.get_secret_value(), "marsense_operator",
+                shared_engine=cloud_manager.engine,
+            )
+        else:
+            if database_path != ":memory:":
+                Path(database_path).parent.mkdir(parents=True, exist_ok=True)
+            store = Store(settings.database_url)
         application.state.store = store
         try:
+            if cloud_assets:
+                cloud_assets.verify_private_bucket()
             with store.session(write=True) as session:
                 seed(session, service.slope_grid)
             yield
         finally:
-            workspace_manager.close()
             guest_pool.close()
-            store.engine.dispose()
+            if cloud_assets:
+                cloud_assets.close()
+            if cloud_manager:
+                cloud_manager.close()
+            if local_manager:
+                local_manager.close()
+            if isinstance(store, CloudStore):
+                store.close()
+            else:
+                store.engine.dispose()
 
     app = FastAPI(title="MARSENSE", version="1.0.0", lifespan=lifespan)
     app.include_router(demo_router)
-    app.include_router(create_workspace_router(workspace_manager))
-    app.add_middleware(WorkspaceDataMiddleware, manager=workspace_manager)
+    if cloud_manager:
+        app.include_router(create_cloud_workspace_router(cloud_manager))
+        app.add_middleware(WorkspaceDataMiddleware, manager=cloud_manager)
+    elif local_manager:
+        app.include_router(create_workspace_router(local_manager))
+        app.add_middleware(WorkspaceDataMiddleware, manager=local_manager)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -101,7 +128,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["Content-Type", "Authorization", "X-Marsense-Demo"],
     )
 
-    def mission_store() -> Store:
+    def mission_store() -> Store | CloudStore:
         context = workspace_context.get()
         return context.workspace.store if context is not None else store
 
@@ -111,6 +138,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     def mission_api_prefix() -> str:
         return DATA_PREFIX if workspace_context.get() is not None else "/api"
+
+    def asset_namespace() -> str:
+        context = workspace_context.get()
+        return f"user-{context.user.id.removeprefix('account-')}" if context else "operator"
 
     def authorize(
         request: Request, authorization: Annotated[str | None, Header()] = None
@@ -373,7 +404,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return get(session, Observation, observation_id)
 
     @app.get("/api/observations/{observation_id}/original", dependencies=protected)
-    def original_asset(observation_id: str) -> FileResponse:
+    def original_asset(observation_id: str) -> Response:
         with mission_store().session() as session:
             observation = get(session, Observation, observation_id)
         name = observation.raw_asset_reference.rsplit("/", 1)[-1]
@@ -384,6 +415,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             and all(c in "0123456789abcdef" for c in name[7:-4])
         ):
             raise HTTPException(404, "Original upload is unavailable for this observation")
+        if cloud_assets:
+            return Response(
+                cloud_assets.read(asset_namespace(), "originals", name.replace(".jpg", ".bin")),
+                media_type="application/octet-stream",
+                headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff",
+                         "Content-Disposition": f'attachment; filename="{name}.original"'},
+            )
         path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
         if not path.is_file():
             raise HTTPException(404, "Original upload unavailable; derivative evidence remains")
@@ -451,10 +489,41 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             clean = io.BytesIO()
             image.convert("RGB").save(clean, format="JPEG", quality=90)
         content = clean.getvalue()
-        if workspace_context.get() is not None:
-            enforce_asset_quota(mission_runtime(), len(content) + len(original_content))
         output = safe_infer(content)
         asset_id = identifier("upload") + ".jpg"
+
+        def record(session: Session) -> Evidence:
+            return service.observe(
+                session, mission_id, geometry, output,
+                f"{mission_api_prefix()}/assets/{asset_id}",
+                hashlib.sha256(content).hexdigest(), "ground", "Astronaut-uploaded image",
+                "Footprint supplied manually in local meters; "
+                "image is not independently geolocated. Display/model input is a sanitized "
+                "JPEG derivative; original bytes/hash are retained separately."
+                + (f" Observer note (unverified): {details}" if details else ""),
+                original_digest=hashlib.sha256(original_content).hexdigest(),
+            )
+
+        if cloud_assets is not None:
+            assets = cloud_assets
+            namespace = asset_namespace()
+
+            def save_cloud() -> Evidence:
+                written = False
+                try:
+                    with mission_store().session(write=True) as session:
+                        assets.ensure_quota(namespace, len(content) + len(original_content))
+                        assets.write_pair(namespace, asset_id, original_content, content)
+                        written = True
+                        return record(session)
+                except Exception:
+                    if written:
+                        assets.remove_pair(namespace, asset_id)
+                    raise
+
+            return await run_in_threadpool(save_cloud)
+        if workspace_context.get() is not None:
+            enforce_asset_quota(mission_runtime(), len(content) + len(original_content))
         upload_dir = mission_runtime() / "uploads"
         upload_dir.mkdir(parents=True, exist_ok=True)
         asset_path = upload_dir / asset_id
@@ -465,21 +534,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             original_path.write_bytes(original_content)
             with mission_store().session(write=True) as session:
-                return service.observe(
-                    session,
-                    mission_id,
-                    geometry,
-                    output,
-                    f"{mission_api_prefix()}/assets/{asset_id}",
-                    hashlib.sha256(content).hexdigest(),
-                    "ground",
-                    "Astronaut-uploaded image",
-                    "Footprint supplied manually in local meters; "
-                    "image is not independently geolocated. Display/model input is a sanitized "
-                    "JPEG derivative; original bytes/hash are retained separately."
-                    + (f" Observer note (unverified): {details}" if details else ""),
-                    original_digest=hashlib.sha256(original_content).hexdigest(),
-                )
+                return record(session)
         except Exception:
             asset_path.unlink(missing_ok=True)
             original_path.unlink(missing_ok=True)
@@ -517,15 +572,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 and all(c in "0123456789abcdef" for c in name[7:-4])
             ):
                 raise HTTPException(404, "Saved ground image unavailable")
-            path = mission_runtime() / "uploads" / name
-            original_path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
-            if not path.is_file() or not original_path.is_file():
-                raise HTTPException(404, "Saved image or original unavailable; evidence retained")
-            content = path.read_bytes()
+            if cloud_assets:
+                content = cloud_assets.read(asset_namespace(), "uploads", name)
+                original = cloud_assets.read(asset_namespace(), "originals", name.replace(".jpg", ".bin"))
+            else:
+                path = mission_runtime() / "uploads" / name
+                original_path = mission_runtime() / "originals" / name.replace(".jpg", ".bin")
+                if not path.is_file() or not original_path.is_file():
+                    raise HTTPException(404, "Saved image or original unavailable; evidence retained")
+                content = path.read_bytes()
+                original = original_path.read_bytes()
             if (
                 hashlib.sha256(content).hexdigest() != observation.model_input_sha256
-                or hashlib.sha256(original_path.read_bytes()).hexdigest()
-                != observation.asset_sha256
+                or hashlib.sha256(original).hexdigest() != observation.asset_sha256
             ):
                 raise HTTPException(409, "Saved image integrity check failed; evidence retained")
             return service.retry_inference(
@@ -535,7 +594,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/api/assets/{asset_id}")
     def asset(
         asset_id: str, request: Request, authorization: Annotated[str | None, Header()] = None
-    ) -> FileResponse:
+    ) -> Response:
         known = {"jezero-ctx.png", "ground-navcam.jpg", "jezero-hirise.png"}
         if asset_id in known:
             path = ROOT / "data/nasa" / asset_id
@@ -547,6 +606,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             authorize(request, authorization)
             if not all(c in "0123456789abcdef" for c in asset_id[7:-4]):
                 raise HTTPException(404, "Asset not found")
+            if cloud_assets:
+                return Response(
+                    cloud_assets.read(asset_namespace(), "uploads", asset_id),
+                    media_type="image/jpeg",
+                    headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"},
+                )
             path = mission_runtime() / "uploads" / asset_id
         else:
             raise HTTPException(404, "Asset not found")
