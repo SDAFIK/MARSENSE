@@ -56,7 +56,7 @@ class Store:
             if "sslmode" not in parsed.query:
                 parsed = parsed.update_query_dict({"sslmode": "require"})
             self.engine = create_engine(
-                parsed, poolclass=NullPool, connect_args={
+                parsed, poolclass=NullPool, hide_parameters=True, connect_args={
                     "connect_timeout": 10, "prepare_threshold": None,
                 },
             )
@@ -101,6 +101,112 @@ class Store:
                         ))
                         connection.execute(text(
                             f'REVOKE ALL ON "{self.schema}"."{table}" '
+                            "FROM PUBLIC, anon, authenticated, service_role"
+                        ))
+                    if self.schema == "marsense":
+                        connection.execute(text("""
+                            CREATE TABLE IF NOT EXISTS marsense.asset_blobs (
+                                namespace varchar(63) NOT NULL,
+                                name varchar(128) NOT NULL,
+                                content bytea NOT NULL,
+                                sha256 varchar(64) NOT NULL,
+                                byte_count integer NOT NULL,
+                                PRIMARY KEY (namespace, name),
+                                CHECK (byte_count = octet_length(content)),
+                                CHECK (sha256 ~ '^[0-9a-f]{64}
+                    if version < 2:
+                        from backend.migrations import migrate_legacy_segments
+
+                        migrate_legacy_segments(session)
+                    row = session.get(SchemaVersion, 1)
+                    if row is None:
+                        session.add(SchemaVersion(id=1, version=SCHEMA_VERSION))
+                    else:
+                        row.version = SCHEMA_VERSION
+                    session.flush()
+        except Exception:
+            self.engine.dispose()
+            raise
+
+    def _scope(self, connection: Connection | Session) -> None:
+        connection.execute(text(f'SET LOCAL search_path TO "{self.schema}", pg_catalog'))
+
+    def _lock(self, connection: Connection | Session, write: bool = True) -> None:
+        function = "pg_advisory_xact_lock" if write else "pg_advisory_xact_lock_shared"
+        connection.execute(
+            text(f"SELECT pg_catalog.{function}(pg_catalog.hashtextextended(:scope, 0))"),
+            {"scope": self.schema},
+        )
+
+    @contextmanager
+    def session(self, write: bool = False) -> Iterator[Session]:
+        with Session(self.engine) as session:
+            if self.postgres:
+                self._scope(session)
+                self._lock(session, write)
+            elif write:
+                session.execute(text("BEGIN IMMEDIATE"))
+            try:
+                yield session
+                if write:
+                    session.commit()
+            except Exception:
+                session.rollback()
+                raise
+
+
+def put(session: Session, entity: Entity) -> None:
+    row = session.get(EntityRow, entity.id)
+    if row is None:
+        session.add(
+            EntityRow(
+                id=entity.id, kind=type(entity).__name__, payload=entity.model_dump(mode="json")
+            )
+        )
+    else:
+        if row.kind != type(entity).__name__:
+            raise ValueError("Entity identity collision")
+        if (
+            isinstance(entity, (Observation, HumanDecision, Interpretation))
+            or type(entity).__name__ in {
+                "SourceDeclaration", "Supersession", "AuthAudit", "InferenceAttempt"
+            }
+        ) and (row.payload != entity.model_dump(mode="json")):
+            raise ValueError("Original observation, interpretation and decision are immutable")
+        if (
+            isinstance(entity, Evidence)
+            and (
+                row.payload.get("source_type") == "orbital"
+                or row.payload.get("verification_state")
+                in {Verification.CONFIRMED.value, Verification.REJECTED.value}
+            )
+            and row.payload != entity.model_dump(mode="json")
+        ):
+            raise ValueError("NASA priors and final evidence decisions are immutable")
+        row.payload = entity.model_dump(mode="json")
+    session.flush()
+
+
+def get[T: Entity](session: Session, cls: type[T], entity_id: str) -> T:
+    row = session.get(EntityRow, entity_id)
+    if row is None or row.kind != cls.__name__:
+        raise KeyError(entity_id)
+    return cls.model_validate(row.payload)
+
+
+def all_of[T: Entity](session: Session, cls: type[T]) -> list[T]:
+    rows = session.scalars(
+        select(EntityRow).where(EntityRow.kind == cls.__name__).order_by(EntityRow.id)
+    )
+    return [cls.model_validate(row.payload) for row in rows]
+)
+                            )
+                        """))
+                        connection.execute(text(
+                            "ALTER TABLE marsense.asset_blobs ENABLE ROW LEVEL SECURITY"
+                        ))
+                        connection.execute(text(
+                            "REVOKE ALL ON marsense.asset_blobs "
                             "FROM PUBLIC, anon, authenticated, service_role"
                         ))
                 with Session(bind=connection) as session:
