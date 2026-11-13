@@ -32,6 +32,8 @@ pandas==3.0.6
 pathspec==1.1.1
 pillow==12.3.0
 pluggy==1.6.0
+psycopg==3.2.13
+psycopg-binary==3.2.13
 pydantic==2.14.0
 pydantic-settings==2.15.0
 pydantic_core==2.50.0
