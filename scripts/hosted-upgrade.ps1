@@ -28,10 +28,27 @@ if ($env:MARSENSE_USERS_FILE -match '^/run/desktop/mnt/host/([a-zA-Z])/(.*)$') {
 }
 Check (Test-Path -LiteralPath $env:MARSENSE_USERS_FILE -PathType Leaf) 'Private identity file accessible'
 $entry=$info.Config.Env | Where-Object {$_ -like 'MARSENSE_CORS_ORIGINS=*'} | Select-Object -First 1
-$origins=@()
-if ($entry) { $origins=@($entry.Substring('MARSENSE_CORS_ORIGINS='.Length) | ConvertFrom-Json) }
-$origins=@($origins + @($ProductionOrigin.TrimEnd('/'),$StagingOrigin.TrimEnd('/'),$FinalOrigin.TrimEnd('/')) | Sort-Object -Unique)
-$env:MARSENSE_CORS_ORIGINS=ConvertTo-Json -InputObject $origins -Compress
+# Windows PowerShell can wrap ConvertFrom-Json arrays in PSObject metadata.
+# Extract only validated HTTPS origin strings before serializing.
+$origins=[System.Collections.Generic.List[string]]::new()
+if ($entry) {
+    try {
+        $parsed=ConvertFrom-Json -InputObject $entry.Substring('MARSENSE_CORS_ORIGINS='.Length)
+        foreach ($item in $parsed) {
+            if ($item -is [string]) {
+                $uri=$null
+                if ([Uri]::TryCreate($item,[UriKind]::Absolute,[ref]$uri) -and $uri.Scheme -eq 'https' -and $uri.AbsolutePath -eq '/' -and -not $uri.Query -and -not $uri.Fragment -and -not $uri.UserInfo) {
+                    $origins.Add($item.TrimEnd('/'))
+                }
+            }
+        }
+    } catch { Write-Warning 'Existing CORS value is invalid; using explicit HTTPS origins.' }
+}
+foreach ($origin in @($ProductionOrigin,$StagingOrigin,$FinalOrigin)) { $origins.Add($origin.TrimEnd('/')) }
+[string[]]$allowed=@($origins | Sort-Object -Unique)
+$env:MARSENSE_CORS_ORIGINS=ConvertTo-Json -InputObject $allowed -Compress
+# Reject any unexpected serialization before stopping the running API.
+$env:MARSENSE_CORS_ORIGINS | docker run --rm -i --network none --entrypoint python $info.Image -c "import json,sys; a=json.load(sys.stdin); assert isinstance(a,list) and a and all(isinstance(x,str) and x.startswith('https://') for x in a)"; NativeOK
 docker compose -p marsense-free -f compose.funnel.yaml config --quiet; NativeOK
 $stamp=Get-Date -Format 'yyyyMMdd-HHmmss'
 $backup=Join-Path $env:USERPROFILE "MARSENSE-Backups\release-$stamp"
