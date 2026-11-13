@@ -100,8 +100,9 @@ export default function MissionControl({
                 document.getElementById(`workflow-${steps[next]}`)?.focus();
               }
             }}
+            aria-label={s}
           >
-            {s}
+            <span className="workflow-number" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span><span className="workflow-caption">{s}</span>
           </button>
         ))}
         <span>HUMAN DECISION AUTHORITY</span>

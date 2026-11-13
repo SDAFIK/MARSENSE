@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { launchGuestDemo } from "@/lib/api";
 
-export default function PublicDemoButton() {
+export default function PublicDemoButton({ compact = false }: { compact?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   async function launch() {
@@ -19,11 +19,11 @@ export default function PublicDemoButton() {
       setBusy(false);
     }
   }
-  return <div className="guest-launch">
+  return <div className={`guest-launch${compact ? " compact" : ""}`}>
     <button className="button primary" onClick={launch} disabled={busy}>
-      {busy ? "Preparing your demo…" : "Launch Live Demo"} <ArrowRight size={18}/>
+      {busy ? "Preparing your demo…" : compact ? "Try demo" : "Launch Live Demo"} <ArrowRight size={18}/>
     </button>
-    <p className="small muted">No account needed · Private simulated mission</p>
+    {!compact && <p className="small muted">No account needed · Private simulated mission</p>}
     {error && <p role="alert" className="small">{error}</p>}
   </div>;
 }
