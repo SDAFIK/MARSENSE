@@ -12,7 +12,7 @@ export type Verification =
 export type Footprint = { type: "Polygon"; coordinates: Coordinate[][] };
 export type ModelOutput = {
   terrain: Terrain;
-  confidence: number;
+  confidence: number | null;
   confidence_label: string;
   engine: string;
   version: string;

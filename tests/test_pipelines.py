@@ -102,4 +102,4 @@ def test_model_failure_remains_reviewable() -> None:
     Image.new("RGB", (16, 16)).save(output, "PNG")
     prediction = Perception("missing-checkpoint.pt").infer(output.getvalue())
     assert prediction.terrain == Terrain.UNKNOWN
-    assert prediction.confidence == 0
+    assert prediction.confidence is None

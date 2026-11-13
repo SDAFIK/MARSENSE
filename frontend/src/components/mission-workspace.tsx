@@ -43,7 +43,9 @@ export default function MissionWorkspace({ view }: { view: View }) {
     setSelectedId(e.id);
     const refreshed = await refresh();
     setNotice(
-      !refreshed ? "Observation recorded. Reconnect to inspect the saved mission state." : e.consequence.relevant
+      !refreshed ? "Observation recorded. Reconnect to inspect the saved mission state." : e.model_output?.engine === "unavailable"
+        ? "Image saved. Inference unavailable; retry in the evidence review or request human investigation."
+        : e.consequence.relevant
         ? "Analysis recorded. Human review required."
         : "Evidence stored; no active mission dependency challenged.",
     );

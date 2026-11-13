@@ -78,6 +78,15 @@ describe("human verification guard", () => {
       screen.getByLabelText("Human terrain identification"),
     ).toBeInTheDocument();
   });
+  it("unavailable confidence still requires human terrain identification", () => {
+    render(
+      <EvidenceReview evidence={{
+        ...evidence, source_type: "ground", model_confidence: null,
+        model_output: { ...evidence.model_output!, confidence: null, confidence_label: "not estimated" },
+      }} reviewer="Astronaut" onVerified={async () => {}} />,
+    );
+    expect(screen.getByRole("button", { name: "Confirm observation" })).toBeDisabled();
+  });
   it("strong replay annotation is still provisional until human confirmation", () => {
     render(
       <EvidenceReview

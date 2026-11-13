@@ -25,6 +25,7 @@ type History = {
   }[];
   interpretations: { terrain: string; timestamp: string }[];
   legacy_decision: boolean;
+  inference_attempts?: { id: string; timestamp: string; model_output: { engine: string; version: string; confidence_label: string } }[];
 };
 export default function StructuredEvidence({
   snapshot,
@@ -41,6 +42,16 @@ export default function StructuredEvidence({
     useState<(typeof sections)[number]>("GROUND OBSERVATION");
   const [history, setHistory] = useState<History | null>(null);
   const [error, setError] = useState("");
+  const [observation, setObservation] = useState<{ id: string; metadata_note: string; original_asset_reference: string | null; asset_sha256: string } | null>(null);
+  useEffect(() => {
+    let active = true;
+    if (selected?.observation_id)
+      api<{ id: string; metadata_note: string; original_asset_reference: string | null; asset_sha256: string }>(`/observations/${selected.observation_id}`)
+        .then((value) => { if (active) setObservation(value); })
+        .catch(() => { if (active) setObservation(null); });
+    return () => { active = false; };
+  }, [selected?.observation_id]);
+  const savedObservation = observation?.id === selected?.observation_id ? observation : null;
   useEffect(() => {
     let active = true;
     if (selected)
@@ -167,6 +178,16 @@ export default function StructuredEvidence({
                   </dd>
                   <dt>Source</dt>
                   <dd>{selected?.source ?? "Cached replay"}</dd>
+                  {savedObservation && <>
+                    <dt>Observation metadata</dt>
+                    <dd>{savedObservation.metadata_note}</dd>
+                    {savedObservation.original_asset_reference && <>
+                      <dt>Original bytes</dt>
+                      <dd><a href={savedObservation.original_asset_reference} download>Download original image</a></dd>
+                      <dt>Original SHA-256</dt>
+                      <dd className="small" style={{ overflowWrap: "anywhere" }}>{savedObservation.asset_sha256}</dd>
+                    </>}
+                  </>}
                   <dt>Supported footprint</dt>
                   <dd>
                     {selected
@@ -191,9 +212,16 @@ export default function StructuredEvidence({
                   {selected?.model_output?.confidence_label ??
                     "Unknown quality"}
                 </p>
+                {selected?.model_output?.confidence === null && <p>No calibrated numerical confidence is available.</p>}
                 {selected?.source_type === "demo_replay" && (
                   <p>Replay annotations are not actual model inference.</p>
                 )}
+                {selected?.model_output && Object.entries(selected.model_output.features).map(([name, value]) => (
+                  <p key={name} className="small muted">{label(name)}: {value} · measured image feature, not terrain probability</p>
+                ))}
+                {history?.inference_attempts?.map((attempt) => (
+                  <p key={attempt.id} className="small muted">Retry · {attempt.timestamp} · {attempt.model_output.engine} · {attempt.model_output.confidence_label}</p>
+                ))}
                 {selected?.model_output?.limitations.map((l) => (
                   <p key={l} className="small muted">
                     {l}

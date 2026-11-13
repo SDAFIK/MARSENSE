@@ -23,9 +23,12 @@ from backend.domain import (
     EvidenceHistory,
     Footprint,
     HumanDecision,
+    InferenceAttempt,
     Interpretation,
+    ModelOutput,
     Observation,
     ObserveRequest,
+    RetryRequest,
     Snapshot,
     VerifyRequest,
 )
@@ -255,6 +258,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     key=lambda i: i.timestamp,
                 ),
                 legacy_decision=not decisions and evidence.verification_note is not None,
+                inference_attempts=sorted(
+                    [a for a in all_of(session, InferenceAttempt) if a.evidence_id == evidence_id],
+                    key=lambda a: a.timestamp,
+                ),
             )
 
     @app.get(
@@ -295,11 +302,21 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 request = request.model_copy(update={"reviewer": user.name})
             return service.verify(session, evidence_id, request, user_id=user.id if user else None)
 
+    def safe_infer(content: bytes) -> ModelOutput:
+        try:
+            return service.perception.infer(content)
+        except Exception:
+            logger.exception("ground_inference_failed")
+            return Perception.unavailable(
+                "Inference unavailable; original image saved for retry or human review."
+            )
+
     @app.post("/api/observations/upload", response_model=Evidence, dependencies=protected)
     async def upload(
         file: Annotated[UploadFile, File()],
         footprint: Annotated[str, Form()],
         mission_id: Annotated[str, Form()] = "eva-01",
+        details: Annotated[str, Form(max_length=500)] = "",
     ) -> Evidence:
         if settings.environment == "showcase":
             raise HTTPException(403, "Showcase uses curated replay; uploads belong in production")
@@ -310,6 +327,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if len(content) > settings.max_upload_bytes:
             raise HTTPException(413, "Image exceeds the 8 MB upload limit")
         original_content = content
+        details = details.strip()
+        if any(ord(c) < 32 and c not in "\n\t" for c in details) or any(
+            c in details for c in "<>"
+        ):
+            raise ValueError("Observation details must be plain text")
         try:
             with Image.open(io.BytesIO(content)) as image:
                 if image.format not in {"JPEG", "PNG"} or image.width * image.height > 16_000_000:
@@ -328,7 +350,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             clean = io.BytesIO()
             image.convert("RGB").save(clean, format="JPEG", quality=90)
         content = clean.getvalue()
-        output = service.perception.infer(content)
+        output = safe_infer(content)
         asset_id = identifier("upload") + ".jpg"
         upload_dir = settings.runtime_dir / "uploads"
         upload_dir.mkdir(parents=True, exist_ok=True)
@@ -351,13 +373,58 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     "Astronaut-uploaded image",
                     "Footprint supplied manually in local meters; "
                     "image is not independently geolocated. Display/model input is a sanitized "
-                    "JPEG derivative; original bytes/hash are retained separately.",
+                    "JPEG derivative; original bytes/hash are retained separately."
+                    + (f" Observer note (unverified): {details}" if details else ""),
                     original_digest=hashlib.sha256(original_content).hexdigest(),
                 )
         except Exception:
             asset_path.unlink(missing_ok=True)
             original_path.unlink(missing_ok=True)
             raise
+
+    @app.post("/api/evidence/{evidence_id}/retry", response_model=Evidence, dependencies=protected)
+    def retry_inference(
+        evidence_id: str, body: RetryRequest, user: User | None = Depends(authorize)
+    ) -> Evidence:
+        if settings.environment == "showcase":
+            raise HTTPException(403, "Showcase uses curated replay")
+        attempt_id = f"inference-{evidence_id}-{body.request_id}"
+        with store.session(write=True) as session:
+            evidence = get(session, Evidence, evidence_id)
+            try:
+                get(session, InferenceAttempt, attempt_id)
+            except KeyError:
+                pass
+            else:
+                return evidence
+            if (
+                evidence.source_type != "ground"
+                or not evidence.observation_id
+                or evidence.verification_state.value not in {"PROVISIONAL", "NEEDS_MORE_EVIDENCE"}
+                or evidence.model_output is None
+                or evidence.model_output.engine != "unavailable"
+            ):
+                raise ValueError("Only pending ground evidence with unavailable inference can retry")
+            observation = get(session, Observation, evidence.observation_id)
+            name = observation.raw_asset_reference.rsplit("/", 1)[-1]
+            if not (
+                name.startswith("upload-") and name.endswith(".jpg") and len(name) == 43
+                and all(c in "0123456789abcdef" for c in name[7:-4])
+            ):
+                raise HTTPException(404, "Saved ground image unavailable")
+            path = settings.runtime_dir / "uploads" / name
+            original_path = settings.runtime_dir / "originals" / name.replace(".jpg", ".bin")
+            if not path.is_file() or not original_path.is_file():
+                raise HTTPException(404, "Saved image or original unavailable; evidence retained")
+            content = path.read_bytes()
+            if (
+                hashlib.sha256(content).hexdigest() != observation.model_input_sha256
+                or hashlib.sha256(original_path.read_bytes()).hexdigest() != observation.asset_sha256
+            ):
+                raise HTTPException(409, "Saved image integrity check failed; evidence retained")
+            return service.retry_inference(
+                session, evidence, safe_infer(content), attempt_id, user.id if user else None
+            )
 
     @app.get("/api/assets/{asset_id}")
     def asset(

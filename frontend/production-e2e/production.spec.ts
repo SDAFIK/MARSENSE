@@ -39,6 +39,8 @@ test("production-mode real image upload, role separation, human decision and fut
     name: "cached-navcam-test.jpg", mimeType: "image/jpeg", buffer: bytes,
   });
   await expect(page.getByText("Manually locate the supported footprint", { exact: false })).toBeVisible();
+  await expect(page.getByAltText("Selected ground image before submission")).toBeVisible();
+  await page.getByLabel("Observation details (optional)").fill("Disposable fixture; manually placed footprint.");
   const upload = page.waitForResponse((response) => response.url().endsWith("/api/observations/upload") && response.request().method() === "POST");
   await page.getByRole("button", { name: "Analyze terrain", exact: true }).click();
   const response = await upload;
@@ -47,7 +49,8 @@ test("production-mode real image upload, role separation, human decision and fut
   expect(evidence.source_type).toBe("ground");
   expect(evidence.verification_state).toBe("PROVISIONAL");
   expect(evidence.model_output?.engine).toBe("opencv-texture-candidate");
-  expect(evidence.model_confidence).toBeLessThan(0.5);
+  expect(evidence.model_confidence).toBeNull();
+  expect(evidence.model_output?.confidence_label).toBe("not estimated");
   await expect(page.getByRole("tab", { name: "COMPARE", exact: true })).toHaveAttribute("aria-selected", "true");
   const provisional = await (await page.request.get("/api/missions/eva-01")).json() as Snapshot;
   expect(provisional.routes).toHaveLength(1);
@@ -80,6 +83,7 @@ test("production-mode real image upload, role separation, human decision and fut
   expect(current.routes.find((route) => route.id === current.mission.active_route_id)?.name).toBe("Route Beta");
   expect(current.evidence.filter((item) => item.source_type === "orbital")).toEqual(before.evidence.filter((item) => item.source_type === "orbital"));
   const observation = await (await page.request.get(`/api/observations/${evidence.observation_id}`)).json();
+  expect(observation.metadata_note).toContain("Disposable fixture");
   const original = await page.request.get(observation.original_asset_reference);
   expect(original.ok()).toBeTruthy();
   expect(await original.body()).toEqual(bytes);
