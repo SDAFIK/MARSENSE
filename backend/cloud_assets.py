@@ -42,7 +42,9 @@ def enforce_cloud_quota(session: Session, namespace: str, incoming: int) -> None
     """), {"namespace": namespace}).one()
     if (
         int(total or 0) + incoming > CLOUD_LIMIT
-        or (namespace != "marsense" and (used + incoming > WORKSPACE_LIMIT or uploads >= MAX_UPLOADS))
+        or (namespace != "marsense" and (
+            used + incoming > WORKSPACE_LIMIT or uploads >= MAX_UPLOADS
+        ))
     ):
         raise ValueError("Cloud evidence storage quota reached")
 
