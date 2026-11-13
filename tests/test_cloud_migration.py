@@ -150,3 +150,40 @@ def test_postgres_migration_restart_upload_and_isolation(tmp_path: Path) -> None
         }, headers=HEADERS).status_code == 200
         assert client.get(new["original_asset_reference"]).content == image
         assert client.get(observation["original_asset_reference"]).status_code == 404
+
+
+def test_fresh_cloud_bootstrap_and_restart(tmp_path: Path) -> None:
+    url = os.environ.get("MARSENSE_TEST_POSTGRES_URL")
+    if not url:
+        pytest.skip("Disposable PostgreSQL service is not configured")
+    parsed = make_url(url)
+    assert parsed.host in {"127.0.0.1", "localhost"} and parsed.database == "marsense_test"
+    engine = create_engine(url, isolation_level="AUTOCOMMIT")
+    with engine.connect() as connection:
+        connection.execute(text("CREATE DATABASE marsense_fresh_test"))
+        for role in ("anon", "authenticated", "service_role"):
+            connection.execute(text(
+                f"DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='{role}') "
+                f"THEN CREATE ROLE {role} NOLOGIN; END IF; END $$"
+            ))
+    engine.dispose()
+    fresh_url = parsed.set(database="marsense_fresh_test").render_as_string(hide_password=False)
+    from pydantic import SecretStr
+
+    password = "fresh-test-operator-password"
+    config = Settings(
+        environment="production", database_url=fresh_url,
+        runtime_dir=tmp_path / "fresh", cors_origins=[ORIGIN],
+        cloud_fresh_start=True, cloud_admin_password=SecretStr(password),
+    )
+    login = {"username": "marsense-admin", "password": password}
+    with TestClient(create_app(config), base_url=ORIGIN) as client:
+        assert client.post("/api/auth/login", headers=HEADERS, json=login).status_code == 200
+        mission = client.get("/api/missions/eva-01").json()
+        assert mission["mission"]["active_route_id"] == "eva-01-alpha"
+        assert client.get("/api/health").status_code == 200
+    config.cloud_fresh_start = False
+    config.cloud_admin_password = SecretStr("")
+    with TestClient(create_app(config), base_url=ORIGIN) as client:
+        assert client.post("/api/auth/login", headers=HEADERS, json=login).status_code == 200
+        assert client.get("/api/missions/eva-01").json() == mission
