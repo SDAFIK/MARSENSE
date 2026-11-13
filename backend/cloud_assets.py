@@ -2,6 +2,7 @@
 
 import hashlib
 import re
+from typing import cast
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -36,10 +37,10 @@ def enforce_cloud_quota(session: Session, namespace: str, incoming: int) -> None
     # All namespaces serialize quota checks; evidence and assets commit together.
     session.execute(text("SELECT pg_advisory_xact_lock(788201426193)"))
     total = session.scalar(text("SELECT coalesce(sum(byte_count),0) FROM marsense.asset_blobs"))
-    used, uploads = session.execute(text("""
+    used, uploads = cast(tuple[int, int], session.execute(text("""
         SELECT coalesce(sum(byte_count),0), count(*) FILTER (WHERE name LIKE '%.bin')
         FROM marsense.asset_blobs WHERE namespace=:namespace
-    """), {"namespace": namespace}).one()
+    """), {"namespace": namespace}).one())
     if (
         int(total or 0) + incoming > CLOUD_LIMIT
         or (namespace != "marsense" and (
