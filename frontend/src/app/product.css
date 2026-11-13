@@ -177,3 +177,18 @@ body {background:var(--bg);}
   .astronaut-console .ground-actions > * { flex: 1 1 140px; }
   .astronaut-console .panel-heading > * { min-width: 0; max-width: 100%; }
 }
+
+/* Guest/personal access adds a third header item: keep the mission selector flexible. */
+@media (max-width: 600px) {
+  .app-shell .app-header { min-width: 0; max-width: 100%; }
+  .app-shell .app-header .wordmark { flex: 0 0 auto; }
+  .app-shell .header-right { flex: 1 1 0; min-width: 0; gap: 6px; justify-content: flex-end; }
+  .app-shell .app-header .eva-select { flex: 1 1 0; width: auto; min-width: 0; max-width: 145px; }
+  .app-shell .app-header .eva-select .small-mono { display: none; }
+  .app-shell .app-header .eva-select select { width: 100%; min-width: 0; max-width: 145px; }
+  .app-shell .app-header .session-access { flex: 0 0 auto; min-width: 0; }
+  .app-shell .app-header .session-access > summary {
+    max-width: 108px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .app-shell .header-right > .small { min-width: 0; max-width: 100px; overflow-wrap: anywhere; }
+}
