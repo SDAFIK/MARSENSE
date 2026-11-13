@@ -2,6 +2,8 @@ name: MARSENSE hosted cloud smoke
 on:
   push:
     branches: [codex/marsense-cloud-migration]
+  pull_request:
+    branches: [codex/final-release-guard-2026-11-12]
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,6 +30,7 @@ jobs:
                       return error.code, json.loads(error.read())
                   except ValueError:
                       return error.code, {}
+          status, health = 0, {}
           for attempt in range(3):
               try:
                   status, health = request("/api/health")
