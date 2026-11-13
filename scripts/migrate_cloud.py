@@ -5,7 +5,9 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import sqlite3
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -31,19 +33,27 @@ class Snapshot:
 def read_snapshot(path: Path, schema: str) -> Snapshot:
     if not path.is_file():
         raise ValueError("Required backup database is missing")
-    with sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True) as db:
-        if db.execute("PRAGMA integrity_check").fetchall() != [("ok",)]:
-            raise ValueError("SQLite backup integrity check failed")
-        if db.execute("SELECT version FROM schema_version WHERE id=1").fetchone() != (
-            SCHEMA_VERSION,
-        ):
-            raise ValueError("Only a verified version-2 source backup can be imported")
-        rows = {}
-        for ident, kind, raw in db.execute("SELECT id,kind,payload FROM entities"):
-            payload = json.loads(raw)
-            if not isinstance(payload, dict) or payload.get("id") != ident:
-                raise ValueError("Invalid source entity identity")
-            rows[ident] = (kind, payload)
+    # SQLite WAL recovery can require writable sidecars, even for a read-only query.
+    # Copy the quiesced backup and WAL to private temporary storage; never modify source.
+    with tempfile.TemporaryDirectory(prefix="marsense-migration-") as directory:
+        local = Path(directory) / path.name
+        shutil.copyfile(path, local)
+        wal = path.with_name(path.name + "-wal")
+        if wal.is_file():
+            shutil.copyfile(wal, local.with_name(local.name + "-wal"))
+        with sqlite3.connect(local) as db:
+            if db.execute("PRAGMA integrity_check").fetchall() != [("ok",)]:
+                raise ValueError("SQLite backup integrity check failed")
+            if db.execute("SELECT version FROM schema_version WHERE id=1").fetchone() != (
+                SCHEMA_VERSION,
+            ):
+                raise ValueError("Only a verified version-2 source backup can be imported")
+            rows = {}
+            for ident, kind, raw in db.execute("SELECT id,kind,payload FROM entities"):
+                payload = json.loads(raw)
+                if not isinstance(payload, dict) or payload.get("id") != ident:
+                    raise ValueError("Invalid source entity identity")
+                rows[ident] = (kind, payload)
     assets = {}
     if schema != "marsense_accounts":
         for folder, suffix in (("uploads", ".jpg"), ("originals", ".bin")):
