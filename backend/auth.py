@@ -99,11 +99,11 @@ def password_hash(password: str, salt: str | None = None) -> str:
 class Auth:
     cookie = "marsense_session"
 
-    def __init__(self, users_file: str):
+    def __init__(self, users_file: str, users: list[User] | None = None):
         self.users = (
             [User.model_validate(u) for u in json.loads(Path(users_file).read_text())]
             if users_file
-            else []
+            else list(users or [])
         )
         if len({u.username for u in self.users}) != len(self.users) or len(
             {u.id for u in self.users}
@@ -111,7 +111,7 @@ class Auth:
             raise ValueError("Duplicate authentication identity")
         self.failures: dict[str, list[float]] = {}
         self.lock = Lock()
-        self.dummy_hash = password_hash(secrets.token_urlsafe(32)) if users_file else ""
+        self.dummy_hash = password_hash(secrets.token_urlsafe(32)) if self.users else ""
         self.registration_failures: dict[str, list[float]] = {}
 
     def available_users(self, session: Session) -> list[User]:
