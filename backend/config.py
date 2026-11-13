@@ -9,7 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="MARSENSE_", env_file=ROOT / ".env", extra="ignore"
+        env_prefix="MARSENSE_", env_file=ROOT / ".env", extra="ignore",
+        hide_input_in_errors=True
     )
     environment: Literal["demo", "production", "showcase"] = "demo"
     database_url: str = f"sqlite:///{ROOT / 'data/runtime/marsense.db'}"
@@ -34,7 +35,10 @@ class Settings(BaseSettings):
                 )
             if not self.database_url.endswith("/showcase.db"):
                 raise ValueError("Showcase requires a dedicated showcase.db database")
+        self.database_url = self.database_url.strip()
         postgres = self.database_url.startswith(("postgresql://", "postgresql+psycopg://"))
+        if self.cloud_fresh_start and not postgres:
+            raise ValueError("MARSENSE_DATABASE_URL must be a complete PostgreSQL connection URI")
         if (
             self.environment == "production" and not self.auth_users_file
             and not self.read_only and not postgres
