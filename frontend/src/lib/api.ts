@@ -1,6 +1,6 @@
 const DEMO_KEY = "marsense-guest-token";
 const WORKSPACE_KEY = "marsense-personal-workspace";
-const DEMO_VIEWS = new Set(["/mission", "/astronaut", "/evidence", "/memory", "/comparison"]);
+const DEMO_VIEWS = new Set(["/mission", "/astronaut", "/evidence", "/memory", "/comparison", "/intelligence"]);
 
 export function guestToken(): string | null {
   return typeof window === "undefined" ? null : sessionStorage.getItem(DEMO_KEY);
