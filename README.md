@@ -25,7 +25,7 @@ The previous cinematic redesign retains the planet-first NASA Viking globe, map-
 | [Hosted cloud smoke and guest isolation](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199131) | Passed |
 | [Production container smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199134) | Passed |
 | [Production Vercel deployment](https://redscape-570sbrqrr-sadib-dewans-projects.vercel.app) | Ready; original public domain assigned |
-| [V3 public website acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43580317544) | Dedicated post-deployment run; follow the linked result |
+| [V3 public website acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43580317544) | Passed: guide, guided mission, seven screens, alternatives, NASA drive anchors, replay export exclusion, review, reroute, inheritance and exit |
 
 The exact candidate run includes actual Chromium screenshots in **seeded-visual-review**, **production-visual-review** and **showcase-confirmed-view** artifacts. It exercises desktop/tablet/mobile layouts, real private image upload, authentication, guest simulation, route and spatial intelligence, and mission inheritance. Scientific validation of an improved terrain classifier and automatic ground localization remain separate research gates.
 
