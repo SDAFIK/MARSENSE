@@ -89,6 +89,7 @@ export default function MissionWorkspace({ view }: { view: View }) {
             <RefreshCw size={15} />
             Retry connection
           </button>
+          <Link href="/demo" className="button primary">Open instant judge demo</Link>
         </div>
       )}
       {!snapshot && error !== "Authentication required" && !error?.startsWith("Demo expired") && (

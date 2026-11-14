@@ -103,7 +103,7 @@ test("production-mode real image upload, role separation, human decision and fut
 
 test("guest launch needs no account and isolates the complete simulated mission", async ({ page, browser }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Launch Live Demo" }).click();
+  await page.getByRole("button", { name: "Launch Cloud Demo" }).click();
   await expect(page).toHaveURL(/\/mission$/);
   await expect(page.getByRole("tab", { name: "EXPECT", exact: true })).toBeVisible();
   await page.getByRole("tab", { name: "OBSERVE", exact: true }).click();
@@ -121,7 +121,7 @@ test("guest launch needs no account and isolates the complete simulated mission"
   try {
     const visitor = await other.newPage();
     await visitor.goto("/");
-    await visitor.getByRole("button", { name: "Launch Live Demo" }).click();
+    await visitor.getByRole("button", { name: "Launch Cloud Demo" }).click();
     await expect(visitor.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Alpha");
     await expect(visitor.getByRole("complementary", { name: "Mission trace and evidence" })).not.toContainText("Route Beta");
   } finally { await other.close(); }
@@ -189,7 +189,7 @@ test("guest mobile navigation connects astronaut evidence routes and future memo
     expect(layout.overflow, JSON.stringify({ screen, ...layout })).toBeLessThanOrEqual(1);
   };
   await page.goto("/");
-  await page.getByRole("button", { name: "Launch Live Demo", exact: true }).click();
+  await page.getByRole("button", { name: "Launch Cloud Demo", exact: true }).click();
   await expect(page.getByRole("tab", { name: "EXPECT", exact: true })).toBeVisible();
   await expect(page.getByRole("complementary", { name: "Mission trace and evidence" })).toContainText("Route Alpha");
   await inspect("mission");
