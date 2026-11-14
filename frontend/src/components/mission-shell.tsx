@@ -14,12 +14,12 @@ import {
 import type { View } from "@/lib/types";
 import AuthPanel from "./auth-panel";
 const links = [
-  { view: "mission", label: "Mission Control", icon: Map },
-  { view: "astronaut", label: "Astronaut View", icon: Footprints },
-  { view: "evidence", label: "Evidence Inspector", icon: ScanLine },
-  { view: "memory", label: "Exploration Memory", icon: History },
-  { view: "comparison", label: "Route Comparison", icon: Columns2 },
-  { view: "intelligence", label: "Intelligence Center", icon: Radar },
+  { view: "mission", short: "Mission", label: "Mission Control", icon: Map },
+  { view: "astronaut", short: "Field", label: "Astronaut View", icon: Footprints },
+  { view: "evidence", short: "Evidence", label: "Evidence Inspector", icon: ScanLine },
+  { view: "memory", short: "Memory", label: "Exploration Memory", icon: History },
+  { view: "comparison", short: "Routes", label: "Route Comparison", icon: Columns2 },
+  { view: "intelligence", short: "Intel", label: "Intelligence Center", icon: Radar },
 ] as const;
 export default function MissionShell({
   view,
@@ -72,7 +72,7 @@ export default function MissionShell({
           <span className="small muted">Mars · 18.44° N, 77.45° E</span>
         </div>
         <nav aria-label="Main navigation">
-          {links.map(({ view: v, label, icon: Icon }) => (
+          {links.map(({ view: v, label, short, icon: Icon }) => (
             <Link
               key={v}
               href={`/${v}`}
@@ -82,6 +82,7 @@ export default function MissionShell({
             >
               <Icon size={18} />
               <span className="nav-label">{label}</span>
+              <span className="nav-mobile-label" aria-hidden="true">{short}</span>
               {view === v && <span className="nav-active-dot" />}
             </Link>
           ))}

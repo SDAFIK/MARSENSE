@@ -69,3 +69,40 @@ body{background:var(--bg);color:var(--text)}
 @media(max-width:600px){.app-shell{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto 1fr}.app-shell .app-header{grid-column:1;height:auto;min-height:64px;padding:10px 12px;flex-wrap:wrap;gap:8px}.app-shell .sidebar{grid-column:1;grid-row:2;position:sticky;top:0;z-index:15;width:auto;height:auto;padding:6px 8px;border-right:0;border-bottom:1px solid var(--border)}.app-shell .sidebar nav{flex-direction:row;justify-content:space-around;gap:3px}.app-shell .sidebar .nav-link{width:auto;flex:1;min-width:0;min-height:44px;padding:8px 4px}.app-shell .sidebar .nav-link:hover .nav-label,.app-shell .sidebar .nav-link:focus-visible .nav-label{left:0;top:100%;transform:none}.app-shell .workspace,.app-shell:not(.view-mission) .workspace,.app-shell.view-mission .workspace{grid-column:1;grid-row:3;padding:0 10px 12px}.app-shell:not(.view-mission) .workspace-heading{min-height:0;padding:16px 0}.app-shell .workspace-heading .button{align-self:flex-start}.app-shell .astronaut-console .ground-stage-image{height:260px}.app-shell .astronaut-console .astronaut-map-stage .map-panel:not(.map-expanded){height:380px}.app-shell .recovery-columns{padding:6px;gap:8px}.app-shell .panel-body{padding:12px}.app-shell .header-right{flex:1 1 auto;flex-wrap:wrap}.app-shell .app-header .eva-select{max-width:160px}.app-shell .globe-stage{min-height:240px}.product-home .product-step{padding:8px;font-size:10px}}
 @media(prefers-reduced-motion:no-preference){.app-shell:not(.view-mission) .workspace-heading,.app-shell .astronaut-console,.app-shell .structured-evidence,.app-shell .spatial-memory,.app-shell .spatial-comparison{animation:premium-in .32s ease-out both}.product-home .hero-orbital{animation:premium-in .65s ease-out both}.product-home .feature-grid article{transition:transform .22s,border-color .22s}.product-home .feature-grid article:hover{transform:translateY(-3px)}}
 @keyframes premium-in{from{opacity:.45;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Final responsive alignment: keep the full mission timeline inside its viewport. */
+.app-shell .sidebar .nav-mobile-label{display:none}
+.app-shell .sidebar .nav-link{transition:background .18s,border-color .18s}
+.view-mission .notice{top:74px}
+@media(min-width:1250px){
+  .app-shell.view-mission{grid-template-columns:212px minmax(0,1fr)}
+  .app-shell.view-mission .sidebar{padding:22px 12px}
+  .app-shell.view-mission .sidebar .nav-link{border-radius:12px;padding:12px}
+}
+@media(min-width:1100px){
+  .view-mission .recovery-control{height:calc(100dvh - 72px);min-height:0;grid-template-rows:48px minmax(0,1fr) 116px}
+  .view-mission .recovery-left{min-height:0}
+  .view-mission .recovery-map{min-height:0}
+}
+@media(min-width:1100px) and (max-height:760px){
+  .app-shell.view-mission{height:auto;min-height:100dvh;overflow:visible}
+  .view-mission .recovery-control{height:auto;min-height:690px;grid-template-rows:48px minmax(510px,1fr) 116px}
+}
+@media(max-width:1249px) and (min-width:601px){
+  .app-shell .sidebar .nav-link{justify-content:center;padding:10px 0}
+  .app-shell .sidebar-project,.app-shell .sidebar-bottom{display:none}
+}
+@media(max-width:600px){
+  .app-shell .sidebar .nav-link{flex-direction:column;gap:3px;min-height:52px;padding:6px 1px}
+  .app-shell .sidebar .nav-link svg{height:19px;width:19px}
+  .app-shell .sidebar .nav-mobile-label{display:block;font-size:9px;line-height:1.2;white-space:nowrap}
+  .app-shell .sidebar .nav-link:hover .nav-label,.app-shell .sidebar .nav-link:focus-visible .nav-label{width:1px;height:1px;clip-path:inset(50%);overflow:hidden;padding:0;border:0}
+  .view-mission .notice{position:static;max-width:none;margin:8px 0;pointer-events:auto}
+  .app-shell .app-header .header-right{width:auto;min-width:0}
+  .app-shell .app-header .eva-select select{min-width:0}
+  .app-shell .workspace-heading .button{min-height:40px}
+  .app-shell .ground-stage-image{aspect-ratio:auto}
+  .app-shell .ground-caption p{font-size:12px}
+  .app-shell .recovery-workflow button{padding:0 4px}
+}
+@media(prefers-reduced-motion:reduce){.view-mission .notice{display:flex;animation:none;visibility:visible;opacity:1}}
