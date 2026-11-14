@@ -14,6 +14,13 @@ const text = (locator, value) => visible(locator.filter({ hasText: value }));
 const button = name => page.getByRole("button", { name, exact: true });
 const link = name => page.getByRole("link", { name, exact: true });
 const screenshot = async name => {
+  for (const image of await page.locator("img").all()) {
+    if (await image.isVisible()) await image.scrollIntoViewIfNeeded();
+  }
+  await page.waitForFunction(() => Array.from(document.images).filter(img => img.getClientRects().length > 0).every(img => img.complete && img.naturalWidth > 0));
+  if (await page.locator(".map-panel").count()) {
+    await page.waitForFunction(() => Array.from(document.querySelectorAll(".map-panel")).every(map => map.getAttribute("data-renderer") === "webgl"));
+  }
   await page.evaluate(() => window.scrollTo(0, 0));
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), name + ": horizontal overflow");
   await page.screenshot({ path: output + "/" + name + ".png", fullPage: true, animations: "disabled" });
@@ -23,13 +30,18 @@ try {
   for (let i = 0; i < 5; i++) {
     try {
       const response = await page.goto(origin, { timeout: 30000 });
-      if (response?.ok() && await button("Launch Live Demo").isVisible()) { ready = true; break; }
+      if (response?.ok() && await page.locator(".mars-experience").isVisible() && await button("Launch Live Demo").isVisible()) { ready = true; break; }
     } catch { /* transient deployment propagation */ }
     await page.waitForTimeout(5000);
   }
   assert(ready, "Public landing page is unavailable");
+  await visible(page.getByRole("heading", { name: /Every step makes Mars more known/ }));
+  await visible(page.getByText("Planetary context ready", { exact: true }));
   await visible(page.locator(".product-steps").getByText("INHERIT", { exact: true }));
   await screenshot("landing-desktop");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await screenshot("landing-mobile");
+  await page.setViewportSize({ width: 1440, height: 1000 });
   let healthy = false;
   for (let i = 0; i < 3; i++) {
     try {
@@ -46,6 +58,8 @@ try {
   }
   await button("Launch Live Demo").click();
   await visible(page.getByRole("tab", { name: "EXPECT", exact: true }));
+  await visible(page.locator(".mission-command-v3"));
+  await visible(page.getByRole("region", { name: "Mission overview" }));
   await text(page.getByRole("complementary", { name: "Mission trace and evidence" }), "Route Alpha");
   await visible(page.getByText("MARSENSE / v2.0", { exact: true }));
   await screenshot("mission-desktop");
@@ -55,6 +69,7 @@ try {
   const ground = page.getByRole("region", { name: "Ground observation view" });
   const controls = page.getByRole("complementary", { name: "Observation and decision controls" });
   await visible(ground);
+  await visible(page.locator(".field-experience-v3"));
   await visible(controls.getByRole("button", { name: "Observe", exact: true }));
   await screenshot("astronaut-desktop");
   await page.setViewportSize({ width: 390, height: 844 });
@@ -71,12 +86,17 @@ try {
 
   await link("Evidence Inspector").click();
   await visible(page.getByRole("navigation", { name: "Evidence hierarchy" }));
+  await visible(page.locator(".evidence-studio-v3"));
+  await page.locator(".studio-original summary").click();
+  await visible(page.locator(".studio-original img"));
+  await page.locator(".studio-original summary").click();
   await button("Open human review").click();
   await page.getByRole("region", { name: "Evidence review" }).getByRole("button", { name: "Confirm observation", exact: true }).click();
   await visible(page.getByText("Confirmed by Guest reviewer (simulation)", { exact: true }));
   await screenshot("evidence-mobile");
 
   await link("Route Comparison").click();
+  await visible(page.locator(".route-studio-v3"));
   const route = page.getByRole("region", { name: "Route comparison summary" });
   await text(route, "Route Alpha");
   await text(route, "Route Beta");
@@ -86,12 +106,14 @@ try {
   await screenshot("comparison-mobile");
 
   await link("Exploration Memory").click();
+  await visible(page.locator(".memory-archive-v3"));
   await text(page.locator(".memory-stats"), "1 confirmed ground records");
   await page.getByLabel("Active mission").selectOption("eva-02");
   await text(page.locator(".memory-stats"), "1 inherited records");
   await screenshot("memory-mobile");
 
   await link("Intelligence Center").click();
+  await visible(page.locator(".intel-observatory-v3"));
   await visible(page.getByRole("region", { name: "Current mission briefing" }));
   await visible(page.getByRole("img", { name: "Mars globe rendered from NASA Viking imagery" }));
   await visible(page.getByText("Planetary context ready", { exact: true }));
@@ -103,11 +125,12 @@ try {
 
   await link("Mission Control").click();
   await text(page.getByRole("complementary", { name: "Mission trace and evidence" }), "Route Beta");
+  await screenshot("mission-mobile");
   await page.locator("summary").filter({ hasText: "GUEST DEMO" }).click();
   await button("Exit demo").click();
   await page.waitForURL(origin + "/");
   assert.deepEqual(errors, [], "Browser errors");
-  console.log("Public MARSENSE 2.0 desktop/mobile guest mission, images, human review, reroute, inheritance and exit passed.");
+  console.log("Public MARSENSE cinematic rebuild: all seven rebuilt screens, desktop/mobile guest mission, images, human review, reroute, inheritance and exit passed.");
 } finally {
   // Clean up only this test's own guest session if the browser failed before exit.
   if (page.url().startsWith(origin)) {
