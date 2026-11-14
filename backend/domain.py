@@ -74,8 +74,10 @@ def rectangle(x0: float, y0: float, x1: float, y1: float) -> Footprint:
 class ModelOutput(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
     terrain: Terrain
-    confidence: float = Field(ge=0, le=1)
-    confidence_label: Literal["reviewed demo annotation", "low", "moderate", "high", "unavailable"]
+    confidence: float | None = Field(ge=0, le=1)
+    confidence_label: Literal[
+        "reviewed demo annotation", "low", "moderate", "high", "unavailable", "not estimated"
+    ]
     engine: str
     version: str
     class_fractions: dict[str, float] = Field(default_factory=dict)
@@ -126,6 +128,19 @@ class Observation(Entity):
     provenance: Provenance = Field(default_factory=Provenance)
 
 
+class InferenceAttempt(Entity):
+    evidence_id: str
+    observation_id: str
+    timestamp: str = Field(default_factory=now)
+    model_output: ModelOutput
+    user_id: str | None = None
+
+
+class RetryRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    request_id: str = Field(pattern=r"^[a-f0-9]{32}$")
+
+
 class HumanDecision(Entity):
     evidence_id: str
     decision: Literal["CONFIRMED", "REJECTED", "NEEDS_MORE_EVIDENCE"]
@@ -156,6 +171,7 @@ class EvidenceHistory(BaseModel):
     decisions: list[HumanDecision]
     interpretations: list[Interpretation]
     legacy_decision: bool
+    inference_attempts: list[InferenceAttempt] = Field(default_factory=list)
 
 
 class Consequence(BaseModel):

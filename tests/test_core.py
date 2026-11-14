@@ -2,10 +2,12 @@ import hashlib
 import io
 from concurrent.futures import ThreadPoolExecutor
 
+import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 from shapely.geometry import LineString, shape
 
+from ai.perception import Perception
 from backend.config import Settings
 from backend.domain import Evidence, Verification, rectangle
 from backend.main import create_app
@@ -240,7 +242,8 @@ def test_real_upload_conservative_fallback(client: TestClient) -> None:
     evidence = response.json()
     assert evidence["source_type"] == "ground"
     assert evidence["model_output"]["engine"] == "opencv-texture-candidate"
-    assert evidence["model_confidence"] < 0.5
+    assert evidence["model_confidence"] is None
+    assert evidence["model_output"]["confidence_label"] == "not estimated"
     assert client.get(evidence["raw_asset_reference"]).status_code == 200
     observation = client.get(f"/api/observations/{evidence['observation_id']}").json()
     assert len(observation["asset_sha256"]) == 64
@@ -251,6 +254,56 @@ def test_real_upload_conservative_fallback(client: TestClient) -> None:
     assert original.headers["content-type"] == "application/octet-stream"
     assert original.headers["x-content-type-options"] == "nosniff"
     verify(client, evidence, human_terrain="obstacle-rich terrain")
+    assert snapshot(client)["routes"][-1]["name"] == "Route Beta"
+
+
+def test_inference_failure_preserves_image_and_retry_is_idempotent(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    content = io.BytesIO()
+    Image.new("RGB", (32, 32), "gray").save(content, "PNG")
+    original_infer = Perception.infer
+
+    def fail(*args, **kwargs):
+        raise RuntimeError("Test inference outage")
+
+    monkeypatch.setattr(Perception, "infer", fail)
+    response = client.post(
+        "/api/observations/upload",
+        files={"file": ("terrain.png", content.getvalue(), "image/png")},
+        data={
+            "mission_id": "eva-01",
+            "footprint": rectangle(520, 320, 680, 480).model_dump_json(),
+            "details": "Fixture observer note",
+        },
+    )
+    assert response.status_code == 200
+    evidence = response.json()
+    assert evidence["model_output"]["engine"] == "unavailable"
+    assert evidence["model_confidence"] is None
+    assert evidence["verification_state"] == "PROVISIONAL"
+    path = f"/api/observations/{evidence['observation_id']}"
+    original = client.get(path).json()
+    assert "Fixture observer note" in original["metadata_note"]
+    assert client.get(original["original_asset_reference"]).content == content.getvalue()
+    assert len(snapshot(client)["routes"]) == 1
+
+    monkeypatch.setattr(Perception, "infer", original_infer)
+    retry_path = f"/api/evidence/{evidence['id']}/retry"
+    body = {"request_id": "a" * 32}
+    response = client.post(retry_path, json=body)
+    assert response.status_code == 200, response.text
+    updated = response.json()
+    assert updated["id"] == evidence["id"]
+    assert updated["model_output"]["engine"] == "opencv-texture-candidate"
+    assert updated["model_confidence"] is None
+    assert client.post(retry_path, json=body).json() == updated
+    assert client.post(retry_path, json={"request_id": "b" * 32}).status_code == 422
+    history = client.get(f"/api/evidence/{evidence['id']}/history").json()
+    assert len(history["inference_attempts"]) == 1
+    assert client.get(path).json() == original
+    assert len(snapshot(client)["routes"]) == 1
+    verify(client, updated, human_terrain="obstacle-rich terrain")
     assert snapshot(client)["routes"][-1]["name"] == "Route Beta"
 
 

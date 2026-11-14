@@ -5,6 +5,8 @@ import LivingMap from "./living-map";
 import RouteSummary from "./route-summary";
 export default function BeforeAfter({ snapshot }: { snapshot: Snapshot }) {
   const [split, setSplit] = useState(50);
+  const alpha = snapshot.routes.find(r => r.version === 1);
+  const active = snapshot.routes.find(r => r.id === snapshot.mission.active_route_id);
   const confirmed = snapshot.evidence.some(
     (e) =>
       e.source_type !== "orbital" &&
@@ -82,6 +84,7 @@ export default function BeforeAfter({ snapshot }: { snapshot: Snapshot }) {
           persistent ground-observed evidence. Mission geometry is illustrative.
         </p>
       </section>
+      <section className="panel route-compare-data"><div className="panel-heading"><h2>Route comparison · modeled values</h2></div><div className="route-compare-grid">{[alpha, active?.version === 1 ? undefined : active].map((route,i)=><article key={i}><span className="eyebrow">{i===0 ? "ORIGINAL PLAN" : "CURRENT REVISION"}</span><h3>{route?.name ?? "Awaiting confirmed evidence"}</h3>{route && <><p>{route.status} · {route.status === "NO_ROUTE" ? "No route" : route.distance_m.toFixed(0)+" m"}</p><p>{route.explanation}</p></>}</article>)}</div></section>
       <RouteSummary snapshot={snapshot} />
     </div>
   );

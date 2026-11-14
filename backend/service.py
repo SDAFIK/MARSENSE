@@ -13,10 +13,12 @@ from backend.comparison import compare, consequence, expected_at
 from backend.config import ROOT
 from backend.domain import (
     AstronautState,
+    Consequence,
     Discrepancy,
     Evidence,
     Footprint,
     HumanDecision,
+    InferenceAttempt,
     Interpretation,
     KnowledgeState,
     Mission,
@@ -94,25 +96,8 @@ class MissionService:
         )
         if region is None:
             raise ValueError("Footprint must be contained within one mapped region")
-        history = sorted(active_evidence(session), key=lambda e: e.timestamp)
-        expected, conflicting = expected_at(region.prior_interpretation, footprint, history)
-        if any(
-            e.verification_state == Verification.CONFIRMED
-            and e.source_type != "orbital"
-            and e.persistence_type == "persistent"
-            and e.observed_value != output.terrain
-            and shape(e.spatial_footprint.model_dump()).intersects(shape(footprint.model_dump()))
-            for e in history
-        ):
-            conflicting = True
-        discrepancy = compare(expected, output, conflicting)
-        impact = consequence(
-            footprint,
-            output,
-            discrepancy,
-            [get(session, Route, mission.active_route_id)],
-            all_of(session, MissionAssumption),
-            all_of(session, RouteSegment),
+        expected, discrepancy, impact = self._evaluate(
+            session, mission, region, footprint, output
         )
         observation = Observation(
             id=identifier("obs"),
@@ -142,7 +127,10 @@ class MissionService:
             ),
         )
         if original_digest:
-            observation.original_asset_reference = f"/api/observations/{observation.id}/original"
+            prefix = asset.rsplit("/assets/", 1)[0]
+            observation.original_asset_reference = (
+                f"{prefix}/observations/{observation.id}/original"
+            )
         put(session, observation)
         dynamic = observation_type == "visibility"
         evidence = Evidence(
@@ -182,6 +170,73 @@ class MissionService:
             "OBSERVATION_ANALYZED",
             impact.alert or "Evidence recorded",
             f"Expected {expected.value}; observed {output.terrain.value}. {impact.explanation}",
+            evidence.id,
+        )
+        return evidence
+
+    def _evaluate(
+        self, session: Session, mission: Mission, region: Region,
+        footprint: Footprint, output: ModelOutput,
+    ) -> tuple[Terrain, Discrepancy, Consequence]:
+        history = sorted(active_evidence(session), key=lambda e: e.timestamp)
+        expected, conflicting = expected_at(region.prior_interpretation, footprint, history)
+        if any(
+            e.verification_state == Verification.CONFIRMED
+            and e.source_type != "orbital"
+            and e.persistence_type == "persistent"
+            and e.observed_value != output.terrain
+            and shape(e.spatial_footprint.model_dump()).intersects(shape(footprint.model_dump()))
+            for e in history
+        ):
+            conflicting = True
+        discrepancy = compare(expected, output, conflicting)
+        impact = consequence(
+            footprint,
+            output,
+            discrepancy,
+            [get(session, Route, mission.active_route_id)],
+            all_of(session, MissionAssumption),
+            all_of(session, RouteSegment),
+        )
+        return expected, discrepancy, impact
+
+    def retry_inference(
+        self, session: Session, evidence: Evidence, output: ModelOutput,
+        attempt_id: str, user_id: str | None,
+    ) -> Evidence:
+        # The original Observation and its initial inference remain immutable.
+        if (
+            evidence.source_type != "ground"
+            or evidence.observation_id is None
+            or evidence.verification_state not in {
+                Verification.PROVISIONAL, Verification.NEEDS_MORE_EVIDENCE,
+            }
+            or evidence.model_output is None
+            or evidence.model_output.engine != "unavailable"
+        ):
+            raise ValueError("Only pending ground evidence with unavailable inference can retry")
+        mission = get(session, Mission, evidence.mission_id)
+        region = get(session, Region, evidence.region_id)
+        expected, discrepancy, impact = self._evaluate(
+            session, mission, region, evidence.spatial_footprint, output
+        )
+        put(session, InferenceAttempt(
+            id=attempt_id, evidence_id=evidence.id,
+            observation_id=evidence.observation_id, model_output=output, user_id=user_id,
+        ))
+        evidence.expected_value = expected
+        evidence.observed_value = output.terrain
+        evidence.model_output = output
+        evidence.model_confidence = output.confidence
+        evidence.discrepancy = discrepancy
+        evidence.consequence = impact
+        put(session, evidence)
+        self._refresh_region(session, evidence.region_id)
+        self._refresh_assumptions(session)
+        self._refresh_route_alerts(session)
+        self._event(
+            session, mission.id, "INFERENCE_RETRIED", "Inference retried",
+            f"Recorded another processing attempt: {output.engine}. Human review required.",
             evidence.id,
         )
         return evidence

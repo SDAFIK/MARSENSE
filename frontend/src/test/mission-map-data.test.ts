@@ -3,6 +3,7 @@ import {
   challengedAlpha,
   missionFeatures,
   toMars,
+  fromMars,
 } from "@/lib/mission-map-data";
 import type { Snapshot } from "@/lib/types";
 const snapshot = {
@@ -51,6 +52,12 @@ const snapshot = {
   ],
 } as unknown as Snapshot;
 describe("Mission map presentation", () => {
+  it("round trips local coordinates using Mars radius, not an Earth scale", () => {
+    const original: [number, number] = [520, 320];
+    const roundtrip = fromMars(toMars(original));
+    expect(roundtrip[0]).toBeCloseTo(original[0], 6);
+    expect(roundtrip[1]).toBeCloseTo(original[1], 6);
+  });
   it("retains complete solid off-white Alpha and challenges only frozen segment 3", () => {
     const f = missionFeatures(snapshot, false, 0);
     expect(f.features[0].properties?.color).toBe("#f1eee6");

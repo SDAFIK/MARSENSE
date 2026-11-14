@@ -8,6 +8,7 @@ import {
   Map,
   Orbit,
   Radio,
+  Radar,
   ScanLine,
 } from "lucide-react";
 import type { View } from "@/lib/types";
@@ -17,7 +18,8 @@ const links = [
   { view: "astronaut", label: "Astronaut View", icon: Footprints },
   { view: "evidence", label: "Evidence Inspector", icon: ScanLine },
   { view: "memory", label: "Exploration Memory", icon: History },
-  { view: "comparison", label: "Before & After", icon: Columns2 },
+  { view: "comparison", label: "Route Comparison", icon: Columns2 },
+  { view: "intelligence", label: "Intelligence Center", icon: Radar },
 ] as const;
 export default function MissionShell({
   view,
@@ -38,9 +40,7 @@ export default function MissionShell({
       <header className="app-header">
         <Link className="wordmark" href="/">
           <Orbit size={24} />
-          MARSENSE
-          <span className="brand-divider" />
-          <span className="small-mono">MISSION CONTROL</span>
+          <span className="brand-stack"><span>MAR<span>SENSE</span></span><small>THE LIVING MARS MAP</small></span>
         </Link>
         <div className="header-right">
           <label className="eva-select">
@@ -61,6 +61,7 @@ export default function MissionShell({
           <span className="cache-indicator">
             <span className="status-dot" /> LOCAL DATA CACHE
           </span>
+          <Link className="button secondary access-link" href="/login">Mission access</Link>
           <AuthPanel compact />
         </div>
       </header>
@@ -107,7 +108,9 @@ export default function MissionShell({
                   ? "What one explorer discovers, the next explorer inherits."
                   : view === "comparison"
                     ? "See exactly how ground evidence changes the mission."
-                    : view === "evidence"
+                    : view === "intelligence"
+                      ? "Inspect real mission data, NASA sources and the evidence-to-route chain."
+                      : view === "evidence"
                       ? "Inspect the observation, interpretation, and decision separately."
                       : "Your observation. Your judgment. A better map for the next EVA."}
               </p>

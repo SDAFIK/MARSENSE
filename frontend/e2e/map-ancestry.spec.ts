@@ -2,12 +2,14 @@ import { test, expect } from "@playwright/test";
 
 test("full map preserves mission framing and closes with Escape", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/mission");
   await page
     .getByRole("button", { name: "Open full map", exact: true })
     .click();
   await expect(page.locator(".map-expanded")).toBeVisible();
+  await expect(page.getByLabel("Illustrative Mars local metric scale")).toBeVisible();
+  await page.getByRole("button", { name: "Reset map north" }).click();
   await page.getByRole("checkbox", { name: "Routes", exact: true }).uncheck();
   await expect(
     page.getByRole("checkbox", { name: "Routes", exact: true }),
@@ -60,3 +62,13 @@ test("Evidence Inspector exposes source ancestry without changing final decision
     page.getByText("Prototype camera / episode single-burst", { exact: false }),
   ).toBeVisible();
 });
+
+ test("mission memory filters persisted events and clears an empty search", async ({ page }) => {
+  await page.goto("/memory");
+  const search = page.getByRole("searchbox", { name: "Search mission history" });
+  await expect(search).toBeVisible();
+  await search.fill("not-a-real-mission-event-xyz");
+  await expect(page.getByText("No matching events. Try another search.")).toBeVisible();
+  await search.clear();
+  await expect(page.locator(".spatial-event-list button").first()).toBeVisible();
+ });

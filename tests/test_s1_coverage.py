@@ -122,7 +122,12 @@ def test_covering_ingestion_reproduces_offline_without_touching_live_data(tmp_pa
         root = Path(__file__).resolve().parents[1]
         with np.load(root / "data/processed/hirise-covering-slope.npz") as expected:
             assert np.array_equal(actual["elevation_m"], expected["elevation_m"])
-            assert np.array_equal(actual["slope_deg"], expected["slope_deg"])
+            # Transcendental float32 calculations can differ by a few rounding
+            # units across NumPy builds and CPU math libraries. Keep the raw
+            # elevations exact and require tightly bounded slope agreement.
+            np.testing.assert_allclose(
+                actual["slope_deg"], expected["slope_deg"], rtol=1e-6, atol=1e-6
+            )
 
 
 def test_configured_grid_detects_tampered_processed_bytes(tmp_path):
