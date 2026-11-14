@@ -60,3 +60,17 @@
   .app-shell.view-mission .command-map>.map-panel:not(.map-expanded){height:400px;min-height:400px;flex:0 0 400px}
   .app-shell.view-mission .command-map{min-height:0;height:auto}
 }
+
+/* At smaller widths, coordinate context must not cover the globe controls. */
+@media(max-width:1000px){
+  .mx-planet{align-content:center;gap:8px}
+  .mx-planet .mx-coordinate{position:static;justify-self:end;max-width:100%;margin-top:2px}
+  .mx-planet .intel-globe{position:relative;z-index:1}
+}
+@media(min-width:751px) and (max-width:900px){
+  .mx-hero{grid-template-columns:minmax(0,1fr);gap:26px;padding-top:55px}
+  .mx-hero h1{font-size:clamp(54px,8vw,74px)}
+  .mx-wide-break{display:none}
+  .mx-planet{max-width:540px;width:100%;min-height:420px;margin:auto}
+  .mx-planet .globe-stage canvas{width:min(85%,420px)!important}
+}

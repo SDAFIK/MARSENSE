@@ -113,6 +113,11 @@ for (const [size, width, height] of [
         await expect(page.getByRole("heading", { name: /Every step makes Mars more known/ })).toBeVisible();
         await expect(page.getByText("Planetary context ready", { exact: true })).toBeVisible();
         await expect(page.getByRole("button", { name: "Launch Live Demo", exact: true })).toBeVisible();
+        if (width <= 1000) {
+          const controls = await page.locator(".mx-planet .globe-controls").boundingBox();
+          const coordinates = await page.locator(".mx-coordinate").boundingBox();
+          expect(controls && coordinates && coordinates.y >= controls.y + controls.height, "Planet coordinate label must not obscure globe controls").toBeTruthy();
+        }
       }
       if (view === "mission") await expect(page.getByRole("region", { name: "Mission overview" })).toBeVisible();
       // A shell heading can appear before the mission API finishes loading.
