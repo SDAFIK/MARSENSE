@@ -6,7 +6,12 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from backend.camera import camera_anchor_consistency, drive_anchor_context, exact_clock_join, parse_label
+from backend.camera import (
+    camera_anchor_consistency,
+    drive_anchor_context,
+    exact_clock_join,
+    parse_label,
+)
 
 LABEL = Path('data/nasa/cameras/NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.xml')
 
@@ -107,4 +112,5 @@ def test_real_drive_anchor_coordinate_consistency_and_unknown_ground_coverage():
     assert drive_anchor_context({**navcam, "rover_local_m": [0, 0]})["status"] == "UNAVAILABLE"
     wrong = {**navcam, "drive_anchor": {**navcam["drive_anchor"], "drive": "999"}}
     assert drive_anchor_context(wrong)["status"] == "UNAVAILABLE"
-    assert drive_anchor_context({**navcam, "places_exact_interval": None})["status"] == "UNAVAILABLE"
+    missing_interval = {**navcam, "places_exact_interval": None}
+    assert drive_anchor_context(missing_interval)["status"] == "UNAVAILABLE"
