@@ -53,7 +53,7 @@ def extract(reader: RangeArchive, entry: dict, destination: Path) -> dict:
         raise ValueError('Unexpected archive entry size')
     offset = entry['offset']
     reader.seek(offset)
-    payload = reader.read(min(SIZE - offset, 30 + len(entry['name'].encode()) + 65535 + entry['compressed']))
+    payload = reader.read(min(SIZE - offset, 30 + len(entry['name'].encode()) + 65535 + entry['compressed'] + 24))
     fields = struct.unpack('<4s5H3I2H', payload[:30])
     if fields[0] != b'PK\x03\x04' or fields[3] not in (0, 8) or fields[2] & 1:
         raise ValueError('Unsupported ZIP entry')
@@ -66,7 +66,18 @@ def extract(reader: RangeArchive, entry: dict, destination: Path) -> dict:
     if len(compressed) != entry['compressed']:
         raise ValueError('Truncated compressed entry')
     content = zlib.decompress(compressed, -15) if fields[3] == 8 else compressed
-    if len(content) != entry['size'] or zlib.crc32(content) != entry['crc32']:
+    expected_crc = entry.get('crc32')
+    if expected_crc is None:
+        if not fields[2] & 8:
+            expected_crc = fields[6]
+        else:
+            descriptor = payload[start + entry['compressed']:]
+            if descriptor.startswith(b'PK\x07\x08'):
+                descriptor = descriptor[4:]
+            if len(descriptor) < 12:
+                raise ValueError('Missing ZIP integrity descriptor')
+            expected_crc = struct.unpack_from('<I', descriptor)[0]
+    if len(content) != entry['size'] or zlib.crc32(content) != expected_crc:
         raise ValueError('Archive entry integrity mismatch')
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(content)
