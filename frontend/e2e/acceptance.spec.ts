@@ -81,6 +81,7 @@ for (const [size, width, height] of [
     "evidence",
     "memory",
     "comparison",
+    "intelligence",
   ]) {
     test(`${view || "landing"} at ${size}: visible content, no overflow`, async ({
       page,
@@ -103,7 +104,8 @@ for (const [size, width, height] of [
         await expect(page.getByRole("navigation", { name: "Evidence hierarchy" })).toBeVisible();
       if (view === "memory")
         await expect(page.getByRole("heading", { name: "Knowledge that Lives On" })).toBeVisible();
-      if (["mission", "astronaut", "comparison", "memory"].includes(view)) {
+      if (view === "intelligence") await expect(page.getByRole("heading", { name: "NASA data inventory" })).toBeVisible();
+      if (["mission", "astronaut", "comparison", "memory", "intelligence"].includes(view)) {
         await expect(page.locator(".map-canvas canvas").first()).toBeVisible();
         await expect.poll(() => page.locator(".map-panel").evaluateAll(
           (maps) => maps.length > 0 && maps.every((map) => map.getAttribute("data-renderer") === "webgl"),
@@ -188,4 +190,31 @@ test("keyboard navigation reaches mission controls", async ({ page }) => {
   await page.getByLabel("Active mission").focus();
   await page.keyboard.press("ArrowDown");
   await expect(page.getByLabel("Active mission")).toBeFocused();
+});
+
+test("intelligence center selects genuine datasets and retains mission context", async ({page}) => {
+  await page.goto("/intelligence");
+  await expect(page.getByRole("heading", {name:"NASA data inventory"})).toBeVisible();
+  await page.getByRole("button", {name:/CTX Regional orbital context/}).click();
+  await expect(page.getByRole("heading", {name:"CTX image monitor"})).toBeVisible();
+  await page.getByRole("button", {name:/Navcam Cached ground imagery/}).click();
+  await expect(page.getByRole("heading", {name:"Navcam image monitor"})).toBeVisible();
+  await page.getByLabel("Active mission").selectOption("eva-02");
+  await expect(page.getByRole("heading", {name:"Mars Intelligence Center"})).toBeVisible();
+  await expect(page.locator(".intel-counts")).toContainText("Inherited");
+  await page.getByRole("button", {name:"Refresh data"}).click();
+  await expect(page.locator(".intel-status")).toContainText("Mission data loaded");
+  await page.getByRole("link", {name:"Route Comparison"}).click();
+  await expect(page).toHaveURL(/\/comparison$/);
+  await expect(page.getByLabel("Active mission")).toHaveValue("eva-02");
+});
+
+test("science briefing exposes sources and limitations on mobile", async ({page}, testInfo) => {
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/science");
+  await expect(page.getByRole("heading", {name:"Science behind the living map"})).toBeVisible();
+  await expect(page.getByRole("heading", {name:"Scientific limits"})).toBeVisible();
+  await expect(page.getByRole("link", {name:"NASA source matrix"})).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({path:testInfo.outputPath("science-mobile.png"),fullPage:true});
 });
