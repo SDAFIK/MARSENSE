@@ -106,3 +106,34 @@ body{background:var(--bg);color:var(--text)}
   .app-shell .recovery-workflow button{padding:0 4px}
 }
 @media(prefers-reduced-motion:reduce){.view-mission .notice{display:flex;animation:none;visibility:visible;opacity:1}}
+
+/* Screen-specific workflow refinements. */
+#mission-context,#evidence-detail,#memory-detail,#memory-map{scroll-margin-top:90px}
+.recovery-workflow button[data-recorded=true] .workflow-number{border-color:var(--mint);color:var(--mint)}
+.recovery-workflow button[data-recorded=true]:not([aria-selected=true]) .workflow-caption{color:#c8e8e4}
+.evidence-focus-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px;padding:14px;background:#122b3b;border:1px solid #3a576b;border-radius:10px}
+.evidence-focus-strip>div{display:grid;gap:5px;min-width:0}.evidence-focus-strip strong{font-size:16px}.evidence-focus-strip .button{flex-shrink:0}
+.evidence-paired figure{border-radius:12px}.evidence-pair-image{aspect-ratio:4/3}.evidence-paired figcaption{padding:14px;font-size:12px}
+.spatial-memory .memory-hero{border-radius:16px;padding:clamp(20px,4vw,42px);background:linear-gradient(90deg,#091828f5,#102a3b99),url('/api/assets/ground-navcam.jpg') center/cover}
+.spatial-memory .memory-stats span{border-radius:9px;padding:12px;background:#10273cdd}
+.spatial-memory-map .map-panel:not(.map-expanded){height:clamp(380px,55vh,660px);min-height:0}
+#memory-detail .button{margin:12px 0}
+.route-metric-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.route-metric-strip article{min-width:0;display:grid;gap:6px;padding:16px;border:1px solid #3d586c;border-radius:13px;background:linear-gradient(145deg,#1a3044,#101c29)}
+.route-metric-strip strong{font-size:clamp(19px,2vw,28px);font-weight:700;color:var(--cyan);overflow-wrap:anywhere}
+.route-metric-strip article>span:last-child{color:var(--muted);font-size:12px}
+.route-metric-strip article:nth-child(2){border-color:#b17a52}.route-metric-strip article:nth-child(2) strong{color:var(--orange)}
+.route-compare-grid article{border-radius:10px;background:#102536}
+.intel-overview{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.intel-overview .intel-globe{grid-column:auto;min-width:0}
+.intel-briefing .panel-body{display:grid;gap:12px}
+.intel-briefing h3{font-size:clamp(22px,3vw,32px);font-weight:700}
+.intel-briefing .panel-body>p{color:var(--muted)}
+.intel-brief-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.intel-brief-metrics>div{display:grid;gap:5px;background:#102638;border:1px solid #34566c;padding:12px;border-radius:9px;min-width:0}
+.intel-brief-metrics span{font-size:11px;color:var(--muted)}.intel-brief-metrics strong{font-size:18px;color:var(--cyan);overflow-wrap:anywhere}
+.globe-stage canvas{cursor:grab;touch-action:pan-y}.globe-stage canvas:active{cursor:grabbing}
+@media(max-width:900px){.intel-overview{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.evidence-focus-strip{flex-direction:column;align-items:stretch;margin:8px;padding:12px}.route-metric-strip{grid-template-columns:1fr 1fr;gap:8px}.route-metric-strip article{padding:11px}.route-metric-strip article:last-child{grid-column:1/-1}.route-metric-strip strong{font-size:19px}.intel-brief-metrics>div{padding:10px}.spatial-memory-map .map-panel:not(.map-expanded){height:400px}.intel-overview .globe-stage{min-height:260px}}
+@media(prefers-reduced-motion:no-preference){.product-home .landing-terrain{animation:landing-mars-drift 24s ease-in-out infinite alternate;transform-origin:center}.route-metric-strip,.intel-overview{animation:premium-in .35s ease-out both}}
+@keyframes landing-mars-drift{from{transform:scale(1.01)}to{transform:scale(1.065)}}

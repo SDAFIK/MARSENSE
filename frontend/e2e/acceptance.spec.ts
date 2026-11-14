@@ -236,3 +236,20 @@ test("premium astronaut controls and mobile navigation remain usable", async ({ 
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   await page.screenshot({ path: testInfo.outputPath("premium-field-controls-mobile.png"), fullPage: true });
 });
+
+test("route summary and science mission briefing use the current snapshot", async ({ page }) => {
+  await page.goto("/comparison");
+  const summary = page.getByRole("region", { name: "Route comparison summary" });
+  await expect(summary).toContainText("Route Alpha");
+  await expect(summary).toContainText("Route Beta");
+  await expect(summary).toContainText("DISTANCE CHANGE");
+  await page.getByRole("link", { name: "Intelligence Center", exact: true }).click();
+  const briefing = page.getByRole("region", { name: "Current mission briefing" });
+  await expect(briefing).toContainText("Delta outcrop");
+  await expect(briefing).toContainText("Route Beta");
+  await expect(page.getByRole("img", { name: "Mars globe rendered from NASA Viking imagery" })).toBeVisible();
+  await page.getByRole("button", { name: "Play Mars rotation" }).click();
+  await expect(page.getByRole("button", { name: "Pause Mars rotation" })).toBeVisible();
+  await page.getByRole("button", { name: "Pause Mars rotation" }).click();
+  await page.getByRole("button", { name: "Rotate Mars left" }).click();
+});

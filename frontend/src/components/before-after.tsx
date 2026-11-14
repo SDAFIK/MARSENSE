@@ -7,6 +7,7 @@ export default function BeforeAfter({ snapshot }: { snapshot: Snapshot }) {
   const [split, setSplit] = useState(50);
   const alpha = snapshot.routes.find(r => r.version === 1);
   const active = snapshot.routes.find(r => r.id === snapshot.mission.active_route_id);
+  const distanceDelta = alpha && active && alpha.status !== "NO_ROUTE" && active.status !== "NO_ROUTE" ? active.distance_m - alpha.distance_m : undefined;
   const confirmed = snapshot.evidence.some(
     (e) =>
       e.source_type !== "orbital" &&
@@ -16,6 +17,11 @@ export default function BeforeAfter({ snapshot }: { snapshot: Snapshot }) {
   );
   return (
     <div className="spatial-comparison">
+      <section className="route-metric-strip" aria-label="Route comparison summary">
+        <article><span className="eyebrow">ORIGINAL TRAVERSE</span><strong>{alpha?.name ?? "Unavailable"}</strong><span>{alpha && alpha.status !== "NO_ROUTE" ? `${alpha.distance_m.toFixed(0)} m` : "No modeled route"}</span></article>
+        <article><span className="eyebrow">ACTIVE TRAVERSE</span><strong>{active?.name ?? "Unavailable"}</strong><span>{active && active.status !== "NO_ROUTE" ? `${active.distance_m.toFixed(0)} m` : "No modeled route"}</span></article>
+        <article><span className="eyebrow">DISTANCE CHANGE</span><strong>{distanceDelta === undefined ? "Unavailable" : `${distanceDelta >= 0 ? "+" : "−"}${Math.abs(distanceDelta).toFixed(0)} m`}</strong><span>Modeled distance · not a safety guarantee</span></article>
+      </section>
       <section
         className="aligned-maps"
         aria-label="Aligned before and after Mars maps"
