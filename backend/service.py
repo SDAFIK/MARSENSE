@@ -564,7 +564,7 @@ class MissionService:
             ),
         )
 
-    def alternatives(self, session: Session, mission_id: str) -> dict:
+    def alternatives(self, session: Session, mission_id: str) -> dict[str, object]:
         mission = get(session, Mission, mission_id)
         confirmed = active_evidence(session)
         options = route_options(

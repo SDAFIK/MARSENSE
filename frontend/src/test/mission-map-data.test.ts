@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   challengedAlpha,
+  challengedSegments,
   missionFeatures,
   toMars,
   fromMars,
@@ -113,5 +114,17 @@ describe("Mission map presentation", () => {
       coordinates: snapshot.routes[1].coordinates.slice(0, 2).map(toMars),
     });
     expect(early.features[1].properties?.color).toBe("#8ad8bc");
+  });
+});
+
+describe("Evidence-driven route overlays", () => {
+  it("draws separate actual route segment geometries, not a hardcoded corridor", () => {
+    const dynamic = {...snapshot, route_segments: [
+      {id:"segment-west", route_id:"eva-01-alpha", coordinates:[[120,400],[440,400]], assumption_ids:[]},
+      {id:"segment-east", route_id:"eva-01-alpha", coordinates:[[760,400],[1080,400]], assumption_ids:[]},
+    ], evidence:[{...snapshot.evidence[0], consequence:{...snapshot.evidence[0].consequence,
+      route_segment_ids:["segment-west","segment-east"]}}]} as Snapshot;
+    expect(challengedSegments(dynamic,0)).toEqual([[[120,400],[440,400]],[[760,400],[1080,400]]]);
+    expect(missionFeatures(dynamic,false,0).features.filter(f=>f.properties?.kind==="challenge")).toHaveLength(2);
   });
 });
