@@ -38,3 +38,8 @@ The first research candidate is implemented in `ai/train_candidate.py` (DeepLabV
 - Corrected tensor typing and React render-time clock purity; new exact candidate requires full CI.
 - The camera context independently checks the cached product clock/RMC association, PLACES site/drive position, and local coordinate transform. Relative easting/northing consistency is reported as arithmetic consistency, not absolute pose error. The UI locates the actual NASA drive anchor separately from evidence geometry; ground footprint and uncertainty stay unknown.
 - Automatic image-to-ground localization remains blocked on registered stereo/XYZ range data, exact image pose transforms and independent error validation. No drive anchor is converted into a verified terrain footprint.
+
+## Engineering release — November 14, 2026
+- Exact tested candidate `60ff85475d7d54e4171f6c867012a37545cbede7`: [release validation](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199146), 179 passed (84 backend, 26 component, 62 browser, 1 authenticated, 5 production-mode, 1 showcase); 2 skipped. PostgreSQL, cloud smoke and container smoke passed separately.
+- Render deployment `dep-dbs2fi2fngtc73bhmiag` is live at the exact candidate; existing public proxy health returned 200. PR #7 merged as `8a4de164c4408bbfd5946f0395ff41f6f6632bd9`, source identical to tested candidate.
+- Vercel production deployment requested; public acceptance must verify the V3 route and camera APIs with a fresh isolated guest before final signoff. Existing database unchanged; no trained classifier enabled.

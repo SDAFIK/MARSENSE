@@ -30,7 +30,7 @@ try {
   for (let i = 0; i < 5; i++) {
     try {
       const response = await page.goto(origin, { timeout: 30000 });
-      if (response?.ok() && await page.locator(".mars-experience").isVisible() && await button("Launch Live Demo").isVisible()) { ready = true; break; }
+      if (response?.ok() && await page.locator(".mars-experience").isVisible() && await button("Launch Live Demo").isVisible() && await link("Judge walkthrough").isVisible()) { ready = true; break; }
     } catch { /* transient deployment propagation */ }
     await page.waitForTimeout(5000);
   }
@@ -56,8 +56,16 @@ try {
     assert(response.ok(), "NASA image HTTP " + response.status() + ": " + path);
     assert((response.headers()["content-type"] || "").startsWith("image/"), "Expected NASA image: " + path);
   }
+  await link("Judge walkthrough").click();
+  await visible(page.getByRole("heading", { name: "Discover it. Verify it. Pass it on." }));
+  await screenshot("guide-desktop");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await screenshot("guide-mobile");
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await button("Launch Live Demo").click();
   await visible(page.getByRole("tab", { name: "EXPECT", exact: true }));
+  await visible(page.getByRole("region", { name: "Guided mission" }));
+  await visible(button("Go to observation"));
   await visible(page.locator(".mission-command-v3"));
   await visible(page.getByRole("region", { name: "Mission overview" }));
   await text(page.getByRole("complementary", { name: "Mission trace and evidence" }), "Route Alpha");
@@ -103,11 +111,17 @@ try {
   await text(route, "DISTANCE CHANGE");
   await button("After").click();
   assert.equal(await page.getByRole("slider", { name: "Before / After map slider" }).inputValue(), "0");
+  const options = page.getByRole("region", { name: "Modeled route options" });
+  await options.getByRole("button", { name: "Calculate route options", exact: true }).click();
+  await visible(options.getByText("Lowest modeled cost", { exact: true }));
+  assert.equal(await options.locator(".v3-option-grid article").count() >= 2, true, "Expected distinct modeled alternatives");
   await screenshot("comparison-mobile");
 
   await link("Exploration Memory").click();
   await visible(page.locator(".memory-archive-v3"));
   await text(page.locator(".memory-stats"), "1 confirmed ground records");
+  await visible(page.getByRole("heading", { name: "Reviewed research evidence" }));
+  assert(await button("Download reviewed evidence").isDisabled(), "Replay must not be exported as real evidence");
   await page.getByLabel("Active mission").selectOption("eva-02");
   await text(page.locator(".memory-stats"), "1 inherited records");
   await screenshot("memory-mobile");
@@ -121,6 +135,12 @@ try {
   await button("Play Mars rotation").click();
   await visible(button("Pause Mars rotation"));
   await button("Pause Mars rotation").click();
+  const camera = page.getByLabel("NASA camera localization context");
+  await visible(camera.getByRole("heading", { name: "Rover position is not image coverage" }));
+  assert.equal(await camera.getByRole("button", { name: "Locate rover drive anchor" }).count(), 2);
+  await camera.getByRole("button", { name: "Locate rover drive anchor" }).first().click();
+  await visible(page.getByLabel("NASA rover drive anchor location"));
+  await camera.getByRole("button", { name: "Return to mission evidence" }).click();
   await screenshot("intelligence-mobile");
 
   await link("Mission Control").click();
@@ -130,7 +150,7 @@ try {
   await button("Exit demo").click();
   await page.waitForURL(origin + "/");
   assert.deepEqual(errors, [], "Browser errors");
-  console.log("Public MARSENSE cinematic rebuild: all seven rebuilt screens, desktop/mobile guest mission, images, human review, reroute, inheritance and exit passed.");
+  console.log("Public MARSENSE V3: guide, guided mission, seven screens, route alternatives, NASA drive anchors, replay export exclusion, human review, reroute, inheritance and exit passed.");
 } finally {
   // Clean up only this test's own guest session if the browser failed before exit.
   if (page.url().startsWith(origin)) {
