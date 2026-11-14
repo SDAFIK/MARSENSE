@@ -1,54 +1,76 @@
+<div align="center">
+
 # MARSENSE — The Living Mars Map
+
+### Every step makes Mars more known.
 
 **NASA tells us what we expect. Astronauts show us what is actually there. MARSENSE learns the difference.**
 
-Team Redscape · NASA International Space Apps Challenge 2026 · Interplanetary Survival Guide: Martian Map
+Team Redscape · NASA International Space Apps Challenge 2026
 
-[**Launch MARSENSE — live website**](https://redscape-eight.vercel.app) · [Source repository](https://github.com/SDAFIK/MARSENSE) · [Cloud API health](https://marsense-cloud-api.onrender.com/api/health) · [Product specification](docs/PRODUCT_RECOVERY.md) · [NASA source matrix](NASA_SOURCE_MATRIX.md)
+**Interplanetary Survival Guide: Martian Map**
 
-> **Release status (14 November 2026):** MARSENSE 3.0 is live at [redscape-eight.vercel.app](https://redscape-eight.vercel.app). [PR #7](https://github.com/SDAFIK/MARSENSE/pull/7) merged the exact validated source, `60ff854`, as `8a4de16`. The Render backend is running `60ff854`; the Vercel production deployment is [8a4de16](https://redscape-570sbrqrr-sadib-dewans-projects.vercel.app). Both the live landing page and /guide returned HTTP 200, and the production API health endpoint is healthy. The original repository, public URL and existing PostgreSQL data are preserved. This is a competition research prototype, not certified astronaut navigation.
+[**🚀 Launch live website**](https://redscape-eight.vercel.app) · [**🧭 Judge walkthrough**](https://redscape-eight.vercel.app/guide) · [Release tests](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199146) · [NASA sources](NASA_SOURCE_MATRIX.md)
 
-## What's new in MARSENSE 3.0
+[![Live website](https://img.shields.io/badge/Live-MARSENSE-DF7951?style=for-the-badge)](https://redscape-eight.vercel.app)
+[![Release](https://img.shields.io/badge/Release-v3.0-2D8071?style=for-the-badge)](https://github.com/SDAFIK/MARSENSE/pull/7)
+[![Validated tests](https://img.shields.io/badge/Validated-179%20tests-397A56?style=for-the-badge)](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199146)
 
-The cinematic MARSENSE experience now includes a no-account [Judge Walkthrough](https://redscape-eight.vercel.app/guide) and adaptive mission guidance, interactive manual observation footprint placement, explicit uncertainty provenance, real NASA camera drive-anchor context, read-only alternative route calculations and private reviewed-evidence research exports. The Evidence Studio supports bounded segmentation masks from compatible model output while explicitly disclosing unavailable or simulated results.
+</div>
 
-The previous cinematic redesign retains the planet-first NASA Viking globe, map-first Mission Control, wide ground-first Astronaut View, photographic Evidence Studio, aligned Route Comparison Lab, spatial Exploration Archive and Planetary Observatory. Human verification remains mandatory, orbital priors remain intact, and no database schema migration is required for V3.
+## About MARSENSE
 
-**Scientific status:** the trained DeepLabV3 research candidate achieved 0.5296 held-out MSL mIoU but only 0.1306 Perseverance transfer mIoU and zero held-out MSL large-rock recall. It failed the research gate and is not enabled for mission classification. The expanded dataset experiment is separate research; no automatic calibrated image footprint is claimed. Read [the research report](docs/science/V3_RESEARCH_REPORT.md) and [the V3 delivery plan](docs/MARSENSE_3_INTELLIGENCE_PLAN.md).
+MARSENSE is a living Mars exploration map that connects genuine NASA orbital imagery with astronaut ground observations, human-verified evidence, adaptive route planning and shared mission memory. It helps future explorers understand where assumptions about terrain may be wrong, evaluate the consequences of new observations, and carry verified knowledge forward to the next EVA.
 
-### Verified release evidence
+Orbital imagery can guide a traverse, but it cannot establish every ground-level condition. MARSENSE closes that gap through a six-stage evidence workflow:
+
+**Expect → Observe → Compare → Verify → Learn → Inherit**
+
+## Try it in two minutes — no account needed
+
+1. Open the [Judge Walkthrough](https://redscape-eight.vercel.app/guide) and select **Launch Live Demo**.
+2. Inspect EVA-01's NASA-derived terrain prior and Route Alpha.
+3. Record the Area 14 boulder-field demonstration observation and analyze it.
+4. Compare the observation with the prior and confirm it in Human Review.
+5. Inspect the updated footprint, Route Beta and modeled alternative routes.
+6. Switch to EVA-02 to see the inherited evidence in Exploration Memory.
+
+The demonstration is a clearly labeled simulation using genuine NASA source imagery. Each guest receives an isolated temporary mission; no registration is required. A private workspace supports real image uploads and persistent evidence. Render's free service may cold-start on the first request.
+
+## Product preview
+
+[![MARSENSE landing page](docs/screenshots/landing-desktop.png)](https://redscape-eight.vercel.app)
+
+*Open the live website for the latest V3 interface. Repository screenshots illustrate the cinematic product; the exact V3 browser screenshots are available in the [release validation artifacts](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199146).*
+
+| Mission Control | Evidence Studio |
+| --- | --- |
+| [![Mission Control](docs/screenshots/mission-desktop.png)](https://redscape-eight.vercel.app/guide) | [![Evidence Studio](docs/screenshots/evidence-desktop.png)](https://redscape-eight.vercel.app/guide) |
+
+## Release 3.0 — verified engineering
+
+The production release is live on the original competition URL. [PR #7](https://github.com/SDAFIK/MARSENSE/pull/7) merged the validated candidate `60ff854` as `8a4de16`. The backend runs the tested candidate; Vercel serves the matching frontend.
 
 | Release gate | Result |
 | --- | --- |
-| [Exact V3 candidate release validation](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199146) | Passed: 179 tests, plus lint, types, build and dependency audit; 2 skipped |
+| [Exact V3 release validation](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199146) | **179 tests passed**, 2 skipped; lint, types, build and dependency audit passed |
 | [PostgreSQL acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199199) | Passed |
-| [Hosted cloud smoke and guest isolation](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199131) | Passed |
+| [Hosted cloud smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199131) | Passed |
 | [Production container smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199134) | Passed |
-| [Production Vercel deployment](https://redscape-570sbrqrr-sadib-dewans-projects.vercel.app) | Ready; original public domain assigned |
-| [V3 public website acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43580317544) | Passed: guide, guided mission, seven screens, alternatives, NASA drive anchors, replay export exclusion, review, reroute, inheritance and exit |
+| [Live public browser acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43580317544) | Passed: guide, seven screens, review, alternatives, camera anchors, inheritance and exit |
+| [Production API health](https://marsense-cloud-api.onrender.com/api/health) | Live backend health endpoint |
 
-The exact candidate run includes actual Chromium screenshots in **seeded-visual-review**, **production-visual-review** and **showcase-confirmed-view** artifacts. It exercises desktop/tablet/mobile layouts, real private image upload, authentication, guest simulation, route and spatial intelligence, and mission inheritance. Scientific validation of an improved terrain classifier and automatic ground localization remain separate research gates.
+### New in V3
 
-## The problem
+- Guided judge experience and adaptive mission progress.
+- Interactive manual observation footprints with explicit uncertainty provenance.
+- Genuine NASA camera drive-anchor locations, separated from unvalidated ground coverage.
+- Read-only alternative route calculations and private reviewed-evidence exports.
+- Bounded segmentation-mask display for compatible model outputs; unavailable and simulated outputs are labeled.
 
-Orbital imagery can guide Mars surface exploration, but it cannot establish every ground-level condition. A traverse planned from an orbital assumption may encounter unexpected terrain. MARSENSE connects a ground observation to its orbital prior, asks a human to verify it, updates only the supported footprint, recomputes a modeled traverse, and preserves the discovery for later explorers.
+The cinematic redesign retains the interactive NASA Viking globe, map-first Mission Control, ground-first Astronaut View, photographic Evidence Studio, aligned route comparison and spatial memory archive. Human verification remains mandatory and orbital priors remain intact.
 
-**Every step makes Mars more known.**
-
-## Experience MARSENSE
-
-The judge experience requires no project account. Open the [Judge Walkthrough](https://redscape-eight.vercel.app/guide), or select **Launch Live Demo** on [the live public website](https://redscape-eight.vercel.app). The guest mission is independent of the operator database and other visitors.
-
-| Step | What to do | What the system does |
-| --- | --- | --- |
-| EXPECT | Open EVA-01, inspect Jezero and Route Alpha | Retains the NASA-derived orbital prior and mission assumption A17 |
-| OBSERVE | Select the Area 14 boulder-field replay and Analyze terrain | Records an explicitly simulated ground observation |
-| COMPARE | Inspect the evidence and mission consequence | Identifies the relevant discrepancy and challenged route segment |
-| VERIFY | Confirm, reject or request more evidence | Records the human decision; AI cannot confirm the map |
-| LEARN | Inspect the updated map and Route Beta | Updates the supported local footprint and recalculates the modeled route |
-| INHERIT | Switch to EVA-02 | Shows the verified persistent knowledge available to the next mission |
-
-The guest menu allows an isolated reset or exit. For a persistent private mission with real image uploads, create a personal workspace. Invited operator mission accounts and administrator access are separate from the judge experience.
+**Scientific boundary:** this is a competition research prototype, not certified astronaut navigation. The experimental classifier failed its research gate and remains disabled for mission classification. Automatic image-to-ground footprints are not validated. See [V3 research results](docs/science/V3_RESEARCH_REPORT.md), [the intelligence plan](docs/MARSENSE_3_INTELLIGENCE_PLAN.md), and the scientific integrity section below.
 
 ## Product features
 
@@ -157,7 +179,7 @@ npx playwright test --config=playwright.production.config.ts
 npx playwright test --config=playwright.showcase.config.ts
 ```
 
-The PostgreSQL CI workflow uses a disposable database; the private genuine checkpoint requires its own scientific validation and is not in Git. The hosted smoke workflow tests approved-origin requests, two independent guests, observation, review, rerouting, inheritance, reset and unauthorized access without changing operator data. See [GitHub Actions](https://github.com/SDAFIK/MARSENSE/actions) for actual results and [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) for the walkthrough. The public browser workflow independently exercises a signed-out visitor's complete guest mission, including confirmation, Route Beta, EVA-02 inheritance and mobile navigation. The cinematic candidate recorded **164 passing tests** (77 backend, 20 frontend component, 60 main browser, 1 authenticated browser, 5 production-mode browser and 1 showcase); two backend tests were skipped. Backend/frontend lint and type checks, production build and dependency audit passed. The candidate's exact source and seven screen layouts were verified in the release workflow. The separate PostgreSQL, Docker and hosted acceptance workflows also passed. The permanent public website acceptance workflow is available for a fresh signed-out post-deployment check. The private genuine-model checkpoint remains outside the release gate. See the linked workflow logs for exact test results and screenshots. Render Free may cold-start; the prototype is not an availability SLA.
+The PostgreSQL CI workflow uses a disposable database; the private genuine checkpoint requires its own scientific validation and is not in Git. The hosted smoke workflow tests approved-origin requests, two independent guests, observation, review, rerouting, inheritance, reset and unauthorized access without changing operator data. See [GitHub Actions](https://github.com/SDAFIK/MARSENSE/actions) for actual results and [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) for the walkthrough. The public browser workflow independently exercises a signed-out visitor's complete guest mission, including confirmation, Route Beta, EVA-02 inheritance and mobile navigation. The V3 candidate recorded **179 passing tests** (84 backend, 26 frontend component, 62 main browser, 1 authenticated browser, 5 production-mode browser and 1 showcase); two backend tests were skipped. Backend/frontend lint and type checks, production build and dependency audit passed. The exact V3 source and seven principal layouts were verified in the release workflow. The separate PostgreSQL, Docker and hosted acceptance workflows also passed. The permanent public website acceptance workflow is available for a fresh signed-out post-deployment check. The private genuine-model checkpoint remains outside the release gate. See the linked workflow logs for exact test results and screenshots. Render Free may cold-start; the prototype is not an availability SLA.
 
 ## Repository guide
 
@@ -173,6 +195,6 @@ docs/             Product, deployment, science and design documentation
 .github/workflows/ Automated release gates
 ```
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md), [API_CONTRACT.md](API_CONTRACT.md), [PRODUCT_RECOVERY.md](docs/PRODUCT_RECOVERY.md) and [MARSENSE_2_DELIVERY_PLAN.md](docs/MARSENSE_2_DELIVERY_PLAN.md) for the engineering contract.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md), [API_CONTRACT.md](API_CONTRACT.md), [PRODUCT_RECOVERY.md](docs/PRODUCT_RECOVERY.md) [MARSENSE_2_DELIVERY_PLAN.md](docs/MARSENSE_2_DELIVERY_PLAN.md), and [MARSENSE_3_INTELLIGENCE_PLAN.md](docs/MARSENSE_3_INTELLIGENCE_PLAN.md) for the engineering contract.
 
 NASA/JPL-Caltech/Mars Trek and individual source product credits are retained in the manifests. MARSENSE is a Team Redscape research prototype; no NASA endorsement or operational certification is claimed. No open-source code license has been assigned.
