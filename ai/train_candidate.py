@@ -20,6 +20,9 @@ from ai.train import LabeledImages, evaluate
 
 
 class Candidate(nn.Module):
+    mean: torch.Tensor
+    std: torch.Tensor
+
     def __init__(self, network: nn.Module):
         super().__init__()
         self.network = network
