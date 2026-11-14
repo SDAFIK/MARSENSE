@@ -16,6 +16,10 @@ export default function SpatialMemory({
   );
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  function selectMemory(id: string) {
+    setSelectedId(id);
+    if (window.matchMedia("(max-width: 1099px)").matches) requestAnimationFrame(() => document.getElementById("memory-detail")?.scrollIntoView({ block: "start" }));
+  }
   const normalized = query.trim().toLowerCase();
   const filtered = events.filter((e) => {
     const record = snapshot.evidence.find((item) => item.id === e.evidence_id);
@@ -37,27 +41,27 @@ export default function SpatialMemory({
             <button
               key={e.id}
               aria-pressed={e.id === selectedId}
-              onClick={() => setSelectedId(e.id)}
+              onClick={() => selectMemory(e.id)}
             >
               <span>
                 {new Date(e.timestamp).toISOString().slice(11, 19)} UTC
               </span>
               <strong>{e.title}</strong>
               <small>
-                {e.evidence_id ? "Locate observation" : "Orbital context"}
+                {e.evidence_id ? "Inspect observation →" : "Orbital context →"}
               </small>
             </button>
           ))}
         </div>
       </aside>
-      <div className="spatial-memory-map">
+      <div className="spatial-memory-map" id="memory-map">
         <LivingMap
           snapshot={snapshot}
           focusLocation={evidence?.location}
           warmPresentation
         />
       </div>
-      <aside className="panel">
+      <aside className="panel" id="memory-detail" aria-label="Selected memory details">
         <div className="panel-heading">
           <h2>{evidence ? "SELECTED EVIDENCE" : "DURABLE MEMORY"}</h2>
         </div>
@@ -66,6 +70,7 @@ export default function SpatialMemory({
             <>
               <h3>{event.title}</h3>
               <p>{event.detail}</p>
+              {evidence && <button className="button secondary" onClick={() => document.getElementById("memory-map")?.scrollIntoView({ block: "start" })}>Locate on map</button>}
               {evidence && (
                 <>
                   <span className={`badge ${evidence.verification_state === "CONFIRMED" ? "green" : "amber"}`}>

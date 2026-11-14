@@ -51,7 +51,7 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
       {stages.map((stage,i) => <div key={stage.name} data-complete={stage.done}><span>{String(i+1).padStart(2,"0")}</span><strong>{stage.name}</strong><small>{stage.done ? "Recorded" : "Pending"}</small></div>)}
     </section>
     <div className="intel-grid">
-      <MarsGlobe/>
+      <div className="intel-overview"><MarsGlobe/><section className="panel intel-briefing" aria-label="Current mission briefing"><div className="panel-heading"><h2><Route size={17}/> Current mission</h2><span className="badge neutral">{snapshot.mission.eva}</span></div><div className="panel-body"><span className="eyebrow">ACTIVE SCIENCE TARGET</span><h3>{snapshot.target.name}</h3><p>{snapshot.target.objective}</p><div className="intel-brief-metrics"><div><span>Active traverse</span><strong>{active?.name ?? "Unavailable"}</strong></div><div><span>Modeled distance</span><strong>{active && active.status !== "NO_ROUTE" ? `${active.distance_m.toFixed(0)} m` : "Unavailable"}</strong></div><div><span>Human-confirmed records</span><strong>{confirmed.length}</strong></div><div><span>Mission stages recorded</span><strong>{stages.filter(stage => stage.done).length} / {stages.length}</strong></div></div><p className="small muted">Derived from this mission snapshot. No live astronaut telemetry or certified safety claim.</p><Link className="button primary" href="/mission">Open mission control</Link></div></section></div>
       <section className="panel intel-datasets">
         <div className="panel-heading"><h2><Database size={17}/> NASA data inventory</h2></div>
         <div className="intel-source-list" aria-label="Select NASA imagery">

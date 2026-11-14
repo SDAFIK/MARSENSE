@@ -218,3 +218,38 @@ test("science briefing exposes sources and limitations on mobile", async ({page}
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   await page.screenshot({path:testInfo.outputPath("science-mobile.png"),fullPage:true});
 });
+
+test("premium astronaut controls and mobile navigation remain usable", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/astronaut");
+  const ground = page.getByRole("region", { name: "Ground observation view" });
+  const controls = page.getByRole("complementary", { name: "Observation and decision controls" });
+  await expect(ground).toBeVisible();
+  await expect(controls.getByRole("button", { name: "Observe", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await ground.getByRole("button", { name: "Route context", exact: true }).click();
+  await expect(controls.getByRole("button", { name: "Route", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await ground.getByRole("button", { name: "Record observation", exact: true }).click();
+  await expect(controls.getByRole("button", { name: "Observe", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(controls.getByLabel("Demonstration observation")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Mission Control", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath("premium-field-controls-mobile.png"), fullPage: true });
+});
+
+test("route summary and science mission briefing use the current snapshot", async ({ page }) => {
+  await page.goto("/comparison");
+  const summary = page.getByRole("region", { name: "Route comparison summary" });
+  await expect(summary).toContainText("Route Alpha");
+  await expect(summary).toContainText("Route Beta");
+  await expect(summary).toContainText("DISTANCE CHANGE");
+  await page.getByRole("link", { name: "Intelligence Center", exact: true }).click();
+  const briefing = page.getByRole("region", { name: "Current mission briefing" });
+  await expect(briefing).toContainText("Delta outcrop");
+  await expect(briefing).toContainText("Route Beta");
+  await expect(page.getByRole("img", { name: "Mars globe rendered from NASA Viking imagery" })).toBeVisible();
+  await page.getByRole("button", { name: "Play Mars rotation" }).click();
+  await expect(page.getByRole("button", { name: "Pause Mars rotation" })).toBeVisible();
+  await page.getByRole("button", { name: "Pause Mars rotation" }).click();
+  await page.getByRole("button", { name: "Rotate Mars left" }).click();
+});

@@ -6,7 +6,11 @@ Team Redscape · NASA International Space Apps Challenge 2026 · Interplanetary 
 
 [**Launch MARSENSE — live website**](https://redscape-eight.vercel.app) · [Source repository](https://github.com/SDAFIK/MARSENSE) · [Cloud API health](https://marsense-cloud-api.onrender.com/api/health) · [Product specification](docs/PRODUCT_RECOVERY.md) · [NASA source matrix](NASA_SOURCE_MATRIX.md)
 
-> **Release status (14 November 2026):** MARSENSE 2.0 is deployed at [redscape-eight.vercel.app](https://redscape-eight.vercel.app) with the Render API and Supabase PostgreSQL. The release is merged into the original repository via [PR #3](https://github.com/SDAFIK/MARSENSE/pull/3). The deployed frontend source is `4b1cc09`. [Full regression](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194188), [cloud mission acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194108), and [signed-out public browser acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560660362) passed. This remains a competition research prototype, not certified astronaut navigation.
+> **Release status (14 November 2026):** MARSENSE 2.0 is deployed at [redscape-eight.vercel.app](https://redscape-eight.vercel.app) with the Render API and Supabase PostgreSQL. The release is merged into the original repository via [PR #3](https://github.com/SDAFIK/MARSENSE/pull/3). The initial 2.0 release used frontend source `4b1cc09`; production was subsequently repaired for cloud cold-start and bundled NASA imagery. [Full regression](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194188), [cloud mission acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194108), and [signed-out public browser acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560660362) passed. This remains a competition research prototype, not certified astronaut navigation.
+
+## Premium UI release candidate
+
+The redesign branch introduces a shared aerospace design system, larger field imagery, responsive navigation, and direct Observe / Route / Review controls. It preserves the existing evidence, human decision and route engine. The candidate is tracked in [PR #5](https://github.com/SDAFIK/MARSENSE/pull/5); preview and test results must be checked for the exact candidate commit before promotion.
 
 ## The problem
 

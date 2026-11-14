@@ -30,6 +30,12 @@ export default function MissionControl({
   onFuture: () => void;
 }) {
   const [step, setStep] = useState<Step>("EXPECT");
+  function openStep(next: Step) {
+    setStep(next);
+    if (window.matchMedia("(max-width: 1099px)").matches) {
+      requestAnimationFrame(() => document.getElementById("mission-context")?.scrollIntoView({ block: "start" }));
+    }
+  }
   const [eventId, setEventId] = useState<string | null>(null);
   const region =
     snapshot.regions.find((r) => r.name.startsWith("Area 14")) ??
@@ -48,17 +54,18 @@ export default function MissionControl({
     ["PROVISIONAL", "NEEDS_MORE_EVIDENCE"].includes(
       selected.verification_state,
     );
+  const workflowComplete = [Boolean(prior), Boolean(selected), Boolean(selected), selected?.verification_state === "CONFIRMED", Boolean(beta)];
   const event = snapshot.events.find((e) => e.id === eventId);
   const focus: Coordinate | undefined = event?.evidence_id
     ? snapshot.evidence.find((e) => e.id === event.evidence_id)?.location
     : undefined;
   async function analyze(e: Evidence) {
     await observed(e);
-    setStep(e.consequence.relevant ? "COMPARE" : "OBSERVE");
+    openStep(e.consequence.relevant ? "COMPARE" : "OBSERVE");
   }
   async function decide(updated: Evidence) {
     await verified();
-    setStep(updated.verification_state === "CONFIRMED" ? "LEARN" : updated.verification_state === "NEEDS_MORE_EVIDENCE" ? "OBSERVE" : "VERIFY");
+    openStep(updated.verification_state === "CONFIRMED" ? "LEARN" : updated.verification_state === "NEEDS_MORE_EVIDENCE" ? "OBSERVE" : "VERIFY");
   }
   function selectEvent(id: string, evidenceId: string | null) {
     setEventId(id);
@@ -80,9 +87,11 @@ export default function MissionControl({
             id={`workflow-${s}`}
             role="tab"
             aria-selected={step === s}
+            data-recorded={workflowComplete[i]}
+            title={`${s} · ${workflowComplete[i] ? "Recorded" : "Pending"}`}
             aria-controls="mission-context"
             tabIndex={step === s ? 0 : -1}
-            onClick={() => setStep(s)}
+            onClick={() => openStep(s)}
             onKeyDown={(e) => {
               const next =
                 e.key === "ArrowRight"
@@ -162,7 +171,7 @@ export default function MissionControl({
               <h2>EVIDENCE</h2>
             </div>
             <div className="recovery-evidence">
-              <button onClick={() => setStep("EXPECT")}>
+              <button onClick={() => openStep("EXPECT")}>
                 <span>NASA PRIOR · PRESERVED</span>
                 <strong>
                   {label(
@@ -173,7 +182,7 @@ export default function MissionControl({
                 </strong>
                 <small>Orbital-only interpretation</small>
               </button>
-              <button onClick={() => setStep(selected ? "COMPARE" : "OBSERVE")}>
+              <button onClick={() => openStep(selected ? "COMPARE" : "OBSERVE")}>
                 <span>GROUND OBSERVATION</span>
                 <strong>
                   {selected
@@ -186,7 +195,7 @@ export default function MissionControl({
                     : "Human review required"}
                 </small>
               </button>
-              <button onClick={() => setStep("VERIFY")}>
+              <button onClick={() => openStep("VERIFY")}>
                 <span>HUMAN DECISION</span>
                 <strong>
                   {selected
@@ -220,7 +229,7 @@ export default function MissionControl({
               </p>
               <button
                 className="button secondary full"
-                onClick={() => setStep("LEARN")}
+                onClick={() => openStep("LEARN")}
               >
                 WHY THIS ROUTE?
               </button>
@@ -229,7 +238,7 @@ export default function MissionControl({
           {pending && (
             <button
               className="button secondary full review-required"
-              onClick={() => setStep("VERIFY")}
+              onClick={() => openStep("VERIFY")}
             >
               REVIEW REQUIRED · CONFIRM / REQUEST / REJECT
             </button>
@@ -305,7 +314,7 @@ export default function MissionControl({
               </p>
               <button
                 className="button secondary full"
-                onClick={() => setStep("OBSERVE")}
+                onClick={() => openStep("OBSERVE")}
               >
                 OBSERVE THE GROUND
               </button>
@@ -388,7 +397,7 @@ export default function MissionControl({
                   </p>
                   <button
                     className="button secondary full"
-                    onClick={() => setStep("VERIFY")}
+                    onClick={() => openStep("VERIFY")}
                   >
                     HUMAN VERIFICATION
                   </button>
@@ -431,7 +440,7 @@ export default function MissionControl({
                 </p>
                 <button
                   className="button secondary full"
-                  onClick={() => setStep("OBSERVE")}
+                  onClick={() => openStep("OBSERVE")}
                 >
                   RECORD OBSERVATION
                 </button>
