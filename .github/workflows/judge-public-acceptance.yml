@@ -1,0 +1,52 @@
+name: Public judge outage acceptance
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/judge-public-acceptance.yml'
+      - 'frontend/scripts/judge-browser-acceptance.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: public-judge-outage-acceptance
+  cancel-in-progress: true
+jobs:
+  live-judge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - working-directory: frontend
+        run: npm ci
+      - working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Verify new public deployment is ready
+        run: |
+          for i in $(seq 1 36); do
+            if curl -fsS --max-time 10 https://redscape-eight.vercel.app/demo | grep -q 'Jezero reconnaissance'; then
+              echo 'Public browser demo is available.'
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 1
+      - name: Complete live public mission with every cloud API blocked
+        working-directory: frontend
+        env:
+          JUDGE_BASE_URL: https://redscape-eight.vercel.app
+        run: node scripts/judge-browser-acceptance.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-judge-outage-screenshots
+          path: frontend/test-results/judge-resilience/*.png
+          if-no-files-found: ignore
+          retention-days: 7
