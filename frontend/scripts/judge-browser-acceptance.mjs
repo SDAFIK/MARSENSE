@@ -19,7 +19,9 @@ async function scenario(width,height,label) {
   const visible=locator=>locator.waitFor({state:"visible"});
   const text=value=>visible(page.getByText(value,{exact:true}));
   async function capture(name) {
+    for (const image of await page.locator("img").all()) if (await image.isVisible()) await image.scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>Array.from(document.images).filter(img=>img.getClientRects().length>0).every(img=>img.complete&&img.naturalWidth>0));
+    await page.evaluate(()=>window.scrollTo(0,0));
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),label+" horizontal overflow "+name);
     await page.screenshot({path:output+"/"+label+"-"+name+".png",fullPage:true,animations:"disabled"});
   }
@@ -48,7 +50,7 @@ async function scenario(width,height,label) {
     await button("Open human review").click();
     await button("Confirm observation").click();
     await visible(page.getByRole("heading",{name:"The living map adapts."}));
-    await text("Route Beta");
+    await visible(page.getByText("Route Beta",{exact:true}).first());
     await button("Calculate route options").click();
     await visible(page.getByRole("button",{name:/Lowest modeled cost/}));
     await visible(page.getByRole("button",{name:/Alternative 1/}));
