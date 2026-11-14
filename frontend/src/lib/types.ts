@@ -17,6 +17,7 @@ export type ModelOutput = {
   engine: string;
   version: string;
   class_fractions: Record<string, number>;
+  mask_reference?: string | null;
   features: Record<string, number>;
   limitations: string[];
 };
@@ -104,6 +105,7 @@ export type Snapshot = {
   regions: Region[];
   evidence: Evidence[];
   routes: Route[];
+  route_segments?: { id: string; route_id: string; coordinates: Coordinate[]; assumption_ids: string[] }[];
   assumptions: {
     id: string;
     statement: string;
@@ -136,7 +138,15 @@ export type Snapshot = {
         sol: number; sclk: string; preview: string; source_url: string;
         raw_sha256: string; limitations: string[]; clock_interval_matched: boolean;
         observation_clock_matched: boolean; region_overlap: boolean;
+        localization?: {
+          status: "DRIVE_ANCHOR_ONLY" | "UNAVAILABLE";
+          anchor_local_m: Coordinate | null;
+          ground_footprint_available: false;
+          spatial_uncertainty_m: null;
+          reason: string;
+        };
       }[];
+      camera_anchor_consistency?: { anchor_count: number; max_relative_residual_m: number | null };
       ctx?: { render_corners: Coordinate[]; layer: string; sha256: string };
       hirise?: { render_corners: Coordinate[]; layer: string; sha256: string };
       ground?: {

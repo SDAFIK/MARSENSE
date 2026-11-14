@@ -4,6 +4,7 @@ import type { Snapshot } from "@/lib/types";
 import { label } from "@/lib/api";
 import LivingMap from "./living-map";
 import { InheritedMemory } from "./mission-memory";
+import ReviewExport from "./review-export";
 export default function SpatialMemory({
   snapshot,
   onFuture,
@@ -116,6 +117,7 @@ export default function SpatialMemory({
         </div>
       </aside>
       <div className="memory-inheritance"><div className="studio-intro"><span className="eyebrow">NEXT EXPLORER</span><h2>From one EVA to the next.</h2></div>
+        <ReviewExport snapshot={snapshot}/>
         <InheritedMemory
           snapshot={snapshot}
           onSwitch={snapshot.mission.id === "eva-01" ? onFuture : undefined}

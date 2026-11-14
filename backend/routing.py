@@ -38,6 +38,7 @@ def astar(
     goal: tuple[float, float],
     evidence: list[Evidence],
     slope_grid: np.ndarray | None = None,
+    excluded_edge: tuple[tuple[int, int], tuple[int, int]] | None = None,
 ) -> PathResult:
     if slope_grid is not None and slope_grid.shape != (ROWS, COLS):
         raise ValueError("Slope grid does not match the mission grid")
@@ -107,6 +108,8 @@ def astar(
             neighbor = (cell[0] + dx, cell[1] + dy)
             if not (0 <= neighbor[0] < COLS and 0 <= neighbor[1] < ROWS):
                 continue
+            if excluded_edge in ((cell, neighbor), (neighbor, cell)):
+                continue
             candidate = costs[cell] + sum(terms(cell, neighbor).values())
             if candidate < costs.get(neighbor, inf):
                 costs[neighbor] = candidate
@@ -114,6 +117,29 @@ def astar(
                 heuristic = CELL_M * hypot(neighbor[0] - target[0], neighbor[1] - target[1])
                 heapq.heappush(frontier, (candidate + heuristic, neighbor))
     return PathResult([], 0.0, 0.0, {})
+
+
+def route_options(
+    start: tuple[float, float], goal: tuple[float, float], evidence: list[Evidence],
+    slope_grid: np.ndarray | None = None,
+) -> list[PathResult]:
+    """Bounded, read-only search for distinct alternatives under unchanged cost rules."""
+    primary = astar(start, goal, evidence, slope_grid)
+    if not primary.coordinates:
+        return []
+    candidates = [primary]
+    seen = {tuple(primary.coordinates)}
+    cells = [(round(x / CELL_M), round(y / CELL_M)) for x, y in primary.coordinates]
+    edges = list(zip(cells, cells[1:]))
+    # At most six searches: bounded CPU use and no guarantee of global k-shortest paths.
+    indices = sorted({round(i * (len(edges) - 1) / 5) for i in range(6)}) if edges else []
+    for index in indices:
+        alternative = astar(start, goal, evidence, slope_grid, edges[index])
+        key = tuple(alternative.coordinates)
+        if key and key not in seen:
+            candidates.append(alternative)
+            seen.add(key)
+    return [primary, *sorted(candidates[1:], key=lambda p: (p.cost, p.coordinates))[:2]]
 
 
 def load_slope(path: str) -> np.ndarray | None:

@@ -2,13 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Compass, MapPin, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { label } from "@/lib/api";
 import type { Coordinate, Evidence, Snapshot } from "@/lib/types";
 import LivingMap from "./living-map";
 import ObservationPanel from "./observation-panel";
 import EvidenceReview from "./evidence-review";
 import RouteSummary from "./route-summary";
+import { challengedSegments } from "@/lib/mission-map-data";
+import JudgeJourney from "./judge-journey";
 
 const steps = ["EXPECT", "OBSERVE", "COMPARE", "VERIFY", "LEARN"] as const;
 type Step = (typeof steps)[number];
@@ -32,6 +34,11 @@ export default function MissionControl({
   onFuture: () => void;
 }) {
   const [step, setStep] = useState<Step>("EXPECT");
+  const [clock, setClock] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setClock(Date.now()), 10000);
+    return () => clearInterval(timer);
+  }, []);
   function openStep(next: Step) {
     setStep(next);
     if (window.matchMedia("(max-width: 1099px)").matches) {
@@ -79,6 +86,7 @@ export default function MissionControl({
   return (
     <div className="recovery-control mission-command-v3">
       <section className="command-brief" aria-label="Mission overview"><div><p className="eyebrow">SURFACE OPERATIONS / {snapshot.mission.eva}</p><h1>Mission Control</h1><p><MapPin size={14}/> Jezero reconnaissance · {snapshot.target.name}</p></div><div className="command-metrics"><div><span>ACTIVE TRAVERSE</span><strong>{active?.name ?? "Unavailable"}</strong><small>{active && active.status !== "NO_ROUTE" ? `${active.distance_m.toFixed(0)} m modeled` : "No modeled route"}</small></div><div><span>KNOWLEDGE STATE</span><strong>{label(region?.knowledge_state ?? "UNKNOWN")}</strong><small>{pending ? "Human review pending" : "Evidence-backed mission state"}</small></div></div><Link className="button secondary" href="/astronaut"><Compass size={16}/> Field view <ArrowUpRight size={14}/></Link></section>
+      <JudgeJourney snapshot={snapshot} selected={selected} step={step} busy={busy} onStep={openStep} onFuture={onFuture}/>
       <div
         className="recovery-workflow"
         role="tablist"
@@ -260,10 +268,8 @@ export default function MissionControl({
           <div className="map-knowledge-label">
             <strong>{region?.name.split(" \u00b7 ")[0]}</strong>
             <span>{label(region?.knowledge_state ?? "UNKNOWN")}</span>
-            {alphaChallenged && (
-              <span className="challenged-text">
-                A17 · ALPHA SEGMENT 3 CHALLENGED
-              </span>
+            {challengedSegments(snapshot, clock).length > 0 && (
+              <span className="challenged-text">CHALLENGED ROUTE SEGMENTS · SEE AMBER OVERLAY</span>
             )}
           </div>
         </div>
@@ -316,6 +322,7 @@ export default function MissionControl({
           )}
           {step === "OBSERVE" && (
             <ObservationPanel
+              snapshot={snapshot}
               missionId={snapshot.mission.id}
               busy={busy}
               setBusy={setBusy}
@@ -377,7 +384,7 @@ export default function MissionControl({
                   </span>
                   <h3>MISSION IMPACT</h3>
                   <p>{selected.consequence.explanation}</p>
-                  {alphaChallenged && (
+                  {alphaChallenged && selected.consequence.assumption_ids.includes("assumption-corridor") && (
                     <p className="challenged-text">
                       A17 challenged
                       <br />

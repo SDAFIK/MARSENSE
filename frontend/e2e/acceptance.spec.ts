@@ -272,3 +272,28 @@ test("route summary and science mission briefing use the current snapshot", asyn
   await page.getByRole("button", { name: "Pause Mars rotation" }).click();
   await page.getByRole("button", { name: "Rotate Mars left" }).click();
 });
+
+test("judge walkthrough explains the six-step journey and retains accessible entry", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("link", { name: "Judge walkthrough" }).click();
+  await expect(page).toHaveURL(/\/guide$/);
+  await expect(page.getByRole("heading", { name: "Discover it. Verify it. Pass it on." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "What success looks like" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Launch Live Demo", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath("judge-guide-mobile.png"), fullPage: true });
+});
+
+test("NASA camera drive anchors remain separate from ground coverage", async ({ page }) => {
+  await page.goto("/intelligence");
+  // The context uses an aria-labelled container rather than a new navigation surface.
+  const panel = page.getByLabel("NASA camera localization context");
+  await expect(panel.getByRole("heading", { name: "Rover position is not image coverage" })).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Locate rover drive anchor" })).toHaveCount(2);
+  await panel.getByRole("button", { name: "Locate rover drive anchor" }).first().click();
+  await expect(page.getByLabel("NASA rover drive anchor location")).toBeVisible();
+  await expect(panel.getByText("Ground footprint", { exact: true })).toHaveCount(2);
+  await panel.getByRole("button", { name: "Return to mission evidence" }).click();
+  await expect(page.getByLabel("NASA rover drive anchor location")).toHaveCount(0);
+});

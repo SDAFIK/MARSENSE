@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Activity, Database, Layers, Radar, RefreshCw, Route, ScanLine } from "lucide-react";
 import { useState } from "react";
 import { label } from "@/lib/api";
-import type { Snapshot } from "@/lib/types";
+import type { Coordinate, Snapshot } from "@/lib/types";
 import LivingMap from "./living-map";
 import MarsGlobe from "./mars-globe";
 
@@ -23,8 +23,15 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
 }) {
   const [dataset, setDataset] = useState<(typeof datasets)[number]["id"]>("hirise");
   const [eventId, setEventId] = useState("");
+  const [anchorId, setAnchorId] = useState<string | null>(null);
   const selected = datasets.find(item => item.id === dataset) ?? datasets[0];
   const manifest = snapshot.data_status.manifest;
+  const anchor = manifest.cameras?.find(item => item.product_id === anchorId);
+  const focus: Coordinate | undefined = anchor?.localization?.anchor_local_m ?? evidenceLocation();
+  function evidenceLocation() {
+    const selectedEvent = snapshot.events.find(item => item.id === eventId) ?? snapshot.events[0];
+    return snapshot.evidence.find(item => item.id === selectedEvent?.evidence_id)?.location;
+  }
   const available = selected.id === "ground" ? Boolean(manifest.ground) : Boolean(manifest[selected.id]);
   const events = [...snapshot.events].sort((a,b) => Date.parse(b.timestamp) - Date.parse(a.timestamp));
   const event = events.find(item => item.id === eventId) ?? events[0];
@@ -61,8 +68,20 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
       </section>
       <section className="panel intel-map observatory-map">
         <div className="panel-heading"><h2><Radar size={17}/> Jezero / mission geography</h2><span className="small muted">{snapshot.mission.eva}</span></div>
-        <LivingMap snapshot={snapshot} focusLocation={evidence?.location} warmPresentation/>
+        <LivingMap snapshot={snapshot} focusLocation={focus} focusLabel={anchor ? "NASA rover drive anchor" : "Selected evidence"} warmPresentation/>
         <div className="panel-body intel-map-footer"><span>18.44° N · 77.45° E</span><span>Local metric geometry · illustrative mission</span></div>
+        <div className="panel-body v3-camera-context" aria-label="NASA camera localization context">
+          <div><p className="eyebrow">CALIBRATED CAMERA / PLACES</p><h3>Rover position is not image coverage</h3><p className="small muted">Inspect cached NASA drive anchors. These positions never create ground evidence or a route update.</p></div>
+          {(manifest.cameras ?? []).map(camera => <article key={camera.product_id}>
+            <div className="v3-camera-name"><strong>{camera.instrument.join(" / ")}</strong><span className="small muted">Sol {camera.sol}</span></div>
+            <p className="small muted">{camera.localization?.status === "DRIVE_ANCHOR_ONLY" ? "PLACES drive-level position; exact image pose and ground depth not established." : "No validated drive anchor available."}</p>
+            <dl><div><dt>Clock association</dt><dd>{camera.observation_clock_matched ? "Image clock matched" : camera.clock_interval_matched ? "Interval only" : "Unresolved"}</dd></div><div><dt>Ground footprint</dt><dd>Unavailable</dd></div><div><dt>Location uncertainty</dt><dd>Unknown</dd></div></dl>
+            {camera.localization?.anchor_local_m && <button className="button secondary full" aria-pressed={anchorId===camera.product_id} onClick={()=>setAnchorId(camera.product_id)}>Locate rover drive anchor</button>}
+            <a className="small" href={camera.source_url} target="_blank" rel="noreferrer">Official calibrated source ↗</a>
+          </article>)}
+          {typeof manifest.camera_anchor_consistency?.max_relative_residual_m === "number" && <p className="small muted">Relative coordinate consistency: {manifest.camera_anchor_consistency.max_relative_residual_m.toFixed(3)} m residual across cached anchors. This compares coordinate representations; it is not a measurement of absolute pose accuracy.</p>}
+          {anchor && <button className="button secondary" onClick={()=>setAnchorId(null)}>Return to mission evidence</button>}
+        </div>
       </section>
       <section className="panel intel-image">
         <div className="panel-heading"><h2><ScanLine size={17}/> {selected.name} image monitor</h2></div>
@@ -71,7 +90,7 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
       </section>
       <section className="panel intel-events">
         <div className="panel-heading"><h2><Activity size={17}/> Mission event console</h2><span className="small muted">{events.length} recorded</span></div>
-        <div className="intel-event-list">{events.length ? events.map(item => <button key={item.id} aria-pressed={event?.id===item.id} onClick={()=>setEventId(item.id)}><span>{new Date(item.timestamp).toISOString().slice(11,19)} UTC</span><strong>{item.title}</strong><small>{label(item.kind)}</small></button>) : <p>No recorded events yet.</p>}</div>
+        <div className="intel-event-list">{events.length ? events.map(item => <button key={item.id} aria-pressed={event?.id===item.id} onClick={()=>{setEventId(item.id);setAnchorId(null);}}><span>{new Date(item.timestamp).toISOString().slice(11,19)} UTC</span><strong>{item.title}</strong><small>{label(item.kind)}</small></button>) : <p>No recorded events yet.</p>}</div>
         {event && <div className="panel-body intel-event-detail"><strong>{event.title}</strong><p>{event.detail}</p>{evidence && <p className="small muted">Evidence: {label(evidence.verification_state)} · {label(evidence.observed_value)}</p>}</div>}
       </section>
       <section className="panel intel-route">

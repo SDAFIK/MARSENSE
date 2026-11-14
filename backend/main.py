@@ -311,6 +311,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         with mission_store().session() as session:
             return service.snapshot(session, mission_id)
 
+    @app.get("/api/missions/{mission_id}/alternatives", dependencies=protected)
+    def alternatives(mission_id: str) -> dict[str, Any]:
+        with mission_store().session() as session:
+            return service.alternatives(session, mission_id)
+
     @app.post("/api/observations/demo", response_model=Evidence, dependencies=protected)
     def demo(request: ObserveRequest) -> Evidence:
         if settings.environment not in {"demo", "showcase"}:
@@ -452,6 +457,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         footprint: Annotated[str, Form()],
         mission_id: Annotated[str, Form()] = "eva-01",
         details: Annotated[str, Form(max_length=500)] = "",
+        uncertainty_m: Annotated[float | None, Form(ge=0, le=1200)] = None,
     ) -> Evidence:
         if settings.environment == "showcase":
             raise HTTPException(403, "Showcase uses curated replay; uploads belong in production")
@@ -504,6 +510,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "Footprint supplied manually in local meters; "
                 "image is not independently geolocated. Display/model input is a sanitized "
                 "JPEG derivative; original bytes/hash are retained separately."
+                + (f" Observer-estimated location uncertainty: {uncertainty_m:g} m; "
+                   "not independently validated; no footprint expansion."
+                   if uncertainty_m is not None else " Location uncertainty unknown.")
                 + (f" Observer note (unverified): {details}" if details else ""),
                 original_digest=hashlib.sha256(original_content).hexdigest(),
             )

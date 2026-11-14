@@ -6,7 +6,7 @@ import {
   toMars,
   fromMars,
   missionFeatures as features,
-  challengedAlpha,
+  challengedSegments,
 } from "@/lib/mission-map-data";
 import {
   Crosshair,
@@ -139,9 +139,10 @@ function Fallback({
             strokeWidth="5"
           />
         ))}
-      {!before && (
+      {!before && challengedSegments(snapshot, clock).map((segment, index) => (
         <polyline
-          points={challengedAlpha(snapshot, clock)
+          key={index}
+          points={segment
             .map(([x, y]) => `${x},${800 - y}`)
             .join(" ")}
           fill="none"
@@ -149,7 +150,7 @@ function Fallback({
           strokeWidth="6"
           strokeDasharray="10 8"
         />
-      )}
+      ))}
       <circle cx="120" cy="400" r="10" fill="#e5ded3" />
       <text x="120" y="365" fill="white" textAnchor="middle" fontSize="22">
         Habitat
@@ -166,6 +167,7 @@ export default function LivingMap({
   before = false,
   compact = false,
   focusLocation,
+  focusLabel = "Selected evidence",
   warmPresentation = false,
   locked = false,
 }: {
@@ -173,6 +175,7 @@ export default function LivingMap({
   before?: boolean;
   compact?: boolean;
   focusLocation?: Coordinate;
+  focusLabel?: string;
   warmPresentation?: boolean;
   locked?: boolean;
 }) {
@@ -481,10 +484,10 @@ export default function LivingMap({
     map.current.easeTo({ center: toMars(focusLocation), duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 400 });
     const element = document.createElement("div");
     element.className = "map-marker event-location";
-    element.setAttribute("aria-label", "Selected evidence location");
+    element.setAttribute("aria-label", focusLabel + " location");
     const dot = document.createElement("span");
     const title = document.createElement("span");
-    title.textContent = "Selected evidence";
+    title.textContent = focusLabel;
     element.append(dot, title);
     const marker = new maplibregl.Marker({
       element,
@@ -496,7 +499,7 @@ export default function LivingMap({
     return () => {
       marker.remove();
     };
-  }, [ready, focusLocation]);
+  }, [ready, focusLocation, focusLabel]);
   async function changeLayer(value: string) {
     setLayer(value);
     const source = map.current?.getSource("orbital") as

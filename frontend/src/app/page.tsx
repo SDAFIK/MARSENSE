@@ -24,7 +24,7 @@ export default function Home() {
         <p className="mx-kicker"><span/> TEAM REDSCAPE / NASA SPACE APPS 2026</p>
         <h1 id="intro-title">Every step makes<br className="mx-wide-break"/> Mars <em>more known.</em></h1>
         <p className="mx-lead">A living map for the next explorer. Compare what NASA sees from orbit with what humans discover on the ground, and turn verified evidence into better mission decisions.</p>
-        <div className="mx-actions"><PublicDemoButton/><a href="#experience" className="mx-outline">Explore the mission <ArrowDown size={16}/></a></div>
+        <div className="mx-actions"><PublicDemoButton/><Link href="/guide" className="mx-outline">Judge walkthrough <ArrowDown size={16}/></Link></div>
         <div className="mx-proof"><span><ShieldCheck size={17}/> Human-verified decisions</span><span><Layers size={17}/> Real NASA imagery</span></div>
       </div>
       <div className="mx-planet" aria-label="Mars planetary context">

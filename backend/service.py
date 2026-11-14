@@ -9,6 +9,7 @@ from shapely.geometry import LineString, shape
 from sqlalchemy.orm import Session
 
 from ai.perception import Perception
+from backend.camera import camera_anchor_consistency, drive_anchor_context
 from backend.comparison import compare, consequence, expected_at
 from backend.config import ROOT
 from backend.domain import (
@@ -39,7 +40,7 @@ from backend.domain import (
     now,
 )
 from backend.knowledge import Supersession, active_evidence, validate_supersession
-from backend.routing import astar
+from backend.routing import astar, route_options
 from backend.science import crism_context
 from backend.store import all_of, get, put
 
@@ -564,6 +565,23 @@ class MissionService:
             ),
         )
 
+    def alternatives(self, session: Session, mission_id: str) -> dict[str, object]:
+        mission = get(session, Mission, mission_id)
+        confirmed = active_evidence(session)
+        options = route_options(
+            mission.habitat, get(session, ScienceTarget, mission.target_id).location,
+            sorted(confirmed, key=lambda e: e.timestamp), self.slope_grid,
+        )
+        return {
+            "active_route_id": mission.active_route_id,
+            "options": [
+                {"coordinates": p.coordinates, "distance_m": p.distance_m,
+                 "cost": p.cost, "cost_breakdown": p.breakdown}
+                for p in options
+            ],
+            "note": "Read-only modeled candidates; no route selected or safety certified.",
+        }
+
     def snapshot(self, session: Session, mission_id: str) -> Snapshot:
         mission = get(session, Mission, mission_id)
         manifest_path = ROOT / "data/processed/manifest.json"
@@ -590,9 +608,13 @@ class MissionService:
                     "clock_interval_matched": bool(c["places_exact_interval"]),
                     "observation_clock_matched": bool(c["places_observations"]),
                     "region_overlap": c["operational_region_overlap"],
+                    "localization": drive_anchor_context(c),
                 }
                 for name, c in camera_data["products"].items()
             ]
+            manifest["camera_anchor_consistency"] = camera_anchor_consistency(
+                list(camera_data["products"].values())
+            )
         evidence = sorted(all_of(session, Evidence), key=lambda e: e.timestamp, reverse=True)
         for item in evidence:
             item.superseded_by = [
@@ -626,6 +648,8 @@ class MissionService:
             regions=all_of(session, Region),
             evidence=evidence,
             routes=routes,
+            route_segments=[s for s in all_of(session, RouteSegment)
+                            if s.route_id in {r.id for r in routes}],
             assumptions=all_of(session, MissionAssumption),
             events=sorted(
                 [e for e in all_of(session, MissionEvent) if e.mission_id == mission_id],

@@ -236,6 +236,7 @@ def test_real_upload_conservative_fallback(client: TestClient) -> None:
         data={
             "mission_id": "eva-01",
             "footprint": rectangle(520, 320, 680, 480).model_dump_json(),
+            "uncertainty_m": "12.5",
         },
     )
     assert response.status_code == 200, response.text
@@ -246,6 +247,7 @@ def test_real_upload_conservative_fallback(client: TestClient) -> None:
     assert evidence["model_output"]["confidence_label"] == "not estimated"
     assert client.get(evidence["raw_asset_reference"]).status_code == 200
     observation = client.get(f"/api/observations/{evidence['observation_id']}").json()
+    assert "Observer-estimated location uncertainty: 12.5 m" in observation["metadata_note"]
     assert len(observation["asset_sha256"]) == 64
     assert observation["asset_sha256"] == hashlib.sha256(content.getvalue()).hexdigest()
     assert observation["model_input_sha256"] != observation["asset_sha256"]
