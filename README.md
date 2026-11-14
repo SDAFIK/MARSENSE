@@ -4,9 +4,9 @@
 
 Team Redscape · NASA International Space Apps Challenge 2026 · Interplanetary Survival Guide: Martian Map
 
-[Source repository](https://github.com/SDAFIK/MARSENSE) · [Cloud API health](https://marsense-cloud-api.onrender.com/api/health) · [Product specification](docs/PRODUCT_RECOVERY.md) · [NASA source matrix](NASA_SOURCE_MATRIX.md)
+[**Launch MARSENSE — live website**](https://redscape-eight.vercel.app) · [Source repository](https://github.com/SDAFIK/MARSENSE) · [Cloud API health](https://marsense-cloud-api.onrender.com/api/health) · [Product specification](docs/PRODUCT_RECOVERY.md) · [NASA source matrix](NASA_SOURCE_MATRIX.md)
 
-> **Release status:** MARSENSE 2.0 is a competition research prototype under final acceptance. The cloud API and seeded PostgreSQL database are deployed; the latest frontend candidate is tracked in [Recovery PR #3](https://github.com/SDAFIK/MARSENSE/pull/3). The original submitted GitHub URL remains unchanged. A successful health check is not evidence of a complete public release. See [release validation](https://github.com/SDAFIK/MARSENSE/actions) and [the release plan](docs/MARSENSE_2_DELIVERY_PLAN.md) for exact commit results.
+> **Release status (14 November 2026):** MARSENSE 2.0 is deployed at [redscape-eight.vercel.app](https://redscape-eight.vercel.app) with the Render API and Supabase PostgreSQL. The release is merged into the original repository via [PR #3](https://github.com/SDAFIK/MARSENSE/pull/3). The deployed frontend source is `4b1cc09`. [Full regression](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194188), [cloud mission acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194108), and [signed-out public browser acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560660362) passed. This remains a competition research prototype, not certified astronaut navigation.
 
 ## The problem
 
@@ -16,7 +16,7 @@ Orbital imagery can guide Mars surface exploration, but it cannot establish ever
 
 ## Experience MARSENSE
 
-The judge experience requires no project account. Select **Launch Live Demo** on the accepted public website. The guest mission is independent of the operator database and other visitors.
+The judge experience requires no project account. Select **Launch Live Demo** on [the live public website](https://redscape-eight.vercel.app). The guest mission is independent of the operator database and other visitors.
 
 | Step | What to do | What the system does |
 | --- | --- | --- |
@@ -45,7 +45,7 @@ The guest menu allows an isolated reset or exit. For a persistent private missio
 
 ![Earlier reference-led Mission Control implementation](docs/screenshots/visual-recovery/mission-1440x900.png)
 
-*Earlier implementation capture. Final visual and hosted acceptance is tracked against the exact release commit, rather than inferred from this screenshot.*
+*Earlier implementation capture. Current validation screenshots are published by the release workflow; this earlier screenshot is not a claim of pixel-perfect visual parity.*
 
 ## How it works
 
@@ -137,7 +137,7 @@ npx playwright test --config=playwright.production.config.ts
 npx playwright test --config=playwright.showcase.config.ts
 ```
 
-The PostgreSQL CI workflow uses a disposable database; the private genuine checkpoint requires its own scientific validation and is not in Git. The hosted smoke workflow tests approved-origin requests, two independent guests, observation, review, rerouting, inheritance, reset and unauthorized access without changing operator data. See [GitHub Actions](https://github.com/SDAFIK/MARSENSE/actions) for actual results and [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) for the walkthrough. Release gates include real signed-out browser access, desktop/mobile visual acceptance, security and persistence.
+The PostgreSQL CI workflow uses a disposable database; the private genuine checkpoint requires its own scientific validation and is not in Git. The hosted smoke workflow tests approved-origin requests, two independent guests, observation, review, rerouting, inheritance, reset and unauthorized access without changing operator data. See [GitHub Actions](https://github.com/SDAFIK/MARSENSE/actions) for actual results and [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) for the walkthrough. The public browser workflow independently exercises a signed-out visitor's complete guest mission, including confirmation, Route Beta, EVA-02 inheritance and mobile navigation. The latest application regression run passed 77 backend, 19 component and 65 browser tests; the separate PostgreSQL, Docker and hosted acceptance workflows passed. The private genuine-model checkpoint remains outside the release gate. See the linked workflow logs for exact test results and screenshots. Render Free may cold-start; the prototype is not an availability SLA.
 
 ## Repository guide
 
