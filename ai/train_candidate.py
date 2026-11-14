@@ -38,8 +38,9 @@ def train_candidate(manifest: Path, output: Path, epochs: int = 8,
     data = json.loads(manifest.read_text())
     root = manifest.parent.parent if manifest.parent.name == "manifests" else manifest.parent
     # Optional research dependency; the production backend does not import it.
-    from torchvision.models.segmentation import (  # type: ignore[import-untyped]
-        DeepLabV3_MobileNet_V3_Large_Weights, deeplabv3_mobilenet_v3_large,
+    from torchvision.models.segmentation import (
+        DeepLabV3_MobileNet_V3_Large_Weights,
+        deeplabv3_mobilenet_v3_large,
     )
 
     torch.manual_seed(seed)
@@ -89,7 +90,8 @@ def train_candidate(manifest: Path, output: Path, epochs: int = 8,
         "dataset_audit": audit, "preprocessing_version": "rgb-bilinear256-mask-nearest-v1",
         "trained_classes": ["soil", "bedrock", "sand", "large rocks"],
         "classification_enabled": False, "prototype_validation_passed": False,
-        "limitations": "Research candidate only; not calibrated or approved for mission classification.",
+        "limitations": "Research candidate only; not calibrated or approved "
+                       "for mission classification.",
     })
     report["research_gate"] = evaluate_candidate(report)
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -8,8 +8,8 @@ import math
 from pathlib import Path
 from typing import Any
 
-from PIL import Image
 import numpy as np
+from PIL import Image
 
 CLASSES = ("soil", "bedrock", "sand", "large rocks")
 SPLITS = ("train", "validation", "test", "transfer")
@@ -73,17 +73,24 @@ def evaluate_candidate(report: dict[str, Any]) -> dict[str, Any]:
     for split, minimum in thresholds.items():
         metrics = report.get(split + "_evaluation", {})
         iou = metrics.get("mean_iou_present_classes")
-        if not isinstance(iou, (int, float)) or isinstance(iou, bool) or not math.isfinite(iou) or not minimum <= iou <= 1:
+        if (
+            not isinstance(iou, (int, float)) or isinstance(iou, bool)
+            or not math.isfinite(iou) or not minimum <= iou <= 1
+        ):
             issues.append(f"{split}: mean IoU must be at least {minimum}")
         recall = metrics.get("per_class_recall", [])
-        if len(recall) != 4 or any(not isinstance(x, (int, float)) or isinstance(x, bool) or not math.isfinite(x) or not 0.20 <= x <= 1 for x in recall):
+        if len(recall) != 4 or any(
+            not isinstance(x, (int, float)) or isinstance(x, bool)
+            or not math.isfinite(x) or not 0.20 <= x <= 1 for x in recall
+        ):
             issues.append(f"{split}: every class needs recall >= 0.20")
         pixels = metrics.get("labeled_pixels", 0)
         if not isinstance(pixels, int) or pixels < 1:
             issues.append(f"{split}: missing labeled support")
     return {"research_screen_passed": not issues, "issues": issues,
             "classification_enabled": False,
-            "note": "Screening thresholds are project-defined. Independent calibration, localization and human review remain required."}
+            "note": "Screening thresholds are project-defined. Independent calibration, "
+                    "localization and human review remain required."}
 
 
 if __name__ == "__main__":

@@ -1,5 +1,8 @@
 name: MARSENSE V3 terrain research
 on:
+  push:
+    branches: ['codex/marsense-v3-intelligence']
+    paths: ['ai/train_candidate.py', 'ai/research_gate.py', '.github/workflows/terrain-research.yml']
   workflow_dispatch:
     inputs:
       epochs:
@@ -25,7 +28,7 @@ jobs:
           python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
       - name: Audit genuine data and train research candidate
         env:
-          EPOCHS: ${{ inputs.epochs }}
+          EPOCHS: ${{ inputs.epochs || '4' }}
         run: |
           python -m ai.train_candidate data/nasa/ai4mars/manifests/6ec2a90869202f2719ce0fc33084ef094436371df271b163241251869ce8468e.json research-output/deeplab.pt --epochs "$EPOCHS"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
