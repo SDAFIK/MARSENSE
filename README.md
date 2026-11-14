@@ -39,7 +39,7 @@ The guest menu allows an isolated reset or exit. For a persistent private missio
 | Evidence Intelligence | /evidence | Prior, observation, model features, human interpretation, verification and provenance |
 | Route Comparison | /comparison | Aligned before/after map and computed route metrics |
 | Exploration Memory | /memory | Event search, spatial evidence history and inherited knowledge |
-| Mars Intelligence Center | /intelligence | Dataset selector, NASA imagery monitor, mission event console, live mission state and route metrics |
+| Mars Intelligence Center | /intelligence | Interactive NASA Viking globe, dataset selector, NASA imagery monitor, mission event console, live mission state and route metrics |
 | Science & About | /science | Source inventory, methodology, scientific limits and project documentation |
 | Account workflows | /signup, /workspace-login, /login, /register, /account | Private accounts, persistent workspaces, separate invited roles and operator administration |
 
@@ -68,6 +68,8 @@ flowchart LR
 - **Hosting:** Vercel frontend, Render Docker API, Supabase PostgreSQL. Same-origin frontend proxy; explicit approved browser origins; no database credentials in client code.
 
 ## NASA data and scientific integrity
+
+The interactive planetary globe uses the NASA/JPL-Caltech Viking texture from [NASA 3D Resources](https://science.nasa.gov/3d-resources/mars/), with USGS imagery credit. It is a visualization, not live telemetry.
 
 Genuine cached sources include CTX/HiRISE imagery, HiRISE DTM samples, MOLA regional context, Navcam/Mastcam-Z, Mars 2020 PLACES, AI4Mars and CRISM. Source identifiers, processing limits, checksums and coordinate assumptions are documented in [NASA_SOURCE_MATRIX.md](NASA_SOURCE_MATRIX.md), [SCIENTIFIC_AUDIT.md](SCIENTIFIC_AUDIT.md), [MODEL_CARD.md](MODEL_CARD.md) and [FINAL_AUDIT.md](FINAL_AUDIT.md).
 
