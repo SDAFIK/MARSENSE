@@ -7,6 +7,7 @@ import { useState } from "react";
 import { label } from "@/lib/api";
 import type { Snapshot } from "@/lib/types";
 import LivingMap from "./living-map";
+import MarsGlobe from "./mars-globe";
 
 const datasets = [
   { id: "hirise", name: "HiRISE", detail: "High-resolution orbital imagery", asset: "/api/assets/jezero-hirise.png" },
@@ -50,6 +51,7 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
       {stages.map((stage,i) => <div key={stage.name} data-complete={stage.done}><span>{String(i+1).padStart(2,"0")}</span><strong>{stage.name}</strong><small>{stage.done ? "Recorded" : "Pending"}</small></div>)}
     </section>
     <div className="intel-grid">
+      <MarsGlobe/>
       <section className="panel intel-datasets">
         <div className="panel-heading"><h2><Database size={17}/> NASA data inventory</h2></div>
         <div className="intel-source-list" aria-label="Select NASA imagery">
