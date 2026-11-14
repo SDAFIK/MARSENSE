@@ -129,15 +129,6 @@ export default function MissionControl({
               <h2>MISSION TRACE</h2>
               <span>{snapshot.mission.eva}</span>
             </div>
-            <div className="trace-image">
-              <Image
-                unoptimized
-                fill
-                sizes="240px"
-                src="/api/assets/ground-navcam.jpg"
-                alt="Cached NASA Navcam replay image; illustrative mission association"
-              />
-            </div>
             <dl className="trace-data">
               <div>
                 <dt>Mission</dt>

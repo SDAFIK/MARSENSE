@@ -46,3 +46,17 @@
 @media(max-width:1100px){.app-shell .evidence-studio-v3{grid-template-columns:minmax(0,1fr);grid-template-areas:"visual" "records" "detail"}.app-shell .route-studio-v3{grid-template-columns:minmax(0,1fr)}.app-shell .memory-archive-v3{grid-template-columns:minmax(0,1fr);grid-template-areas:"hero" "map" "timeline" "detail" "inherit"}.intel-observatory-v3 .intel-grid,.intel-observatory-v3 .intel-overview{grid-template-columns:minmax(0,1fr)}.intel-observatory-v3 .intel-grid>.panel{grid-column:1;grid-row:auto}.intel-observatory-v3 .intel-grid>.intel-overview{grid-column:1}}
 @media(max-width:600px){.studio-intro{padding:15px}.studio-intro h2{font-size:26px}.evidence-studio-v3 .evidence-paired{gap:6px;padding:8px}.evidence-studio-v3 .evidence-paired figcaption{padding:9px}.evidence-studio-v3 .evidence-source-image{height:250px}.route-studio-v3 .aligned-maps{height:390px}.memory-archive-v3 .spatial-event-list{grid-template-columns:1fr}.memory-archive-v3 .spatial-memory-map .map-panel,.intel-observatory-v3 .intel-map .map-panel{height:380px}.memory-archive-v3 .memory-stats span{flex-basis:100%;font-size:13px}.observatory-globe .globe-stage canvas{width:min(100%,330px)!important}}
 /* Keep full labels available to assistive technology while the compact labels remain visual. */
+
+/* Explicit dimensions prevent percentage-height map collapse on tablets. */
+@media(min-width:601px) and (max-width:1100px){
+  .app-shell.view-mission .command-grid{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto}
+  .app-shell.view-mission .command-map{display:flex;flex-direction:column;min-height:0;height:auto;grid-column:1;grid-row:1}
+  .app-shell.view-mission .command-map>.map-panel:not(.map-expanded){height:480px;min-height:480px;flex:0 0 480px}
+  .app-shell.view-mission .command-map>.map-knowledge-label{position:static;display:flex;flex-wrap:wrap;gap:8px;max-width:none;border:0;border-top:1px solid var(--border);padding:10px;background:#111e2b}
+  .app-shell.view-mission .recovery-inspector{grid-column:1;grid-row:2;max-height:none;min-height:0}
+  .app-shell.view-mission .recovery-left{grid-column:1;grid-row:3;max-height:none;overflow:visible}
+}
+@media(max-width:600px){
+  .app-shell.view-mission .command-map>.map-panel:not(.map-expanded){height:400px;min-height:400px;flex:0 0 400px}
+  .app-shell.view-mission .command-map{min-height:0;height:auto}
+}
