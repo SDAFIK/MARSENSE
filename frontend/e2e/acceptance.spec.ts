@@ -98,6 +98,28 @@ for (const [size, width, height] of [
       } else
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       if (view) await expect(page.getByLabel("Active mission")).toBeVisible();
+      // Verify this is the structural redesign, not the previous styled dashboard.
+      const rebuiltScreens: Record<string, string> = {
+        "": ".mars-experience",
+        mission: ".mission-command-v3",
+        astronaut: ".field-experience-v3",
+        evidence: ".evidence-studio-v3",
+        memory: ".memory-archive-v3",
+        comparison: ".route-studio-v3",
+        intelligence: ".intel-observatory-v3",
+      };
+      await expect(page.locator(rebuiltScreens[view])).toBeVisible();
+      if (!view) {
+        await expect(page.getByRole("heading", { name: /Every step makes Mars more known/ })).toBeVisible();
+        await expect(page.getByText("Planetary context ready", { exact: true })).toBeVisible();
+        await expect(page.getByRole("button", { name: "Launch Live Demo", exact: true })).toBeVisible();
+        if (width <= 1000) {
+          const controls = await page.locator(".mx-planet .globe-controls").boundingBox();
+          const coordinates = await page.locator(".mx-coordinate").boundingBox();
+          expect(controls && coordinates && coordinates.y >= controls.y + controls.height, "Planet coordinate label must not obscure globe controls").toBeTruthy();
+        }
+      }
+      if (view === "mission") await expect(page.getByRole("region", { name: "Mission overview" })).toBeVisible();
       // A shell heading can appear before the mission API finishes loading.
       // Capture the actual data-backed view, not an empty loading state.
       if (view === "evidence")
@@ -127,21 +149,18 @@ for (const [size, width, height] of [
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - window.innerWidth,
       );
-      expect(overflow).toBeLessThanOrEqual(1);
+      expect(overflow, `Horizontal overflow: ${view || "landing"} at ${width} × ${height}`).toBeLessThanOrEqual(1);
       expect(errors).toEqual([]);
       await expect
         .poll(() =>
           page
             .locator("img")
             .evaluateAll((images) =>
-              images.every(
-                (img) =>
-                  (img as HTMLImageElement).complete &&
-                  (img as HTMLImageElement).naturalWidth > 0,
-              ),
+              images.filter((img) => !(img as HTMLImageElement).complete || (img as HTMLImageElement).naturalWidth === 0).map(img => (img as HTMLImageElement).getAttribute("src")),
+
             ),
         )
-        .toBe(true);
+        .toEqual([]);
       await page.screenshot({
         path: testInfo.outputPath(`${view || "landing"}-${size}.png`),
         fullPage: true,

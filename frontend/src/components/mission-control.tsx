@@ -1,5 +1,7 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight, Compass, MapPin, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { label } from "@/lib/api";
 import type { Coordinate, Evidence, Snapshot } from "@/lib/types";
@@ -75,7 +77,8 @@ export default function MissionControl({
     } else setStep("EXPECT");
   }
   return (
-    <div className="recovery-control">
+    <div className="recovery-control mission-command-v3">
+      <section className="command-brief" aria-label="Mission overview"><div><p className="eyebrow">SURFACE OPERATIONS / {snapshot.mission.eva}</p><h1>Mission Control</h1><p><MapPin size={14}/> Jezero reconnaissance · {snapshot.target.name}</p></div><div className="command-metrics"><div><span>ACTIVE TRAVERSE</span><strong>{active?.name ?? "Unavailable"}</strong><small>{active && active.status !== "NO_ROUTE" ? `${active.distance_m.toFixed(0)} m modeled` : "No modeled route"}</small></div><div><span>KNOWLEDGE STATE</span><strong>{label(region?.knowledge_state ?? "UNKNOWN")}</strong><small>{pending ? "Human review pending" : "Evidence-backed mission state"}</small></div></div><Link className="button secondary" href="/astronaut"><Compass size={16}/> Field view <ArrowUpRight size={14}/></Link></section>
       <div
         className="recovery-workflow"
         role="tablist"
@@ -116,7 +119,7 @@ export default function MissionControl({
         ))}
         <span>HUMAN DECISION AUTHORITY</span>
       </div>
-      <div className="recovery-columns">
+      <div className="recovery-columns command-grid">
         <aside
           className="recovery-left"
           aria-label="Mission trace and evidence"
@@ -125,15 +128,6 @@ export default function MissionControl({
             <div className="panel-heading">
               <h2>MISSION TRACE</h2>
               <span>{snapshot.mission.eva}</span>
-            </div>
-            <div className="trace-image">
-              <Image
-                unoptimized
-                fill
-                sizes="240px"
-                src="/api/assets/ground-navcam.jpg"
-                alt="Cached NASA Navcam replay image; illustrative mission association"
-              />
             </div>
             <dl className="trace-data">
               <div>
@@ -257,7 +251,7 @@ export default function MissionControl({
             Ground footprint requires human review.
           </p>
         </aside>
-        <div className="recovery-map">
+        <div className="recovery-map command-map">
           <LivingMap
             snapshot={snapshot}
             focusLocation={focus}
@@ -281,7 +275,7 @@ export default function MissionControl({
           aria-labelledby={`workflow-${step}`}
           tabIndex={0}
         >
-          <div className="context-heading">
+          <div className="context-heading"><ShieldCheck size={16}/>
             <h2>{step}</h2>
             <span>{region?.name.split(" \u00b7 ")[0]}</span>
           </div>

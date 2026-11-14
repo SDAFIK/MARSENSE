@@ -29,8 +29,8 @@ export default function SpatialMemory({
   const event = filtered.find((e) => e.id === selectedId);
   const evidence = snapshot.evidence.find((e) => e.id === event?.evidence_id);
   return (
-    <div className="spatial-memory"><section className="memory-hero"><p className="eyebrow">EXPLORATION MEMORY</p><h2>Knowledge that Lives On</h2><p>Every verified observation becomes part of the living map.</p><div className="memory-stats"><span>{snapshot.events.length} recorded events</span><span>{snapshot.evidence.filter(e=>e.source_type!=="orbital" && e.verification_state==="CONFIRMED").length} confirmed ground records</span><span>{snapshot.mission.inherited_evidence.length} inherited records</span></div></section>
-      <aside className="panel">
+    <div className="spatial-memory memory-archive-v3"><section className="memory-hero"><p className="eyebrow">EXPLORATION MEMORY</p><h2>Knowledge that Lives On</h2><p>Every verified observation becomes part of the living map.</p><div className="memory-stats"><span>{snapshot.events.length} recorded events</span><span>{snapshot.evidence.filter(e=>e.source_type!=="orbital" && e.verification_state==="CONFIRMED").length} confirmed ground records</span><span>{snapshot.mission.inherited_evidence.length} inherited records</span></div></section>
+      <aside className="panel memory-chronicle">
         <div className="panel-heading">
           <h2>MISSION TIMELINE · {snapshot.mission.eva}</h2>
         </div>
@@ -54,7 +54,7 @@ export default function SpatialMemory({
           ))}
         </div>
       </aside>
-      <div className="spatial-memory-map" id="memory-map">
+      <div className="spatial-memory-map" id="memory-map"><div className="studio-intro"><span className="eyebrow">SPATIAL ARCHIVE</span><h2>Knowledge on the map</h2><p>Select a mission event to locate the corresponding evidence.</p></div>
         <LivingMap
           snapshot={snapshot}
           focusLocation={evidence?.location}
@@ -115,7 +115,7 @@ export default function SpatialMemory({
           </p>
         </div>
       </aside>
-      <div className="memory-inheritance">
+      <div className="memory-inheritance"><div className="studio-intro"><span className="eyebrow">NEXT EXPLORER</span><h2>From one EVA to the next.</h2></div>
         <InheritedMemory
           snapshot={snapshot}
           onSwitch={snapshot.mission.id === "eva-01" ? onFuture : undefined}

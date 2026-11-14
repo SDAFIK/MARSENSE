@@ -16,13 +16,13 @@ export default function BeforeAfter({ snapshot }: { snapshot: Snapshot }) {
       e.persistence_type === "persistent",
   );
   return (
-    <div className="spatial-comparison">
+    <div className="spatial-comparison route-studio-v3"><div className="studio-intro route-intro"><span className="eyebrow">TRAVERSE / REVISION ANALYSIS</span><h2>See how the journey changes.</h2><p>Compare the same terrain before and after a human-confirmed observation.</p></div>
       <section className="route-metric-strip" aria-label="Route comparison summary">
         <article><span className="eyebrow">ORIGINAL TRAVERSE</span><strong>{alpha?.name ?? "Unavailable"}</strong><span>{alpha && alpha.status !== "NO_ROUTE" ? `${alpha.distance_m.toFixed(0)} m` : "No modeled route"}</span></article>
         <article><span className="eyebrow">ACTIVE TRAVERSE</span><strong>{active?.name ?? "Unavailable"}</strong><span>{active && active.status !== "NO_ROUTE" ? `${active.distance_m.toFixed(0)} m` : "No modeled route"}</span></article>
         <article><span className="eyebrow">DISTANCE CHANGE</span><strong>{distanceDelta === undefined ? "Unavailable" : `${distanceDelta >= 0 ? "+" : "−"}${Math.abs(distanceDelta).toFixed(0)} m`}</strong><span>Modeled distance · not a safety guarantee</span></article>
       </section>
-      <section
+      <div className="route-map-stage"><section
         className="aligned-maps"
         aria-label="Aligned before and after Mars maps"
       >
@@ -89,7 +89,7 @@ export default function BeforeAfter({ snapshot }: { snapshot: Snapshot }) {
           NASA prior retained. Only human-confirmed, supported footprints become
           persistent ground-observed evidence. Mission geometry is illustrative.
         </p>
-      </section>
+      </section></div>
       <section className="panel route-compare-data"><div className="panel-heading"><h2>Route comparison · modeled values</h2></div><div className="route-compare-grid">{[alpha, active?.version === 1 ? undefined : active].map((route,i)=><article key={i}><span className="eyebrow">{i===0 ? "ORIGINAL PLAN" : "CURRENT REVISION"}</span><h3>{route?.name ?? "Awaiting confirmed evidence"}</h3>{route && <><p>{route.status} · {route.status === "NO_ROUTE" ? "No route" : route.distance_m.toFixed(0)+" m"}</p><p>{route.explanation}</p></>}</article>)}</div></section>
       <RouteSummary snapshot={snapshot} />
     </div>
