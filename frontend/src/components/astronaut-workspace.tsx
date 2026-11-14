@@ -116,6 +116,7 @@ export default function AstronautWorkspace({
         {context === "WHY" && <RouteSummary snapshot={snapshot} />}{" "}
         {context === "OBSERVE" && (
           <ObservationPanel
+            snapshot={snapshot}
             missionId={missionId}
             busy={busy}
             setBusy={setBusy}

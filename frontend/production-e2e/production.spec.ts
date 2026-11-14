@@ -41,6 +41,9 @@ test("production-mode real image upload, role separation, human decision and fut
   await expect(page.getByText("Manually locate the supported footprint", { exact: false })).toBeVisible();
   await expect(page.getByAltText("Selected ground image before submission")).toBeVisible();
   await page.getByLabel("Observation details (optional)").fill("Disposable fixture; manually placed footprint.");
+  await expect(page.getByRole("button", { name: "Analyze terrain", exact: true })).toBeDisabled();
+  await page.getByLabel("Estimated location uncertainty (m, optional)").fill("12");
+  await page.getByRole("checkbox", { name: /I confirm this is the manually placed footprint/ }).check();
   const upload = page.waitForResponse((response) => response.url().endsWith("/api/observations/upload") && response.request().method() === "POST");
   await page.getByRole("button", { name: "Analyze terrain", exact: true }).click();
   const response = await upload;
@@ -84,6 +87,7 @@ test("production-mode real image upload, role separation, human decision and fut
   expect(current.evidence.filter((item) => item.source_type === "orbital")).toEqual(before.evidence.filter((item) => item.source_type === "orbital"));
   const observation = await (await page.request.get(`/api/observations/${evidence.observation_id}`)).json();
   expect(observation.metadata_note).toContain("Disposable fixture");
+  expect(observation.metadata_note).toContain("Observer-estimated location uncertainty: 12 m");
   const original = await page.request.get(observation.original_asset_reference);
   expect(original.ok()).toBeTruthy();
   expect(await original.body()).toEqual(bytes);
@@ -146,6 +150,7 @@ test("self-service signup creates a private saved mission and personal login res
   await page.getByLabel("Upload ground image").setInputFiles({
     name: "personal-fixture.jpg", mimeType: "image/jpeg", buffer: await source.body(),
   });
+  await page.getByRole("checkbox", { name: /I confirm this is the manually placed footprint/ }).check();
   await page.getByRole("button", { name: "Analyze terrain", exact: true }).click();
   await expect(page.getByRole("tab", { name: "COMPARE", exact: true })).toHaveAttribute("aria-selected", "true");
   await page.getByRole("tab", { name: "VERIFY", exact: true }).click();

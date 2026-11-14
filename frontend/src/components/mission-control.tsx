@@ -316,6 +316,7 @@ export default function MissionControl({
           )}
           {step === "OBSERVE" && (
             <ObservationPanel
+              snapshot={snapshot}
               missionId={snapshot.mission.id}
               busy={busy}
               setBusy={setBusy}

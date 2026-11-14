@@ -4,14 +4,17 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Camera, ScanLine, Upload } from "lucide-react";
 import { api, jsonRequest } from "@/lib/api";
-import type { Evidence } from "@/lib/types";
+import type { Evidence, Snapshot } from "@/lib/types";
+import FootprintPicker, { defaultPlacement, placementRegion } from "./footprint-picker";
 export default function ObservationPanel({
   missionId,
+  snapshot,
   onComplete,
   busy,
   setBusy,
 }: {
   missionId: string;
+  snapshot: Snapshot;
   onComplete: (e: Evidence) => Promise<void>;
   busy: boolean;
   setBusy: (busy: boolean) => void;
@@ -36,20 +39,22 @@ export default function ObservationPanel({
   useEffect(() => () => {
     if (preview) URL.revokeObjectURL(preview);
   }, [preview]);
-  const [bounds, setBounds] = useState({
-    x: 520,
-    y: 320,
-    width: 160,
-    height: 160,
-  });
+  const [bounds, setBounds] = useState(defaultPlacement);
+  const [placementConfirmed, setPlacementConfirmed] = useState(false);
+  const [uncertainty, setUncertainty] = useState("");
+  const region = placementRegion(snapshot.regions, bounds);
+  const validUncertainty = uncertainty === "" || (Number.isFinite(Number(uncertainty)) && Number(uncertainty) >= 0 && Number(uncertainty) <= 1200);
   const fileInput = useRef<HTMLInputElement>(null);
   function clearFile() {
     setFile(null);
     setPreview(null);
+    setPlacementConfirmed(false);
+    setUncertainty("");
+    setBounds(defaultPlacement);
     if (fileInput.current) fileInput.current.value = "";
   }
   async function analyze() {
-    if (file ? !canUpload : !canReplay) return;
+    if (file ? !canUpload || !placementConfirmed || !region || !validUncertainty : !canReplay) return;
     setBusy(true);
     setError(null);
     try {
@@ -62,6 +67,7 @@ export default function ObservationPanel({
         }
         const body = new FormData();
         body.append("details", details);
+        if (uncertainty !== "") body.append("uncertainty_m", uncertainty);
         body.append("file", file);
         body.append("mission_id", missionId);
         body.append(
@@ -167,6 +173,9 @@ export default function ObservationPanel({
             }
             setFile(next ?? null);
             setPreview(next ? URL.createObjectURL(next) : null);
+            setPlacementConfirmed(false);
+            setUncertainty("");
+            setBounds(defaultPlacement);
             setError(null);
           }}
         />
@@ -177,23 +186,12 @@ export default function ObservationPanel({
               Manually locate the supported footprint in local meters. Uploads
               are not automatically geolocated.
             </p>
-            <div className="footprint-fields">
-              {Object.entries(bounds).map(([key, value]) => (
-                <label key={key}>
-                  {key}
-                  <input
-                    type="number"
-                    disabled={busy}
-                    min="0"
-                    max={key === "y" || key === "height" ? 800 : 1200}
-                    value={value}
-                    onChange={(e) =>
-                      setBounds({ ...bounds, [key]: Number(e.target.value) })
-                    }
-                  />
-                </label>
-              ))}
-            </div>
+            <FootprintPicker snapshot={snapshot} value={bounds} disabled={busy} onChange={value=>{setBounds(value);setPlacementConfirmed(false);}}/>
+            <label className="field-label">Estimated location uncertainty (m, optional)
+              <input type="number" min="0" max="1200" step="any" value={uncertainty} disabled={busy} onChange={e=>{setUncertainty(e.target.value);setPlacementConfirmed(false);}} placeholder="Unknown"/>
+            </label>
+            <p className="small muted">A reviewer estimate is not a measured geolocation error. Leave blank if unknown. It does not enlarge the supported footprint.</p>
+            <label className="placement-confirm"><input type="checkbox" checked={placementConfirmed} disabled={busy||!region||!validUncertainty} onChange={e=>setPlacementConfirmed(e.target.checked)}/><span>I confirm this is the manually placed footprint for this observation, not an automatically measured location.</span></label>
             <label className="field-label">
               Observation details (optional)
               <textarea rows={3} maxLength={500} value={details} disabled={busy}
@@ -213,7 +211,7 @@ export default function ObservationPanel({
         <button
           className="button primary full"
           onClick={analyze}
-          disabled={busy || (file ? !canUpload : !canReplay)}
+          disabled={busy || (file ? !canUpload || !placementConfirmed || !region || !validUncertainty : !canReplay)}
         >
           <ScanLine size={16} />
           {busy ? "Analyzing observation…" : "Analyze terrain"}
