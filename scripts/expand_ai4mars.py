@@ -8,6 +8,8 @@ import argparse
 import hashlib
 import json
 import re
+import struct
+import zlib
 from collections import Counter
 from pathlib import Path
 
@@ -16,7 +18,7 @@ from PIL import Image
 
 from ai.research_gate import audit_manifest
 from backend.config import ROOT
-from scripts.cache_ai4mars import SIZE, URL, extract
+from scripts.cache_ai4mars import SIZE, URL
 from scripts.range_archive import RangeArchive
 
 BASE = ROOT / "data/nasa/ai4mars"
@@ -43,6 +45,33 @@ def mars2020_site(name: str) -> str | None:
     # keeps multiple sols/drives from the same rover site in one split.
     match = re.search(r"_N(\d{3})\d{4}NCAM", name)
     return "m2020-site-" + match[1] if match else None
+
+
+def extract(reader: RangeArchive, entry: dict, destination: Path) -> dict:
+    # Coalesce local ZIP header, name, extra field and payload into one bounded read.
+    if not 0 <= entry['size'] <= 16 * 1024 * 1024:
+        raise ValueError('Unexpected archive entry size')
+    offset = entry['offset']
+    reader.seek(offset)
+    payload = reader.read(min(SIZE - offset, 30 + len(entry['name'].encode()) + 65535 + entry['compressed']))
+    fields = struct.unpack('<4s5H3I2H', payload[:30])
+    if fields[0] != b'PK\x03\x04' or fields[3] not in (0, 8) or fields[2] & 1:
+        raise ValueError('Unsupported ZIP entry')
+    name_length, extra_length = fields[-2:]
+    name = payload[30:30 + name_length].decode('utf-8')
+    if name != entry['name']:
+        raise ValueError('Archive index/header filename mismatch')
+    start = 30 + name_length + extra_length
+    compressed = payload[start:start + entry['compressed']]
+    if len(compressed) != entry['compressed']:
+        raise ValueError('Truncated compressed entry')
+    content = zlib.decompress(compressed, -15) if fields[3] == 8 else compressed
+    if len(content) != entry['size'] or zlib.crc32(content) != entry['crc32']:
+        raise ValueError('Archive entry integrity mismatch')
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(content)
+    return {'archive_entry': name, 'file': destination.relative_to(ROOT).as_posix(),
+            'sha256': hashlib.sha256(content).hexdigest(), 'bytes': len(content)}
 
 
 def build(output: Path) -> dict:
@@ -95,7 +124,7 @@ def build(output: Path) -> dict:
     mars_test = [e for e in mars2020 if mars2020_site(e["name"]) in transfer_sites]
     manifest = {"train": list(old["train"]), "validation": list(old["validation"]),
                 "test": [], "transfer": []}
-    reader = RangeArchive(URL, SIZE, BASE / "expanded-ranges", budget=192 * 1024 * 1024)
+    reader = RangeArchive(URL, SIZE, BASE / "expanded-ranges", budget=192 * 1024 * 1024, pace_seconds=1.5)
     provenance = []
 
     def acquire(candidates: list[dict], split: str, limit: int, rover: str) -> None:

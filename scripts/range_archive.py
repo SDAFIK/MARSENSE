@@ -2,15 +2,21 @@
 
 import hashlib
 import io
+import time
 import urllib.request
 from pathlib import Path
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
+from email.utils import parsedate_to_datetime
+from datetime import UTC, datetime
 
 
 class RangeArchive(io.RawIOBase):
-    def __init__(self, url: str, size: int, cache: Path, budget: int = 64 * 1024 * 1024):
+    def __init__(self, url: str, size: int, cache: Path, budget: int = 64 * 1024 * 1024,
+                 pace_seconds: float = 0.0):
         super().__init__()
         self.url, self.size, self.cache, self.budget = url, size, cache, budget
+        self.pace_seconds = max(0.0, pace_seconds)
+        self.last_request = 0.0
         self.position = 0
         self.requested_bytes = 0
         self.ranges: list[dict[str, object]] = []
@@ -57,6 +63,8 @@ class RangeArchive(io.RawIOBase):
                 content = b""
                 for attempt in range(3):
                     try:
+                        time.sleep(max(0.0, self.pace_seconds - (time.monotonic() - self.last_request)))
+                        self.last_request = time.monotonic()
                         with urllib.request.urlopen(request, timeout=30) as response:
                             expected = f"bytes {start}-{start + length - 1}/{self.size}"
                             if (
@@ -69,6 +77,20 @@ class RangeArchive(io.RawIOBase):
                             content = response.read(length + 1)
                         if len(content) == length:
                             break
+                    except HTTPError as error:
+                        if error.code not in (429, 503) or attempt == 2:
+                            raise
+                        retry = error.headers.get('Retry-After')
+                        delay = 60.0 * (attempt + 1)
+                        if retry:
+                            try:
+                                delay = max(delay, float(retry))
+                            except ValueError:
+                                delay = max(delay, (parsedate_to_datetime(retry) - datetime.now(UTC)).total_seconds())
+                        if delay > 180:
+                            raise
+                        print(f'Archive rate limit: respecting {delay:.0f}s retry delay', flush=True)
+                        time.sleep(delay)
                     except (URLError, TimeoutError):
                         if attempt == 2:
                             raise
