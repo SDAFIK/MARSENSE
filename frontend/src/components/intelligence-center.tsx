@@ -42,7 +42,7 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
     {name:"Learn", done:Boolean(beta)},
     {name:"Inherit", done:snapshot.mission.inherited_evidence.length > 0},
   ];
-  return <div className="intel-console">
+  return <div className="intel-console intel-observatory-v3">
     <section className="intel-top">
       <div><p className="eyebrow">MARSENSE / SCIENCE OPERATIONS</p><h2>Mars Intelligence Center</h2><p>NASA-derived context · mission intelligence · evidence provenance</p></div>
       <div className="intel-actions"><span className="intel-status" role="status"><Activity size={16}/>{error ? "Connection interrupted" : loading ? "Refreshing" : "Mission data loaded"}</span><button className="button secondary" disabled={loading} onClick={() => void refresh()}><RefreshCw size={15}/> Refresh data</button></div>
@@ -51,7 +51,7 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
       {stages.map((stage,i) => <div key={stage.name} data-complete={stage.done}><span>{String(i+1).padStart(2,"0")}</span><strong>{stage.name}</strong><small>{stage.done ? "Recorded" : "Pending"}</small></div>)}
     </section>
     <div className="intel-grid">
-      <div className="intel-overview"><MarsGlobe/><section className="panel intel-briefing" aria-label="Current mission briefing"><div className="panel-heading"><h2><Route size={17}/> Current mission</h2><span className="badge neutral">{snapshot.mission.eva}</span></div><div className="panel-body"><span className="eyebrow">ACTIVE SCIENCE TARGET</span><h3>{snapshot.target.name}</h3><p>{snapshot.target.objective}</p><div className="intel-brief-metrics"><div><span>Active traverse</span><strong>{active?.name ?? "Unavailable"}</strong></div><div><span>Modeled distance</span><strong>{active && active.status !== "NO_ROUTE" ? `${active.distance_m.toFixed(0)} m` : "Unavailable"}</strong></div><div><span>Human-confirmed records</span><strong>{confirmed.length}</strong></div><div><span>Mission stages recorded</span><strong>{stages.filter(stage => stage.done).length} / {stages.length}</strong></div></div><p className="small muted">Derived from this mission snapshot. No live astronaut telemetry or certified safety claim.</p><Link className="button primary" href="/mission">Open mission control</Link></div></section></div>
+      <div className="intel-overview"><div className="observatory-globe"><div className="studio-intro"><span className="eyebrow">PLANETARY OBSERVATORY</span><h2>Mars in context.</h2><p>Explore the NASA Viking globe and its Jezero mission context.</p></div><MarsGlobe/></div><section className="panel intel-briefing" aria-label="Current mission briefing"><div className="panel-heading"><h2><Route size={17}/> Current mission</h2><span className="badge neutral">{snapshot.mission.eva}</span></div><div className="panel-body"><span className="eyebrow">ACTIVE SCIENCE TARGET</span><h3>{snapshot.target.name}</h3><p>{snapshot.target.objective}</p><div className="intel-brief-metrics"><div><span>Active traverse</span><strong>{active?.name ?? "Unavailable"}</strong></div><div><span>Modeled distance</span><strong>{active && active.status !== "NO_ROUTE" ? `${active.distance_m.toFixed(0)} m` : "Unavailable"}</strong></div><div><span>Human-confirmed records</span><strong>{confirmed.length}</strong></div><div><span>Mission stages recorded</span><strong>{stages.filter(stage => stage.done).length} / {stages.length}</strong></div></div><p className="small muted">Derived from this mission snapshot. No live astronaut telemetry or certified safety claim.</p><Link className="button primary" href="/mission">Open mission control</Link></div></section></div>
       <section className="panel intel-datasets">
         <div className="panel-heading"><h2><Database size={17}/> NASA data inventory</h2></div>
         <div className="intel-source-list" aria-label="Select NASA imagery">
@@ -59,7 +59,7 @@ export default function IntelligenceCenter({ snapshot, refresh, loading, error }
         </div>
         <div className="panel-body intel-provenance"><p className="eyebrow">SOURCE STATUS</p><p>{available ? "Cached source metadata available" : "Source metadata unavailable"}</p><p className="small muted">Terrain prior: {snapshot.data_status.terrain_prior}</p><p className="small muted">Slope: {snapshot.data_status.slope}</p><Link className="button secondary" href="https://github.com/SDAFIK/MARSENSE/blob/master/NASA_SOURCE_MATRIX.md">Source matrix ↗</Link></div>
       </section>
-      <section className="panel intel-map">
+      <section className="panel intel-map observatory-map">
         <div className="panel-heading"><h2><Radar size={17}/> Jezero / mission geography</h2><span className="small muted">{snapshot.mission.eva}</span></div>
         <LivingMap snapshot={snapshot} focusLocation={evidence?.location} warmPresentation/>
         <div className="panel-body intel-map-footer"><span>18.44° N · 77.45° E</span><span>Local metric geometry · illustrative mission</span></div>

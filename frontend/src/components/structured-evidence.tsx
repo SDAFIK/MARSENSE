@@ -80,7 +80,7 @@ export default function StructuredEvidence({
       (!selected || e.region_id === selected.region_id),
   );
   return (
-    <div className="structured-evidence">
+    <div className="structured-evidence evidence-studio-v3">
       <aside className="panel">
         <nav aria-label="Evidence hierarchy">
           {sections.map((s) => (
@@ -114,13 +114,13 @@ export default function StructuredEvidence({
             ))}
         </div>
       </aside>
-      <section className="evidence-image-stage panel">
+      <section className="evidence-image-stage panel"><div className="studio-intro"><span className="eyebrow">01 / COMPARE THE EVIDENCE</span><h2>Two views. One decision.</h2><p>Preserve the orbital prior and examine what the ground observation changes.</p></div>
         <div className="panel-heading">
           <h2>Expected vs observed · {section}</h2>
         </div>
         <div className="evidence-focus-strip"><div><span className="eyebrow">EVIDENCE STATE</span><strong>{selected ? label(selected.verification_state) : "Awaiting ground observation"}</strong><span className="small muted">{selected ? label(selected.discrepancy) : "NASA orbital prior preserved"}</span></div>{selected && <button className="button primary" onClick={() => openSection("HUMAN DECISION")}>Open human review</button>}</div>
         <div className="evidence-paired"><figure><div className="evidence-pair-image"><Image unoptimized fill sizes="(max-width:720px) 90vw, 420px" src="/api/assets/jezero-hirise.png" alt="Cached NASA orbital terrain"/></div><figcaption>EXPECTED · NASA orbital prior<br/><strong>{label(selected?.expected_value ?? prior?.observed_value ?? "unknown")}</strong></figcaption></figure><figure><div className="evidence-pair-image"><Image unoptimized fill sizes="(max-width:720px) 90vw, 420px" src={selected?.raw_asset_reference ?? "/api/assets/ground-navcam.jpg"} alt="Ground evidence or cached Navcam example"/></div><figcaption>OBSERVED · {selected ? label(selected.source_type) : "Cached example · no observation"}<br/><strong>{selected ? label(selected.observed_value) : "Awaiting observation"}</strong></figcaption></figure></div>
-        <div className="evidence-source-image">
+        <details className="studio-original"><summary>Inspect original source image</summary><div className="evidence-source-image">
           <Image
             unoptimized
             fill
@@ -143,9 +143,9 @@ export default function StructuredEvidence({
             ? "NASA-derived orbital pixels; terrain interpretation is illustrative."
             : (selected?.source ??
               "Cached Navcam replay; no ground evidence recorded yet.")}
-        </p>
+        </p></details>
       </section>
-      <aside className="panel" id="evidence-detail" aria-label="Evidence detail">
+      <aside className="panel studio-detail" id="evidence-detail" aria-label="Evidence detail">
         <div className="panel-heading">
           <h2>{section}</h2>
         </div>
