@@ -35,7 +35,7 @@ Orbital imagery can guide a traverse, but it cannot establish every ground-level
 5. Inspect the updated footprint, Route Beta and modeled alternative routes.
 6. Switch to EVA-02 to see the inherited evidence in Exploration Memory.
 
-The demonstration is a clearly labeled simulation using genuine NASA source imagery. Each guest receives an isolated temporary mission; no registration is required. A private workspace supports real image uploads and persistent evidence. Render's free service may cold-start on the first request.
+The default Launch Live Demo now opens a cloud-independent browser simulation at /demo. It uses genuine cached NASA imagery, locally calculated A* routes and a human-verified six-stage replay; no backend request or account is required. State is isolated to the browser tab. The optional Launch Cloud Demo opens the full server-backed guest workspace; private workspaces continue using PostgreSQL. A private workspace supports real image uploads and persistent evidence. The cloud service may cold-start; the default judge demo is independent of it.
 
 ## Product preview
 

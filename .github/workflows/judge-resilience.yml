@@ -1,0 +1,64 @@
+name: Judge outage resilience
+on:
+  push:
+    branches: [master, 'codex/competition-resilient-demo']
+    paths:
+      - 'frontend/src/components/judge-demo*'
+      - 'frontend/src/components/public-demo-button.tsx'
+      - 'frontend/src/lib/judge-replay*'
+      - 'frontend/src/app/demo/**'
+      - 'frontend/public/judge-assets/**'
+      - 'frontend/scripts/judge-browser-acceptance.mjs'
+      - '.github/workflows/judge-resilience.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: judge-resilience-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  outage-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - working-directory: frontend
+        run: npm ci
+      - name: Lint, types and unit tests
+        working-directory: frontend
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test
+      - name: Production build with unreachable cloud API
+        working-directory: frontend
+        env:
+          BACKEND_URL: http://127.0.0.1:9
+        run: npm run build
+      - working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Run complete mission without backend
+        working-directory: frontend
+        env:
+          BACKEND_URL: http://127.0.0.1:9
+        run: |
+          npm run start -- --port 3005 > /tmp/marsense-judge.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:3005/demo >/dev/null && break
+            sleep 1
+          done
+          node scripts/judge-browser-acceptance.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: judge-outage-screenshots
+          path: frontend/test-results/judge-resilience/*.png
+          if-no-files-found: ignore
+          retention-days: 7

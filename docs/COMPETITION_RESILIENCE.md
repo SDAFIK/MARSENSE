@@ -1,0 +1,9 @@
+# Competition resilience — browser-local judge mode
+
+The submitted public URL stays unchanged. **Launch Live Demo** opens /demo, a self-contained browser-local teaching simulation with all six core mission steps. It never checks cloud health or creates a backend session. The NASA CTX, HiRISE and Navcam assets are served by the frontend as static files from /judge-assets. The optional Launch Cloud Demo retains the full server-backed guest application; private/operator data and Render/PostgreSQL settings are unchanged.
+
+The browser simulation uses the same 40 m 31 × 21 grid, eight-neighbor A* search, modeled distance and 15% unknown-terrain cost as the backend's no-slope teaching scenario. It blocks all edges intersecting the exact simulated Area 14 footprint only after human confirmation. Route Alpha is 960 m; the modeled detour is approximately 1059.4 m. The local alternative search is bounded and read-only. It supports reject, request more, confirm, EVA-02 inheritance, reload and reset. It is explicitly a curated replay, not live classifier inference, camera registration or certified safe navigation. Browser storage is isolated from all cloud records. Static imagery and map schematic are not geographically registered to each other.
+
+The full cloud application still supports the other scenarios, source declarations, persistent personal workspaces and real-image uploads. It may experience external service downtime; the browser judge journey does not depend on it. No availability guarantee is implied for Vercel, the internet or browser hardware.
+
+Validation: judge-resilience workflow builds the production frontend, disconnects all API routes in Chromium, and completes the entire six-stage journey, reload, review alternatives, rejection, reset and mobile checks. Existing cloud acceptance explicitly selects Launch Cloud Demo.

@@ -62,7 +62,7 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await screenshot("guide-mobile");
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await button("Launch Live Demo").click();
+  await button("Launch Cloud Demo").click();
   await visible(page.getByRole("tab", { name: "EXPECT", exact: true }));
   await visible(page.getByRole("region", { name: "Guided mission" }));
   await visible(button("Go to observation"));
