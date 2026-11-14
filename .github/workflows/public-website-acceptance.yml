@@ -1,0 +1,40 @@
+name: Public website acceptance
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/public-website-acceptance.yml'
+      - 'frontend/scripts/public-browser-acceptance.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: marsense-public-website-acceptance
+  cancel-in-progress: false
+jobs:
+  public-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - working-directory: frontend
+        run: npm ci
+      - working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Verify public production website with isolated guest
+        working-directory: frontend
+        run: node scripts/public-browser-acceptance.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: public-website-screenshots
+          path: frontend/test-results/public-website/*.png
+          if-no-files-found: ignore
+          retention-days: 3

@@ -6,11 +6,24 @@ Team Redscape · NASA International Space Apps Challenge 2026 · Interplanetary 
 
 [**Launch MARSENSE — live website**](https://redscape-eight.vercel.app) · [Source repository](https://github.com/SDAFIK/MARSENSE) · [Cloud API health](https://marsense-cloud-api.onrender.com/api/health) · [Product specification](docs/PRODUCT_RECOVERY.md) · [NASA source matrix](NASA_SOURCE_MATRIX.md)
 
-> **Release status (14 November 2026):** MARSENSE 2.0 is deployed at [redscape-eight.vercel.app](https://redscape-eight.vercel.app) with the Render API and Supabase PostgreSQL. The release is merged into the original repository via [PR #3](https://github.com/SDAFIK/MARSENSE/pull/3). The initial 2.0 release used frontend source `4b1cc09`; production was subsequently repaired for cloud cold-start and bundled NASA imagery. [Full regression](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194188), [cloud mission acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560194108), and [signed-out public browser acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43560660362) passed. This remains a competition research prototype, not certified astronaut navigation.
+> **Release status (14 November 2026):** The premium MARSENSE 2.0 frontend is live at [redscape-eight.vercel.app](https://redscape-eight.vercel.app), served from production deployment [8438dde](https://vercel.com/sadib-dewans-projects/redscape/H2nzEs5M3H3Uon6P5ZyEv8na4hLo). The original repository is retained. [PR #5](https://github.com/SDAFIK/MARSENSE/pull/5) merged the validated application source `ccaace4`; the merge introduced no application-file differences. All four required automated release workflows passed. This is a competition research prototype, not certified astronaut navigation.
 
-## Premium UI release candidate
+## What's new in MARSENSE 2.0
 
-The redesign branch introduces a shared aerospace design system, larger field imagery, responsive navigation, and direct Observe / Route / Review controls. It preserves the existing evidence, human decision and route engine. The candidate is tracked in [PR #5](https://github.com/SDAFIK/MARSENSE/pull/5); preview and test results must be checked for the exact candidate commit before promotion.
+The redesigned application features a cohesive navy-and-amber aerospace interface, real cached NASA imagery, responsive desktop and mobile navigation, a larger Astronaut View with Observe / Route / Review actions, clearer evidence and verification controls, calculated route comparison metrics, searchable exploration memory, a draggable NASA Viking Mars globe, and a six-stage judge journey. The mission API, human decision authority, private data separation and underlying routing engine are preserved.
+
+### Verified release evidence
+
+| Release gate | Result |
+| --- | --- |
+| [Backend regression, frontend checks, responsive browser, auth, real upload, guest and showcase acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43571363969) | Passed |
+| [PostgreSQL acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43571363947) | Passed |
+| [Hosted cloud smoke and guest isolation](https://github.com/SDAFIK/MARSENSE/actions/runs/43571363953) | Passed |
+| [Production container smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43571364043) | Passed |
+| [Vercel production build](https://vercel.com/sadib-dewans-projects/redscape/H2nzEs5M3H3Uon6P5ZyEv8na4hLo) | Ready; original public domain assigned |
+| [Public website acceptance](https://github.com/SDAFIK/MARSENSE/actions/workflows/public-website-acceptance.yml) | Separate post-deployment signed-out check; inspect latest run |
+
+The [validated candidate run](https://github.com/SDAFIK/MARSENSE/actions/runs/43571363969) includes **seeded-visual-review**, **production-visual-review** and **showcase-confirmed-view** screenshots captured by Chromium, not design mockups. The seeded captures cover seven core routes at seven viewport sizes; production captures include guest navigation, login and registration. GitHub Actions retains the screenshot archives temporarily. The release review inspected desktop and mobile captures; long scientific panels remain scrollable on mobile. The public website workflow checks the actual hosted frontend and API without requiring a judge account.
 
 ## The problem
 
@@ -47,9 +60,7 @@ The guest menu allows an isolated reset or exit. For a persistent private missio
 | Science & About | /science | Source inventory, methodology, scientific limits and project documentation |
 | Account workflows | /signup, /workspace-login, /login, /register, /account | Private accounts, persistent workspaces, separate invited roles and operator administration |
 
-![Earlier reference-led Mission Control implementation](docs/screenshots/visual-recovery/mission-1440x900.png)
-
-*Earlier implementation capture. Current validation screenshots are published by the release workflow; this earlier screenshot is not a claim of pixel-perfect visual parity.*
+**See the current product:** [Mission Control](https://redscape-eight.vercel.app/mission) · [Astronaut View](https://redscape-eight.vercel.app/astronaut) · [Mars Intelligence Center](https://redscape-eight.vercel.app/intelligence). Open the public landing page and launch the guest demo before visiting these mission routes. For current screenshot evidence, use the verified release run above.
 
 ## How it works
 
@@ -141,7 +152,7 @@ npx playwright test --config=playwright.production.config.ts
 npx playwright test --config=playwright.showcase.config.ts
 ```
 
-The PostgreSQL CI workflow uses a disposable database; the private genuine checkpoint requires its own scientific validation and is not in Git. The hosted smoke workflow tests approved-origin requests, two independent guests, observation, review, rerouting, inheritance, reset and unauthorized access without changing operator data. See [GitHub Actions](https://github.com/SDAFIK/MARSENSE/actions) for actual results and [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) for the walkthrough. The public browser workflow independently exercises a signed-out visitor's complete guest mission, including confirmation, Route Beta, EVA-02 inheritance and mobile navigation. The latest application regression run passed 77 backend, 19 component and 65 browser tests; the separate PostgreSQL, Docker and hosted acceptance workflows passed. The private genuine-model checkpoint remains outside the release gate. See the linked workflow logs for exact test results and screenshots. Render Free may cold-start; the prototype is not an availability SLA.
+The PostgreSQL CI workflow uses a disposable database; the private genuine checkpoint requires its own scientific validation and is not in Git. The hosted smoke workflow tests approved-origin requests, two independent guests, observation, review, rerouting, inheritance, reset and unauthorized access without changing operator data. See [GitHub Actions](https://github.com/SDAFIK/MARSENSE/actions) for actual results and [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) for the walkthrough. The public browser workflow independently exercises a signed-out visitor's complete guest mission, including confirmation, Route Beta, EVA-02 inheritance and mobile navigation. The premium candidate release validation passed backend regression, frontend lint/type checks/component tests/build, browser acceptance, authenticated browser acceptance, production-mode uploads and guest journeys, the isolated showcase and dependency audit. The separate PostgreSQL, Docker and hosted acceptance workflows also passed. The permanent public website acceptance workflow is available for a fresh signed-out post-deployment check. The private genuine-model checkpoint remains outside the release gate. See the linked workflow logs for exact test results and screenshots. Render Free may cold-start; the prototype is not an availability SLA.
 
 ## Repository guide
 
