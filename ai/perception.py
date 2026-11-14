@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
+from ai.segmentation import render_segmentation
 from backend.domain import ModelOutput, Terrain
 
 logger = logging.getLogger(__name__)
@@ -82,12 +83,15 @@ class Perception:
             logits = model(tensor)
             if tuple(logits.shape) != (1, 4, 256, 256):
                 raise ValueError("Expected AI4Mars-compatible four-class pixel logits")
+            if not torch.isfinite(logits).all():
+                raise ValueError("Nonfinite model logits")
             probabilities = torch.softmax(logits, dim=1)
-            labels = probabilities.argmax(dim=1)
+            pixel_scores, labels = probabilities.max(dim=1)
             fractions = {
                 c.value: float((labels == i).float().mean()) for i, c in enumerate(CLASSES)
             }
-            confidence = float(probabilities.max(dim=1).values.mean())
+            confidence = float(pixel_scores.mean())
+            mask, abstention = render_segmentation(labels[0].numpy(), pixel_scores[0].numpy())
             if not np.isfinite(confidence):
                 raise ValueError("Nonfinite model output")
         terrain = max(CLASSES, key=lambda c: fractions[c.value])
@@ -106,9 +110,12 @@ class Perception:
             engine="torchscript-ai4mars",
             version=version,
             class_fractions=fractions,
+            features={"pixel_abstention_fraction": round(abstention, 4)},
+            mask_reference=mask,
             limitations=[
                 "Model confidence is uncalibrated evidence, not a safety probability.",
                 "Single-view terrain classification does not establish traversability.",
+                "Mask gray pixels have scores below 0.5; this is an uncalibrated display screen.",
                 *(
                     []
                     if classification_enabled

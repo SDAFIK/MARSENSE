@@ -65,6 +65,8 @@ def test_low_confidence_and_invalid_image_remain_explicit(tmp_path):
     assert result.terrain == Terrain.UNKNOWN
     assert result.confidence == pytest.approx(0.25)
     assert result.confidence_label == "low"
+    assert result.mask_reference and result.mask_reference.startswith("data:image/png;base64,")
+    assert result.features["pixel_abstention_fraction"] == 1
     with pytest.raises(ValueError, match="decoded"):
         Perception(str(path)).infer(b"not an image")
     metadata_path = path.with_suffix(".json")

@@ -17,6 +17,7 @@ export type ModelOutput = {
   engine: string;
   version: string;
   class_fractions: Record<string, number>;
+  mask_reference?: string | null;
   features: Record<string, number>;
   limitations: string[];
 };

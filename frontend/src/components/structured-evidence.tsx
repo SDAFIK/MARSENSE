@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { api, label } from "@/lib/api";
 import type { Evidence, Snapshot } from "@/lib/types";
 import EvidenceReview from "./evidence-review";
+import TerrainAnalysis from "./terrain-analysis";
 const sections = [
   "NASA PRIOR",
   "GROUND OBSERVATION",
@@ -206,6 +207,7 @@ export default function StructuredEvidence({
             )}
             {section === "MODEL INFERENCE" && (
               <>
+                <TerrainAnalysis output={selected?.model_output ?? null} replay={selected?.source_type === "demo_replay"}/>
                 <h3>
                   {selected?.source_type === "demo_replay"
                     ? "CURATED REPLAY"
@@ -224,7 +226,7 @@ export default function StructuredEvidence({
                   <p>Replay annotations are not actual model inference.</p>
                 )}
                 {selected?.model_output && Object.entries(selected.model_output.features).map(([name, value]) => (
-                  <p key={name} className="small muted">{label(name)}: {value} · measured image feature, not terrain probability</p>
+                  <p key={name} className="small muted">{label(name)}: {value} · {name === "pixel_abstention_fraction" ? "model diagnostic, not a calibrated probability" : "measured image feature, not terrain probability"}</p>
                 ))}
                 {history?.inference_attempts?.map((attempt) => (
                   <p key={attempt.id} className="small muted">Retry · {attempt.timestamp} · {attempt.model_output.engine} · {attempt.model_output.confidence_label}</p>
