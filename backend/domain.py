@@ -307,6 +307,7 @@ class Snapshot(BaseModel):
     regions: list[Region]
     evidence: list[Evidence]
     routes: list[Route]
+    route_segments: list[RouteSegment] = Field(default_factory=list)
     assumptions: list[MissionAssumption]
     events: list[MissionEvent]
     data_status: dict[str, Any]

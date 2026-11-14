@@ -62,7 +62,9 @@ def audit_manifest(manifest: Path) -> dict[str, Any]:
                 geometry_pairs[geometry_key] = geometry_pairs.get(geometry_key, 0) + 1
                 if img.size != mask.size:
                     if abs(iw * mh - ih * mw) / max(iw * mh, ih * mw) > 0.01:
-                        raise ValueError(f"Image/mask aspect mismatch: {row['image']} {geometry_key}")
+                        raise ValueError(
+                            f"Image/mask aspect mismatch: {row['image']} {geometry_key}"
+                        )
                     resampled_pairs[split] = resampled_pairs.get(split, 0) + 1
                 labels = np.asarray(mask)
                 if labels.ndim != 2 or not np.isin(labels, [0, 1, 2, 3, 255]).all():

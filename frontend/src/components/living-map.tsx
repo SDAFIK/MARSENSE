@@ -6,7 +6,7 @@ import {
   toMars,
   fromMars,
   missionFeatures as features,
-  challengedAlpha,
+  challengedSegments,
 } from "@/lib/mission-map-data";
 import {
   Crosshair,
@@ -139,9 +139,10 @@ function Fallback({
             strokeWidth="5"
           />
         ))}
-      {!before && (
+      {!before && challengedSegments(snapshot, clock).map((segment, index) => (
         <polyline
-          points={challengedAlpha(snapshot, clock)
+          key={index}
+          points={segment
             .map(([x, y]) => `${x},${800 - y}`)
             .join(" ")}
           fill="none"
@@ -149,7 +150,7 @@ function Fallback({
           strokeWidth="6"
           strokeDasharray="10 8"
         />
-      )}
+      ))}
       <circle cx="120" cy="400" r="10" fill="#e5ded3" />
       <text x="120" y="365" fill="white" textAnchor="middle" fontSize="22">
         Habitat

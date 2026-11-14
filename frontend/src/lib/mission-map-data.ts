@@ -35,6 +35,17 @@ export function challengedAlpha(
     return [];
   return alpha.coordinates.filter(([x]) => x >= 440 && x <= 760);
 }
+export function challengedSegments(snapshot: Snapshot, clock: number): Coordinate[][] {
+  if (!snapshot.route_segments) {
+    const legacy = challengedAlpha(snapshot, clock);
+    return legacy.length >= 2 ? [legacy] : [];
+  }
+  const ids = new Set(snapshot.evidence.filter(e => e.source_type !== "orbital" &&
+    e.verification_state !== "REJECTED" && !e.superseded_by?.length &&
+    (!e.valid_until || Date.parse(e.valid_until) > clock)).flatMap(e => e.consequence.route_segment_ids));
+  return snapshot.route_segments.filter(s => ids.has(s.id) && s.coordinates.length >= 2 &&
+    snapshot.routes.some(r => r.id === s.route_id)).map(s => s.coordinates);
+}
 export function missionFeatures(
   snapshot: Snapshot,
   before: boolean,
@@ -62,8 +73,7 @@ export function missionFeatures(
     });
   }
   if (!before) {
-    const challenged = challengedAlpha(snapshot, clock);
-    if (challenged.length >= 2)
+    for (const challenged of challengedSegments(snapshot, clock))
       result.features.push({
         type: "Feature",
         properties: { kind: "challenge", color: "#efb482" },

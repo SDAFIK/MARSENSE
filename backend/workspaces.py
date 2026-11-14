@@ -40,7 +40,7 @@ MAX_UPLOADS = 16
 MAX_ASSET_BYTES = 64 * 1024 * 1024
 _ID = r"[A-Za-z0-9_-]{1,100}"
 _GET_DATA = re.compile(
-    rf"/(?:missions/{_ID}|evidence/{_ID}(?:/(?:ancestry|history))?"
+    rf"/(?:missions/{_ID}(?:/alternatives)?|evidence/{_ID}(?:/(?:ancestry|history))?"
     rf"|observations/{_ID}(?:/original)?|assets/upload-[a-f0-9]{{32}}\.jpg)"
 )
 _POST_DATA = re.compile(rf"/(?:observations/upload|evidence/{_ID}/(?:verify|source|retry))")

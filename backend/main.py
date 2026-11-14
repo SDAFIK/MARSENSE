@@ -311,6 +311,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         with mission_store().session() as session:
             return service.snapshot(session, mission_id)
 
+    @app.get("/api/missions/{mission_id}/alternatives", dependencies=protected)
+    def alternatives(mission_id: str) -> dict[str, Any]:
+        with mission_store().session() as session:
+            return service.alternatives(session, mission_id)
+
     @app.post("/api/observations/demo", response_model=Evidence, dependencies=protected)
     def demo(request: ObserveRequest) -> Evidence:
         if settings.environment not in {"demo", "showcase"}:

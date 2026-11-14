@@ -167,6 +167,11 @@ def create_demo_router(service: MissionService, origins: list[str]) -> tuple[API
         with access(request) as session:
             return service.snapshot(session, mission_id)
 
+    @router.get("/missions/{mission_id}/alternatives")
+    def alternatives(mission_id: str, request: Request) -> dict[str, Any]:
+        with access(request) as session:
+            return service.alternatives(session, mission_id)
+
     @router.post("/observations/demo", response_model=Evidence)
     def observe(body: ObserveRequest, request: Request) -> Evidence:
         with access(request, write=True) as session:

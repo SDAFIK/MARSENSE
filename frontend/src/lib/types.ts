@@ -105,6 +105,7 @@ export type Snapshot = {
   regions: Region[];
   evidence: Evidence[];
   routes: Route[];
+  route_segments?: { id: string; route_id: string; coordinates: Coordinate[]; assumption_ids: string[] }[];
   assumptions: {
     id: string;
     statement: string;
