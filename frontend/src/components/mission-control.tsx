@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Compass, MapPin, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { label } from "@/lib/api";
 import type { Coordinate, Evidence, Snapshot } from "@/lib/types";
 import LivingMap from "./living-map";
@@ -34,6 +34,11 @@ export default function MissionControl({
   onFuture: () => void;
 }) {
   const [step, setStep] = useState<Step>("EXPECT");
+  const [clock, setClock] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setClock(Date.now()), 10000);
+    return () => clearInterval(timer);
+  }, []);
   function openStep(next: Step) {
     setStep(next);
     if (window.matchMedia("(max-width: 1099px)").matches) {
@@ -263,7 +268,7 @@ export default function MissionControl({
           <div className="map-knowledge-label">
             <strong>{region?.name.split(" \u00b7 ")[0]}</strong>
             <span>{label(region?.knowledge_state ?? "UNKNOWN")}</span>
-            {challengedSegments(snapshot, Date.now()).length > 0 && (
+            {challengedSegments(snapshot, clock).length > 0 && (
               <span className="challenged-text">CHALLENGED ROUTE SEGMENTS · SEE AMBER OVERLAY</span>
             )}
           </div>

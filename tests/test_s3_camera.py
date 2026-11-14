@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from backend.camera import exact_clock_join, parse_label
+from backend.camera import camera_anchor_consistency, drive_anchor_context, exact_clock_join, parse_label
 
 LABEL = Path('data/nasa/cameras/NLF_0013_0668099766_737FDR_N0030028NCAM00112_0A00LLJ05.xml')
 
@@ -90,3 +90,21 @@ def test_camera_cache_is_visible_without_becoming_mission_evidence(client):
         response = client.get(camera['preview'])
         assert response.status_code == 200
         assert response.content[:8] == b'\x89PNG\r\n\x1a\n'
+
+
+def test_real_drive_anchor_coordinate_consistency_and_unknown_ground_coverage():
+    products = json.loads(Path("data/processed/cameras.json").read_text())["products"]
+    result = camera_anchor_consistency(list(products.values()))
+    assert result["anchor_count"] == 2
+    assert result["max_relative_residual_m"] < 0.05
+    for product in products.values():
+        context = drive_anchor_context(product)
+        assert context["status"] == "DRIVE_ANCHOR_ONLY"
+        assert context["anchor_local_m"] == pytest.approx(product["rover_local_m"])
+        assert context["ground_footprint_available"] is False
+        assert context["spatial_uncertainty_m"] is None
+    navcam = products["navcam"]
+    assert drive_anchor_context({**navcam, "rover_local_m": [0, 0]})["status"] == "UNAVAILABLE"
+    wrong = {**navcam, "drive_anchor": {**navcam["drive_anchor"], "drive": "999"}}
+    assert drive_anchor_context(wrong)["status"] == "UNAVAILABLE"
+    assert drive_anchor_context({**navcam, "places_exact_interval": None})["status"] == "UNAVAILABLE"

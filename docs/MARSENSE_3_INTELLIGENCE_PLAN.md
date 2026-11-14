@@ -33,3 +33,8 @@ The first research candidate is implemented in `ai/train_candidate.py` (DeepLabV
 - Phase 4: bounded read-only A* candidate search, actual route segment geometry overlays, distance and modeled cost comparison. No active-route mutation on search.
 - Phase 5: private confirmed-real-ground research manifest export with hashes and footprint; curated replay and superseded data excluded. Broader mission registry and actual training labels remain open.
 - Phase 6: /guide, adaptive mission guidance, premium responsive styles and acceptance checks. Final exact-candidate CI, visual review and release remain gates. Production baseline unchanged.
+
+### Follow-up: localization provenance and release engineering
+- Corrected tensor typing and React render-time clock purity; new exact candidate requires full CI.
+- The camera context independently checks the cached product clock/RMC association, PLACES site/drive position, and local coordinate transform. Relative easting/northing consistency is reported as arithmetic consistency, not absolute pose error. The UI locates the actual NASA drive anchor separately from evidence geometry; ground footprint and uncertainty stay unknown.
+- Automatic image-to-ground localization remains blocked on registered stereo/XYZ range data, exact image pose transforms and independent error validation. No drive anchor is converted into a verified terrain footprint.

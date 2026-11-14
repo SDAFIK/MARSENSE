@@ -9,6 +9,7 @@ from shapely.geometry import LineString, shape
 from sqlalchemy.orm import Session
 
 from ai.perception import Perception
+from backend.camera import camera_anchor_consistency, drive_anchor_context
 from backend.comparison import compare, consequence, expected_at
 from backend.config import ROOT
 from backend.domain import (
@@ -607,9 +608,13 @@ class MissionService:
                     "clock_interval_matched": bool(c["places_exact_interval"]),
                     "observation_clock_matched": bool(c["places_observations"]),
                     "region_overlap": c["operational_region_overlap"],
+                    "localization": drive_anchor_context(c),
                 }
                 for name, c in camera_data["products"].items()
             ]
+            manifest["camera_anchor_consistency"] = camera_anchor_consistency(
+                list(camera_data["products"].values())
+            )
         evidence = sorted(all_of(session, Evidence), key=lambda e: e.timestamp, reverse=True)
         for item in evidence:
             item.superseded_by = [

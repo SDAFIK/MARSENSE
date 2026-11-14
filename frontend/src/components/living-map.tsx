@@ -167,6 +167,7 @@ export default function LivingMap({
   before = false,
   compact = false,
   focusLocation,
+  focusLabel = "Selected evidence",
   warmPresentation = false,
   locked = false,
 }: {
@@ -174,6 +175,7 @@ export default function LivingMap({
   before?: boolean;
   compact?: boolean;
   focusLocation?: Coordinate;
+  focusLabel?: string;
   warmPresentation?: boolean;
   locked?: boolean;
 }) {
@@ -482,10 +484,10 @@ export default function LivingMap({
     map.current.easeTo({ center: toMars(focusLocation), duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 400 });
     const element = document.createElement("div");
     element.className = "map-marker event-location";
-    element.setAttribute("aria-label", "Selected evidence location");
+    element.setAttribute("aria-label", focusLabel + " location");
     const dot = document.createElement("span");
     const title = document.createElement("span");
-    title.textContent = "Selected evidence";
+    title.textContent = focusLabel;
     element.append(dot, title);
     const marker = new maplibregl.Marker({
       element,
@@ -497,7 +499,7 @@ export default function LivingMap({
     return () => {
       marker.remove();
     };
-  }, [ready, focusLocation]);
+  }, [ready, focusLocation, focusLabel]);
   async function changeLayer(value: string) {
     setLayer(value);
     const source = map.current?.getSource("orbital") as

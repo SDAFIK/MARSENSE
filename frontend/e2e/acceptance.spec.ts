@@ -284,3 +284,16 @@ test("judge walkthrough explains the six-step journey and retains accessible ent
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   await page.screenshot({ path: testInfo.outputPath("judge-guide-mobile.png"), fullPage: true });
 });
+
+test("NASA camera drive anchors remain separate from ground coverage", async ({ page }) => {
+  await page.goto("/intelligence");
+  // The context uses an aria-labelled container rather than a new navigation surface.
+  const panel = page.getByLabel("NASA camera localization context");
+  await expect(panel.getByRole("heading", { name: "Rover position is not image coverage" })).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Locate rover drive anchor" })).toHaveCount(2);
+  await panel.getByRole("button", { name: "Locate rover drive anchor" }).first().click();
+  await expect(page.getByLabel("NASA rover drive anchor location")).toBeVisible();
+  await expect(panel.getByText("Ground footprint", { exact: true })).toHaveCount(2);
+  await panel.getByRole("button", { name: "Return to mission evidence" }).click();
+  await expect(page.getByLabel("NASA rover drive anchor location")).toHaveCount(0);
+});
