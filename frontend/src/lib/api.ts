@@ -24,7 +24,21 @@ export function enterWorkspace() {
   sessionStorage.setItem("marsense-mission", "eva-01");
 }
 
+// Render can sleep on the free plan. Probe only the idempotent health endpoint;
+ // never replay a mission mutation automatically.
+async function waitForMissionService() {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      const response = await fetch("/api/health", { cache: "no-store", signal: AbortSignal.timeout(15000) });
+      if (response.ok && (await response.json()).status === "ok") return;
+    } catch { /* transient network or cold start */ }
+    if (attempt < 4) await new Promise(resolve => setTimeout(resolve, 2500));
+  }
+  throw new Error("The cloud mission service is still waking up or unavailable. Please retry. Your saved mission is unchanged.");
+}
+
 export async function launchGuestDemo() {
+  await waitForMissionService();
   const previous = guestToken();
   if (previous) {
     const response = await fetch("/api/public-demo/auth/session", {
