@@ -6,24 +6,28 @@ Team Redscape · NASA International Space Apps Challenge 2026 · Interplanetary 
 
 [**Launch MARSENSE — live website**](https://redscape-eight.vercel.app) · [Source repository](https://github.com/SDAFIK/MARSENSE) · [Cloud API health](https://marsense-cloud-api.onrender.com/api/health) · [Product specification](docs/PRODUCT_RECOVERY.md) · [NASA source matrix](NASA_SOURCE_MATRIX.md)
 
-> **Release status (14 November 2026):** The cinematic MARSENSE 2.0 rebuild is live at [redscape-eight.vercel.app](https://redscape-eight.vercel.app), served from [production deployment 92868ec](https://redscape-4ilpa3cq6-sadib-dewans-projects.vercel.app). The original repository and public URL are preserved. [PR #6](https://github.com/SDAFIK/MARSENSE/pull/6) merged the validated candidate `2f33a8c`; the merge introduced no file differences. All four required automated workflows and the [signed-out live production browser acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43574300531) passed. This is a competition research prototype, not certified astronaut navigation.
+> **Release status (14 November 2026):** MARSENSE 3.0 is live at [redscape-eight.vercel.app](https://redscape-eight.vercel.app). [PR #7](https://github.com/SDAFIK/MARSENSE/pull/7) merged the exact validated source, `60ff854`, as `8a4de16`. The Render backend is running `60ff854`; the Vercel production deployment is [8a4de16](https://redscape-570sbrqrr-sadib-dewans-projects.vercel.app). Both the live landing page and /guide returned HTTP 200, and the production API health endpoint is healthy. The original repository, public URL and existing PostgreSQL data are preserved. This is a competition research prototype, not certified astronaut navigation.
 
-## What's new in the cinematic rebuild
+## What's new in MARSENSE 3.0
 
-The release is a structural redesign, not another color-only overlay. It includes a planet-first landing page with an interactive NASA Viking globe, a map-first Mission Command Center, wide ground-first Astronaut View, photographic Evidence Studio with expandable original imagery, Route Comparison Lab, spatial Exploration Archive, and Planetary Observatory. The mission workflow, real NASA sources, human decision authority, private data separation, API and routing engine remain intact. No database schema changes were made.
+The cinematic MARSENSE experience now includes a no-account [Judge Walkthrough](https://redscape-eight.vercel.app/guide) and adaptive mission guidance, interactive manual observation footprint placement, explicit uncertainty provenance, real NASA camera drive-anchor context, read-only alternative route calculations and private reviewed-evidence research exports. The Evidence Studio supports bounded segmentation masks from compatible model output while explicitly disclosing unavailable or simulated results.
+
+The previous cinematic redesign retains the planet-first NASA Viking globe, map-first Mission Control, wide ground-first Astronaut View, photographic Evidence Studio, aligned Route Comparison Lab, spatial Exploration Archive and Planetary Observatory. Human verification remains mandatory, orbital priors remain intact, and no database schema migration is required for V3.
+
+**Scientific status:** the trained DeepLabV3 research candidate achieved 0.5296 held-out MSL mIoU but only 0.1306 Perseverance transfer mIoU and zero held-out MSL large-rock recall. It failed the research gate and is not enabled for mission classification. The expanded dataset experiment is separate research; no automatic calibrated image footprint is claimed. Read [the research report](docs/science/V3_RESEARCH_REPORT.md) and [the V3 delivery plan](docs/MARSENSE_3_INTELLIGENCE_PLAN.md).
 
 ### Verified release evidence
 
 | Release gate | Result |
 | --- | --- |
-| [Full application release validation](https://github.com/SDAFIK/MARSENSE/actions/runs/43573536697) | Passed: 164 tests, plus lint, types, build and dependency audit |
-| [PostgreSQL acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43573536653) | Passed |
-| [Hosted cloud smoke and guest isolation](https://github.com/SDAFIK/MARSENSE/actions/runs/43573536659) | Passed |
-| [Production container smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43573536640) | Passed |
-| [Production Vercel deployment](https://redscape-4ilpa3cq6-sadib-dewans-projects.vercel.app) | Ready; original public domain assigned |
-| [Public website acceptance — live cinematic release](https://github.com/SDAFIK/MARSENSE/actions/runs/43574300531) | Passed: all seven new layouts, desktop/mobile guest, images, human review, reroute, inheritance and exit |
+| [Exact V3 candidate release validation](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199146) | Passed: 179 tests, plus lint, types, build and dependency audit; 2 skipped |
+| [PostgreSQL acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199199) | Passed |
+| [Hosted cloud smoke and guest isolation](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199131) | Passed |
+| [Production container smoke](https://github.com/SDAFIK/MARSENSE/actions/runs/43577199134) | Passed |
+| [Production Vercel deployment](https://redscape-570sbrqrr-sadib-dewans-projects.vercel.app) | Ready; original public domain assigned |
+| [V3 public website acceptance](https://github.com/SDAFIK/MARSENSE/actions/runs/43580317544) | Dedicated post-deployment run; follow the linked result |
 
-The [validated candidate run](https://github.com/SDAFIK/MARSENSE/actions/runs/43573536697) includes **seeded-visual-review**, **production-visual-review** and **showcase-confirmed-view** Chromium artifacts. The seeded review covers seven principal screens at seven viewport sizes (49 screen/viewport combinations); 60 main browser tests passed. Desktop, tablet and mobile before/after screenshots were compared at the same seeded mission state, and the tablet map sizing and landing globe control overlap were corrected. The actual layouts and all principal interactions were checked, rather than claiming fidelity from design mockups. Exact pixel matching to the original supplied references is not asserted. [The delivery plan](docs/MARSENSE_2_DELIVERY_PLAN.md) records the release scope and limitations.
+The exact candidate run includes actual Chromium screenshots in **seeded-visual-review**, **production-visual-review** and **showcase-confirmed-view** artifacts. It exercises desktop/tablet/mobile layouts, real private image upload, authentication, guest simulation, route and spatial intelligence, and mission inheritance. Scientific validation of an improved terrain classifier and automatic ground localization remain separate research gates.
 
 ## The problem
 
@@ -33,7 +37,7 @@ Orbital imagery can guide Mars surface exploration, but it cannot establish ever
 
 ## Experience MARSENSE
 
-The judge experience requires no project account. Select **Launch Live Demo** on [the live public website](https://redscape-eight.vercel.app). The guest mission is independent of the operator database and other visitors.
+The judge experience requires no project account. Open the [Judge Walkthrough](https://redscape-eight.vercel.app/guide), or select **Launch Live Demo** on [the live public website](https://redscape-eight.vercel.app). The guest mission is independent of the operator database and other visitors.
 
 | Step | What to do | What the system does |
 | --- | --- | --- |
@@ -51,12 +55,13 @@ The guest menu allows an isolated reset or exit. For a persistent private missio
 | Experience | Route | Capability |
 | --- | --- | --- |
 | Landing | / | Project narrative, genuine NASA imagery, guest entry and optional accounts |
+| Judge Walkthrough | /guide | Guided six-stage mission and no-account entry |
 | Mission Control | /mission | Interactive MapLibre map, NASA layers, Alpha/Beta, mission workflow, event timeline |
-| Astronaut field view | /astronaut | Replay or authenticated ground image upload, manual footprint, observation and review |
+| Astronaut field view | /astronaut | Replay or authenticated real-image upload, interactive manual footprint and uncertainty, observation and review |
 | Evidence Intelligence | /evidence | Prior, observation, model features, human interpretation, verification and provenance |
-| Route Comparison | /comparison | Aligned before/after map and computed route metrics |
-| Exploration Memory | /memory | Event search, spatial evidence history and inherited knowledge |
-| Mars Intelligence Center | /intelligence | Interactive NASA Viking globe, dataset selector, NASA imagery monitor, mission event console, live mission state and route metrics |
+| Route Comparison | /comparison | Aligned before/after map, computed metrics and read-only alternative route search |
+| Exploration Memory | /memory | Event search, spatial evidence history, inherited knowledge and reviewed evidence manifest export |
+| Mars Intelligence Center | /intelligence | Interactive NASA Viking globe, dataset selector, NASA imagery monitor, verified drive-anchor context, mission event console, live mission state and route metrics |
 | Science & About | /science | Source inventory, methodology, scientific limits and project documentation |
 | Account workflows | /signup, /workspace-login, /login, /register, /account | Private accounts, persistent workspaces, separate invited roles and operator administration |
 
