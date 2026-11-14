@@ -78,6 +78,7 @@ export default function MissionShell({
               href={`/${v}`}
               className={`nav-link ${view === v ? "active" : ""}`}
               aria-current={view === v ? "page" : undefined}
+              title={label}
             >
               <Icon size={18} />
               <span className="nav-label">{label}</span>
@@ -94,7 +95,7 @@ export default function MissionShell({
           <Link href="/memory">
             Explore mission memory <ArrowUpRight size={14} />
           </Link>
-          <div className="small-mono">MARSENSE / v1.0</div>
+          <div className="small-mono">MARSENSE / v2.0</div>
         </div>
       </aside>
       <main id="main-content" className="workspace">

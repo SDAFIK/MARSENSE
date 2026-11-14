@@ -1,0 +1,71 @@
+/* MARSENSE 2.0 shared aerospace design layer; imported after legacy styles. */
+:root{--bg:#080f18;--panel:#101e2b;--raised:#172a3b;--border:#304457;--text:#f3f5f9;--muted:#a9bdcf;--mint:#85e1c5;--orange:#ffb16e;--cyan:#78d9f4}
+body{background:var(--bg);color:var(--text)}
+.app-shell{background:radial-gradient(ellipse at 85% 0%,#162b3b 0%,#080f18 48%);grid-template-columns:72px minmax(0,1fr);grid-template-rows:72px 1fr}
+.app-header{height:72px;background:#0c1724;border-color:#34495b;padding:0 24px;box-shadow:0 6px 24px #0003}
+.app-header .wordmark{color:#f3f5f9}.app-header .wordmark svg{color:var(--orange)}
+.sidebar{background:#0b1622;border-color:#304457;padding:16px 8px}
+.sidebar .nav-link{border-radius:12px;min-height:48px;color:var(--muted)}
+.sidebar .nav-link.active{background:linear-gradient(145deg,#3a2d25,#213040);border-color:#b27850;color:#ffc28f}
+.sidebar .nav-link.active svg{color:var(--orange)}.sidebar .nav-link:hover{background:#223749}
+.app-shell .button,.app-shell select,.app-shell input,.app-shell textarea,.app-shell .session-access>summary{border-radius:9px}
+.app-shell .button{min-height:42px;font-size:12px;font-weight:650;letter-spacing:.1px}
+.app-shell .button.primary{background:linear-gradient(135deg,#ffc08a,#f59655);border-color:#f3aa72;color:#20170f;box-shadow:0 4px 16px #ef98532a}
+.app-shell .button.primary:hover:not(:disabled){background:#ffd0a8;color:#20170f}
+.app-shell .button.secondary{background:#203344a8;border-color:#4c6478;color:#e5eff8}
+.app-shell .button.secondary:hover{background:#304a60;border-color:#8cb0c5}
+.app-shell :is(select,input,textarea){background:#0e1b29;border-color:#496175;color:#e8f1fb}
+.app-shell :is(.panel,.recovery-control .panel,.recovery-inspector,.recovery-map,.aligned-maps,.map-panel:not(.map-expanded)){border-radius:13px;border-color:#344d62}
+.app-shell .panel,.app-shell .recovery-control .panel,.app-shell .recovery-inspector{background:linear-gradient(150deg,#172a3b,#101c29 68%);box-shadow:0 8px 22px #0002}
+.app-shell :is(.panel-heading,.recovery-control .panel-heading,.context-heading){background:#1c3144;border-color:#344d62;border-radius:12px 12px 0 0;padding:12px 14px;min-height:44px}
+.app-shell :is(.panel-heading h2,.recovery-control h2){font-size:13px;font-weight:700;letter-spacing:.3px}
+.app-shell .panel-body{padding:16px}.app-shell .badge{border-radius:6px;padding:4px 7px;line-height:1.4}
+.app-shell .eyebrow{color:#a9c7db;letter-spacing:1.4px}
+.app-shell:not(.view-mission) .workspace{padding:0 24px 18px}
+.app-shell:not(.view-mission) .workspace-heading{padding:24px 0 20px;min-height:104px;gap:16px;border-bottom:0}
+.app-shell:not(.view-mission) .workspace-heading .eyebrow,.app-shell:not(.view-mission) .workspace-heading p.muted{display:block}
+.app-shell:not(.view-mission) .workspace-heading h1{font-size:clamp(25px,3vw,38px);font-weight:700;letter-spacing:-.7px;margin:4px 0}
+.app-shell:not(.view-mission) .workspace-heading p.muted{font-size:13px}
+.app-shell .workspace-footer{padding:18px 0;color:#a9bdcf;font-size:10px}
+.app-shell .recovery-control{background:#0b1520}.app-shell .recovery-workflow{background:#101f2e;border-color:#344d62}
+.app-shell .recovery-workflow button[aria-selected=true]{background:#342b26;color:#ffc28f;border-color:#ffae70}
+.app-shell .recovery-columns{gap:12px;padding:12px}.app-shell .recovery-timeline{background:#101d2a;border-color:#344d62}
+.app-shell .timeline-events button,.app-shell .recovery-evidence button,.app-shell .evidence-records button,.app-shell .spatial-event-list button,.app-shell .structured-evidence nav button{background:#162b3c;border-color:#385267;border-radius:8px}
+.app-shell .timeline-events button[aria-pressed=true],.app-shell .evidence-records button[aria-pressed=true],.app-shell .spatial-event-list button[aria-pressed=true],.app-shell .structured-evidence nav button.selected{background:#263d48;border-color:#85e1c5}
+.app-shell .recovery-map .map-toolbar>span,.app-shell .map-expand-button,.app-shell .map-layer,.app-shell .map-overlay-switches,.app-shell .map-controls{border-radius:8px;background:#111f2ee8;border-color:#587087}
+.app-shell .map-controls button{background:#15283b}.app-shell .map-legend{background:#101f2ee8}.app-shell .map-location{background:#102131e8}
+.app-shell .structured-evidence,.app-shell .spatial-memory,.app-shell .astronaut-console{gap:16px;margin:0 0 18px;align-items:start;min-height:0}
+.app-shell .astronaut-console{grid-template-columns:minmax(190px,.75fr) minmax(0,2.2fr) minmax(245px,1fr)}
+.astronaut-map-stage{display:grid;gap:16px;min-width:0}.astronaut-console .ground-stage{overflow:hidden}
+.astronaut-console .ground-stage-image{position:relative;height:clamp(250px,35vw,430px);min-height:0}
+.astronaut-console .ground-stage-image img{object-fit:cover}
+.astronaut-console .ground-caption{position:absolute;inset:auto 0 0;padding:30px 18px 16px;background:linear-gradient(transparent,#08131bee 55%);display:grid;gap:4px}
+.astronaut-console .ground-caption strong{font-size:clamp(18px,2vw,25px);color:#fff}
+.astronaut-console .ground-actions{display:flex;flex-wrap:wrap;gap:8px;padding:12px}.astronaut-console .ground-actions>*{flex:1 1 120px}
+.astronaut-console .astronaut-map-stage .map-panel:not(.map-expanded){height:440px;min-height:0}
+.astronaut-console .astronaut-context{overflow:hidden;scroll-margin-top:85px}.astronaut-console .astronaut-context>.panel{border:0;box-shadow:none}
+.astronaut-console .field-kicker{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mint);margin-bottom:8px}
+.astronaut-console .field-target{font-size:23px;font-weight:700;line-height:1.2;margin-bottom:14px}
+.astronaut-console .field-metric{display:block;font-size:26px;font-weight:700;color:var(--cyan);font-variant-numeric:tabular-nums}
+.astronaut-console .field-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:12px;border-bottom:1px solid var(--border)}
+.astronaut-console .field-tabs button{flex:1 1 80px;min-height:40px;font-size:11px;padding:7px}
+.astronaut-console .field-tabs button[aria-pressed=true]{border-color:var(--orange);color:#ffd1ac;background:#3a2d25}
+.app-shell .comparison-controls{border-radius:12px;background:#15283b}
+.app-shell .intel-top{background:linear-gradient(115deg,#193348,#102032 65%,#254453);border-color:#426679}
+.app-shell .intel-grid>.panel{background:linear-gradient(155deg,#142b3d,#0c1b28)}
+.app-shell .intel-source-list button,.app-shell .intel-event-list button{border-radius:9px}
+.app-shell .globe-stage{min-height:320px;background:radial-gradient(ellipse at center,#24445d,#081420 70%)}.app-shell .globe-stage canvas{width:min(100%,360px)}
+.product-home .landing-shade{background:linear-gradient(90deg,#06101aee,#08131cb8 55%,#08131c55)}
+.product-home .product-hero h1{font-weight:800;letter-spacing:-.035em;text-shadow:0 8px 40px #0008}
+.product-home .hero-orbital{border-radius:20px;background:#0d1b2bdc;box-shadow:0 24px 65px #0008}
+.product-home .hero-orbital img{border-radius:9px}.product-home .feature-grid article,.product-home .competition-science{border-radius:16px}
+.product-home .button,.science-brief .button{border-radius:10px}
+.product-home .hero-actions .button.primary{background:linear-gradient(135deg,#ffc08a,#f59655);color:#20170f}
+.product-home .product-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.product-home .product-step{padding:12px;border:1px solid #456276;border-radius:10px;background:#102334c9}
+@media(min-width:1250px){.app-shell:not(.view-mission){grid-template-columns:212px minmax(0,1fr)}.app-shell:not(.view-mission) .sidebar{padding:22px 12px}.app-shell:not(.view-mission) .sidebar-project,.app-shell:not(.view-mission) .sidebar-bottom{display:flex;flex-direction:column}.app-shell:not(.view-mission) .nav-link{justify-content:flex-start;padding:12px;gap:10px;font-size:12px}.app-shell:not(.view-mission) .sidebar .nav-label{position:static;width:auto;height:auto;clip-path:none;overflow:visible;transform:none;background:none;border:0;padding:0}.app-shell:not(.view-mission) .sidebar .nav-active-dot{display:block}.app-shell:not(.view-mission) .sidebar-bottom{padding-top:40px}}
+@media(max-width:1249px){.app-shell .astronaut-console{grid-template-columns:minmax(180px,.8fr) minmax(0,2fr)}.app-shell .astronaut-context{grid-column:1/-1}}
+@media(max-width:900px){.app-shell .astronaut-console{grid-template-columns:minmax(0,1fr)}.app-shell .astronaut-map-stage{grid-row:1}.app-shell .astronaut-context{grid-row:2;grid-column:1}.app-shell .astronaut-console>aside:first-child{grid-row:3}.app-shell:not(.view-mission) .workspace{padding:0 14px 14px}}
+@media(max-width:600px){.app-shell{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto 1fr}.app-shell .app-header{grid-column:1;height:auto;min-height:64px;padding:10px 12px;flex-wrap:wrap;gap:8px}.app-shell .sidebar{grid-column:1;grid-row:2;position:sticky;top:0;z-index:15;width:auto;height:auto;padding:6px 8px;border-right:0;border-bottom:1px solid var(--border)}.app-shell .sidebar nav{flex-direction:row;justify-content:space-around;gap:3px}.app-shell .sidebar .nav-link{width:auto;flex:1;min-width:0;min-height:44px;padding:8px 4px}.app-shell .sidebar .nav-link:hover .nav-label,.app-shell .sidebar .nav-link:focus-visible .nav-label{left:0;top:100%;transform:none}.app-shell .workspace,.app-shell:not(.view-mission) .workspace,.app-shell.view-mission .workspace{grid-column:1;grid-row:3;padding:0 10px 12px}.app-shell:not(.view-mission) .workspace-heading{min-height:0;padding:16px 0}.app-shell .workspace-heading .button{align-self:flex-start}.app-shell .astronaut-console .ground-stage-image{height:260px}.app-shell .astronaut-console .astronaut-map-stage .map-panel:not(.map-expanded){height:380px}.app-shell .recovery-columns{padding:6px;gap:8px}.app-shell .panel-body{padding:12px}.app-shell .header-right{flex:1 1 auto;flex-wrap:wrap}.app-shell .app-header .eva-select{max-width:160px}.app-shell .globe-stage{min-height:240px}.product-home .product-step{padding:8px;font-size:10px}}
+@media(prefers-reduced-motion:no-preference){.app-shell:not(.view-mission) .workspace-heading,.app-shell .astronaut-console,.app-shell .structured-evidence,.app-shell .spatial-memory,.app-shell .spatial-comparison{animation:premium-in .32s ease-out both}.product-home .hero-orbital{animation:premium-in .65s ease-out both}.product-home .feature-grid article{transition:transform .22s,border-color .22s}.product-home .feature-grid article:hover{transform:translateY(-3px)}}
+@keyframes premium-in{from{opacity:.45;transform:translateY(6px)}to{opacity:1;transform:none}}
