@@ -40,8 +40,12 @@ jobs:
             await page.getByRole('button',{name:'Launch Live Demo',exact:true}).click();
             await page.getByRole('tab',{name:'EXPECT',exact:true}).waitFor({timeout:90000});
             await page.getByRole('tab',{name:'OBSERVE',exact:true}).click();
+            const observation=page.waitForResponse(r=>r.url().includes('/api/public-demo/observations/demo') && r.request().method()==='POST',{timeout:90000});
             await page.getByRole('button',{name:'Analyze terrain',exact:true}).click();
+            const result=await observation; assert(result.ok(), 'Observation HTTP '+result.status());
+            await page.getByRole('tabpanel').getByText('Significant Difference',{exact:false}).first().waitFor({timeout:30000});
             await page.getByRole('tab',{name:'VERIFY',exact:true}).click();
+            await page.screenshot({path:'public-review.png',fullPage:true});
             await page.getByRole('region',{name:'Evidence review'}).getByRole('button',{name:'Confirm observation'}).click();
             await page.getByRole('heading',{name:'Route Beta',exact:true}).waitFor({timeout:30000});
             await page.getByLabel('Active mission').selectOption('eva-02');
