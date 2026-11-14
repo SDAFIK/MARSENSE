@@ -41,7 +41,7 @@ export default function AstronautWorkspace({
       selected.verification_state,
     );
   return (
-    <div className="astronaut-console">
+    <div className="astronaut-console field-experience-v3">
       <aside className="panel">
         <div className="panel-heading">
           <h2>NEXT TARGET</h2>
@@ -101,14 +101,12 @@ export default function AstronautWorkspace({
           </p>
         </div>
       </aside>
-      <div className="astronaut-map-stage">
-        <section className="panel ground-stage" aria-label="Ground observation view">
-          <div className="panel-heading"><h2><Camera size={17}/> Ground observation</h2><span className="badge neutral">{selected ? label(selected.source_type) : "CACHED NASA NAVCAM"}</span></div>
+      <section className="panel ground-stage" aria-label="Ground observation view">
+          <div className="panel-heading"><h2><Camera size={17}/> 01 / Ground observation</h2><span className="badge neutral">{selected ? label(selected.source_type) : "CACHED NASA NAVCAM"}</span></div>
           <div className="ground-stage-image"><Image unoptimized fill sizes="(max-width: 900px) 90vw, 820px" src={selected?.raw_asset_reference ?? "/api/assets/ground-navcam.jpg"} alt="Selected ground evidence or cached Perseverance Navcam context" /><div className="ground-caption"><span className="eyebrow">JEZERO · GROUND CONTEXT</span><strong>{selected ? label(selected.observed_value) : "Awaiting ground observation"}</strong><p>{selected?.source ?? "Cached NASA rover image, not a live astronaut camera."}</p></div></div>
           <div className="ground-actions"><button className="button primary" onClick={()=>openContext("OBSERVE")}><Camera size={15}/> Record observation</button><button className="button secondary" onClick={()=>openContext("WHY")}><Map size={15}/> Route context</button><Link href="/evidence" className="button secondary"><ScanLine size={15}/> Inspect evidence</Link>{pending && <button className="button secondary" onClick={()=>openContext("VERIFY")}><ShieldCheck size={15}/> Review evidence</button>}</div>
         </section>
-        <LivingMap snapshot={snapshot} warmPresentation />
-      </div>
+      <div className="astronaut-map-stage"><div className="field-map-heading"><span className="eyebrow">02 / SPATIAL CONTEXT</span><h2>Locate the observation</h2><p className="small muted">Explore the active modeled traverse and supported footprints.</p></div><LivingMap snapshot={snapshot} warmPresentation /></div>
       <aside ref={contextRef} className="panel astronaut-context" aria-label="Observation and decision controls">
         <div className="field-tabs" aria-label="Field controls">
           <button className="button secondary" aria-pressed={context === "OBSERVE"} onClick={() => setContext("OBSERVE")}>Observe</button>
