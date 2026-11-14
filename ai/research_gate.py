@@ -26,6 +26,8 @@ def audit_manifest(manifest: Path) -> dict[str, Any]:
     groups: dict[str, str] = {}
     images: dict[str, str] = {}
     counts: dict[str, list[int]] = {}
+    resampled_pairs: dict[str, int] = {}
+    geometry_pairs: dict[str, int] = {}
     for split in SPLITS:
         rows = data.get(split, [])
         if not rows:
@@ -52,8 +54,16 @@ def audit_manifest(manifest: Path) -> dict[str, Any]:
                         raise ValueError("Duplicate image bytes")
                     images[digest] = split
             with Image.open(files["image"]) as img, Image.open(files["mask"]) as mask:
+                # AI4Mars supplies matching scene labels at lower resolution.
+                # Proportional resize is supported; unexplained crop/aspect changes are not.
+                iw, ih = img.size
+                mw, mh = mask.size
+                geometry_key = f"{iw}x{ih} -> {mw}x{mh}"
+                geometry_pairs[geometry_key] = geometry_pairs.get(geometry_key, 0) + 1
                 if img.size != mask.size:
-                    raise ValueError("Image/mask geometry differs")
+                    if abs(iw * mh - ih * mw) / max(iw * mh, ih * mw) > 0.01:
+                        raise ValueError(f"Image/mask aspect mismatch: {row['image']} {geometry_key}")
+                    resampled_pairs[split] = resampled_pairs.get(split, 0) + 1
                 labels = np.asarray(mask)
                 if labels.ndim != 2 or not np.isin(labels, [0, 1, 2, 3, 255]).all():
                     raise ValueError("Invalid AI4Mars label values")
@@ -63,7 +73,9 @@ def audit_manifest(manifest: Path) -> dict[str, Any]:
         raise ValueError("All four classes need labeled support in every split")
     return {"manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
             "split_sizes": {s: len(data[s]) for s in SPLITS},
-            "class_pixels": counts, "site_groups": len(groups), "unique_images": len(images)}
+            "class_pixels": counts, "site_groups": len(groups), "unique_images": len(images),
+            "geometry_pairs": geometry_pairs, "resampled_pairs": resampled_pairs,
+            "geometry_policy": "Matching source pairs; RGB bilinear and label nearest resize."}
 
 
 def evaluate_candidate(report: dict[str, Any]) -> dict[str, Any]:
